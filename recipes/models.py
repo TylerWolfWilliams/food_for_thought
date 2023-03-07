@@ -17,6 +17,7 @@ class Category(models.Model):
 
 
 class Recipe(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ManyToManyField(Category)
 
@@ -50,7 +51,6 @@ class UserProfile(models.Model):
 
 
 class Review(models.Model):
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 
