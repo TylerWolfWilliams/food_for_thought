@@ -1,16 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from recipes.models import Category, Recipe, UserProfile, Review
-
-
-class CategoryForm(forms.ModelForm):
-    name = forms.CharField(max_length=100, help_text="Enter category name")
-    image = forms.ImageField()
-
-    class Meta:
-        model = Category
-        fields = ('name', 'image',)
-
+from recipes.models import Recipe, UserProfile, Review
 
 class RecipeForm(forms.ModelForm):
     title = forms.CharField(max_length=100, help_text="Please enter the name of the recipe.")
@@ -19,7 +9,7 @@ class RecipeForm(forms.ModelForm):
     ingredients = forms.CharField(max_length=10000, help_text="Please enter the ingredients for the recipe.")
     tags = forms.CharField(max_length=1000, help_text="Please enter tags")
     cooking_time = forms.IntegerField()
-    servings = forms.IntegerField()
+    servings = forms.CharField(max_length=100, help_text="How mant servings?")
 
     class Meta:
         model = Recipe
