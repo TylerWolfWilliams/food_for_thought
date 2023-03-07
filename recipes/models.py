@@ -6,6 +6,12 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     image = models.ImageField()
 
+    slug = models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
@@ -14,7 +20,6 @@ class Recipe(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ManyToManyField(Category)
 
-    # Average rating variable needed please
     title = models.CharField(max_length=100)
     image = models.ImageField()
     content = models.CharField(max_length=10000)
@@ -22,6 +27,12 @@ class Recipe(models.Model):
     cooking_time = models.TimeField()
     serving = models.CharField(max_length=100)
     tags = models.CharField(max_length=1000)
+
+    slug = models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Recipe, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -39,9 +50,9 @@ class UserProfile(models.Model):
 
 
 class Review(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    # Need a recipe id variable please
 
     content = models.CharField(max_length=1000)
     rating = models.FloatField()
