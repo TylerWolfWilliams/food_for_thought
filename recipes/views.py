@@ -26,11 +26,11 @@ def categories(request):
     return render(request, 'food_for_thought/categories.html', context=context_dict)
 
 
-def show_category(request, category_name_slug):
+def show_category(request, category_name):
     context_dict = {}
 
     try:
-        category = Category.objects.get(slug=category_name_slug)
+        category = Category.objects.get(name=category_name)
         recipes = Recipe.objects.filter(category=category)
 
         context_dict['category'] = category

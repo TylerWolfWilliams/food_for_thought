@@ -2,13 +2,15 @@ from django import forms
 from django.contrib.auth.models import User
 from recipes.models import Category, Recipe, UserProfile, Review
 
+
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=100, help_text="Enter category name")
     image = forms.ImageField()
 
     class Meta:
         model = Category
-        fields = ('name', 'image', )
+        fields = ('name', 'image',)
+
 
 class RecipeForm(forms.ModelForm):
     title = forms.CharField(max_length=100, help_text="Please enter the name of the recipe.")
@@ -21,20 +23,22 @@ class RecipeForm(forms.ModelForm):
 
     class Meta:
         model = Recipe
-        exclude = ('author', 'category', )
+        exclude = ('author', 'category',)
+
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', )
+        fields = ('username', 'email', 'password',)
+
 
 class UserProfileForm(forms.ModelForm):
-
     class Meta:
         model = UserProfile
-        fields = ('picture', 'bio', )
+        fields = ('picture', 'bio',)
+
 
 class ReviewForm(forms.ModelForm):
     content = forms.CharField(max_length=1000, help_text="Please enter your thoughts on the recipe.")
@@ -42,4 +46,4 @@ class ReviewForm(forms.ModelForm):
 
     class Meta:
         model = Review
-        exclude = ('author', 'recipe', )
+        exclude = ('author', 'recipe',)
