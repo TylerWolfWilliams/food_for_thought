@@ -15,7 +15,7 @@ def home(request):
 
     context_dict = {'categories': category_list, 'recipes': recipe_list}
 
-    return render(request, 'food_for_thought/home.html', context=context_dict)
+    return render(request, 'recipes/home.html', context=context_dict)
 
 
 def categories(request):
@@ -23,7 +23,7 @@ def categories(request):
 
     context_dict = {'categories': category_list}
 
-    return render(request, 'food_for_thought/categories.html', context=context_dict)
+    return render(request, 'recipes/categories.html', context=context_dict)
 
 
 def show_category(request, category_name):
@@ -40,13 +40,13 @@ def show_category(request, category_name):
         context_dict['category'] = None
         context_dict['recipes'] = None
 
-    return render(request, 'food_for_thought/category.html', context=context_dict)
+    return render(request, 'recipes/category.html', context=context_dict)
 
 
 def show_results(request):
     context_dict = {}
 
-    return render(request, 'food_for_thought/results.html', context=context_dict)
+    return render(request, 'recipes/results.html', context=context_dict)
 
 
 def user_login(request):
@@ -66,13 +66,13 @@ def user_login(request):
             print(f"Invalid login details: {username}, {password}")
             return HttpResponse("Invalid login details given, please enter valid details")
     else:
-        return render(request, "food_for_thought/login.html")
+        return render(request, "recipes/login.html")
 
 
 @login_required
 def user_logout(request):
     logout(request)
-    return redirect(reverse('food_for_thought:home'))
+    return redirect(reverse('recipes:home'))
 
 
 def sign_up(request):
@@ -104,7 +104,7 @@ def sign_up(request):
 
     context_dict['user_form': user_form, 'profile_form': profile_form, 'registered':registered]
 
-    return render(request, 'food_for_thought/signup.html', context=context_dict)
+    return render(request, 'recipes/signup.html', context=context_dict)
 
 
 def show_recipe(request, recipe_name_slug, recipe_id):
@@ -125,4 +125,4 @@ def show_recipe(request, recipe_name_slug, recipe_id):
     except Recipe.DoesNotExist:
         context_dict['recipe'] = None
 
-    return render(request, 'food_for_thought/recipe.html', context=context_dict)
+    return render(request, 'recipes/recipe.html', context=context_dict)
