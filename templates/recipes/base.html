@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Food For Thought</title>
+        <style>
+            /* CSS styles for the header */
+            header {
+                background-color: #333;
+                color: #fff;
+                padding: 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            nav ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                gap: 10px;
+            }
+
+            nav ul li {
+                margin: 0;
+                padding: 0;
+            }
+
+            nav ul li img {
+                height: 30px;
+            }
+
+            form {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            input[type="text"] {
+                padding: 5px;
+                border-radius: 5px;
+                border: none;
+                width: 200px;
+            }
+
+            button[type="submit"] {
+                background-color: #fff;
+                border: none;
+                padding: 5px 10px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            a img {
+                height: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'recipes:home' %}"><img src="home-icon.png" alt="Home"></a></li>
+                    <li><a href="{% url 'recipes:make' %}">Make a recipe</a></li>
+                </ul>
+            </nav>
+            <form>
+                <input type="text" placeholder="Search...">
+                <button type="submit">Search</button>
+            </form>
+        {% if user.is_authenticated %}
+            <a href="{% url 'recipes:logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'recipes:login' %}">Login</a>
+        {% endif %}
+        </header>
+        <main>
+            {% block body_block %}
+            {% endblock %}
+        </main>
+    </body>
+</html>
