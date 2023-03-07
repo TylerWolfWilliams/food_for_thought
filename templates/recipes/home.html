@@ -1,33 +1,35 @@
-{% extends 'rango/base.html' %}
+{% extends 'recipes/base.html' %}
 {% load staticfiles %}
 
 {% block body_block %}
 <div>
-    <h2>Categories</h2>
+   <h2>Categories</h2>
 {% if categories %}
-    <ul>
-    {% for category in categories %}
-        <li><img src="{% category.image %}" alt="{% category.name img %}"></li>
-        <li><a href="{% url 'recipes:show_category' category.name %}">{{ category.name }}</a></li>
-    {% endfor %}
-    </ul>
+   <ul>
+   {% for category in categories %}
+       <li><img src="{% category.image %}" alt="{% category.name img %}"></li>
+       <li><a href="{% url 'recipes:show_category' category.name %}">{{ category.name }}</a></li>
+   {% endfor %}
+   </ul>
 {% else %}
-    <strong>There are no categories present.</strong>
+   <strong>There are no categories present.</strong>
 {% endif %}
 </div>
 
+
 <div>
-    <h2>Highest Rated Recipes</h2>
+   <h2>Highest Rated Recipes</h2>
 {% if recipes %}
-    <ul>
-    {% for recipe in recipes %}
-        <li><img src="{% recipe.image %}" alt="{% recipe.title img %}"></li>
-        <li><a href="{{% url 'recipes:show_recipe' recipe.slug recipe.id %}}">{{ recipe.title }}</a></li>
-    {% endfor %}
-    </ul>
+   <ul>
+   {% for recipe in recipes %}
+       <li><img src="{% recipe.image %}" alt="{% recipe.title img %}"></li>
+       <li><a href="{{% url 'recipes:show_recipe' recipe.slug recipe.id %}}">{{ recipe.title }}</a></li>
+   {% endfor %}
+   </ul>
 {% else %}
-    <strong>There are no recipes present.</strong>
+   <strong>There are no recipes present.</strong>
 {% endif %}
 </div>
+
 
 {% endblock %}
