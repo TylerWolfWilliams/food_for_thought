@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-import uuid
+from django.template.defaultfilters import slugify
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -17,7 +17,6 @@ class Category(models.Model):
 
 
 class Recipe(models.Model):
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ManyToManyField(Category)
 
@@ -25,9 +24,10 @@ class Recipe(models.Model):
     image = models.ImageField()
     content = models.CharField(max_length=10000)
     ingredients = models.CharField(max_length=1000)
-    cooking_time = models.TimeField()
+    cooking_time = models.DurationField()
     serving = models.CharField(max_length=100)
     tags = models.CharField(max_length=1000)
+    average_rating = models.FloatField(null = True)
 
     slug = models.SlugField(unique=True)
 

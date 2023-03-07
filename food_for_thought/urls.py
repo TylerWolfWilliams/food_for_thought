@@ -22,6 +22,6 @@ from recipes import views
 
 urlpatterns = [
                   path('', views.home, name='home'),
-                  path('food_for_thought/', include('recipes.urls')),
+                  path('recipes/', include('recipes.urls')),
                   path('admin/', admin.site.urls),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
