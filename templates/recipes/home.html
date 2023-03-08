@@ -3,7 +3,7 @@
 
 {% block body_block %}
 <div>
-   <h2>Categories</h2>
+   <h2><a href="{% url 'recipes:categories' %}">Categories</a></h2>
 {% if categories %}
    <ul>
    {% for category in categories %}
