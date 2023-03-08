@@ -59,7 +59,7 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request, user)
-                return redirect(reverse('food_for_thought:home'))
+                return redirect(reverse('recipes:home'))
             else:
                 return HttpResponse("Your Food For Thought account is disabled")
         else:
