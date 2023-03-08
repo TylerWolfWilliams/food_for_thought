@@ -9,7 +9,7 @@ class RecipeForm(forms.ModelForm):
     ingredients = forms.CharField(max_length=10000, help_text="Please enter the ingredients for the recipe.")
     tags = forms.CharField(max_length=1000, help_text="Please enter tags")
     cooking_time = forms.IntegerField()
-    servings = forms.CharField(max_length=100, help_text="How mant servings?")
+    servings = forms.CharField(max_length=100, help_text="How many servings?")
 
     class Meta:
         model = Recipe

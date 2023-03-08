@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from recipes.models import Category, Recipe, Review
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from recipes.forms import UserForm, UserProfileForm
+from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm
 
 
 # Create your views here.
@@ -140,5 +140,45 @@ def show_user_account(request):
     context_dict = {"current_user": current_user, "saved_recipes":saved_recipes, "written_recipes":written_recipes, "written_reviews":written_reviews}
 
     return render(request, 'recipes/myaccount.html', context=context_dict)
+
+@login_required
+def show_user_recipes(request):
+    current_user = request.user
+
+    written_recipes = Recipe.objects.filter(author=current_user)
+
+    context_dict = {"written_recipes":written_recipes}
+
+    return render(request, 'recipes/myrecipes.html', context=context_dict)
+
+@login_required
+def add_recipe(request):
+    form = RecipeForm()
+
+    if request.method == "POST":
+        form = RecipeForm(request.POST)
+
+        if form.is_valid():
+            recipe = form.save(commit=False)
+            recipe.author = request.user
+
+            if 'image' in request.FILES:
+                recipe.image = request.FILES['image']
+
+            recipe.average_rating = 0
+            recipe.save()
+
+            return redirect(reverse('recipe:show_user_account'))
+        else:
+            print(form.errors)
+
+    context_dict = {'form': form}
+    return render(request, 'recipes/add_recipe.html', context=context_dict)
+
+@login_required
+def show_user_reviews(request):
+    pass
+
+
 
 

@@ -13,5 +13,6 @@ urlpatterns = [
     path('signup/', views.sign_up, name='signup'),
     path('<slug:recipe_name_slug>/<int:recipe_id>/', views.show_recipe, name='show_recipe'),
     path('myaccount/', views.show_user_account, name='show_user_account'),
-    #path('myaccount/addrecipe/', views.add_recipe, name='add_recipe'),
+    path('myaccount/myrecipes/', views.show_user_recipes, name='show_user_recipes'),
+    path('myaccount/addrecipe/', views.add_recipe, name='add_recipe'),
 ]
