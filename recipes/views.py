@@ -26,11 +26,11 @@ def categories(request):
     return render(request, 'recipes/categories.html', context=context_dict)
 
 
-def show_category(request, category_name):
+def show_category(request, category_name_slug):
     context_dict = {}
 
     try:
-        category = Category.objects.get(name=category_name)
+        category = Category.objects.get(slug=category_name_slug)
         recipes = Recipe.objects.filter(category=category)
 
         context_dict['category'] = category
@@ -126,3 +126,19 @@ def show_recipe(request, recipe_name_slug, recipe_id):
         context_dict['recipe'] = None
 
     return render(request, 'recipes/recipe.html', context=context_dict)
+
+@login_required
+def show_user_account(request):
+    current_user = request.user
+
+    saved_recipes = current_user.saved
+
+    written_recipes = Recipe.objects.filter(author=current_user)
+
+    written_reviews = Review.objects.filter(author=current_user)
+
+    context_dict = {"current_user": current_user, "saved_recipes":saved_recipes, "written_recipes":written_recipes, "written_reviews":written_reviews}
+
+    return render(request, 'recipes/myaccount.html', context=context_dict)
+
+
