@@ -27,7 +27,6 @@ class Recipe(models.Model):
     cooking_time = models.DurationField()
     serving = models.CharField(max_length=100)
     tags = models.CharField(max_length=1000)
-    average_rating = models.FloatField(null = True)
 
     slug = models.SlugField(unique=True)
 
@@ -40,7 +39,6 @@ class Recipe(models.Model):
 
 
 class UserProfile(models.Model):
-    #Name and email?
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     saved = models.ManyToManyField(Recipe, related_name="saved")
 

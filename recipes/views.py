@@ -6,12 +6,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm
 
+from django.db.models import Avg
 
-# Create your views here.
 
 def home(request):
-    category_list = Category.objects.all()[:5]
-    recipe_list = Recipe.objects.order_by('-average_rating')[:5]
+    category_list = Category.objects.order_by("?")[:5]
+    recipe_list = Recipe.objects.annotate(average_rating = Avg('review__rating')).order_by('-average_rating')[:5]
 
     context_dict = {'categories': category_list, 'recipes': recipe_list}
 
