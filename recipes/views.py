@@ -135,7 +135,9 @@ def show_recipe(request, recipe_name_slug, recipe_id):
 def show_user_account(request):
     current_user = request.user
 
-    saved_recipes = current_user.saved
+    current_user_profile = UserProfile.objects.filter(user=current_user)
+
+    saved_recipes = []
 
     written_recipes = Recipe.objects.filter(author=current_user)
 
