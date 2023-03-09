@@ -1,27 +1,25 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
 
-<head>
-    {% block title_block %}
-    <title>Create a recipe</title>
-    {% endblock %}
 
-    {& block body_block %}
-    <div>
-        <form id="recipe_form" method="POST" action="{% url 'recipes:add_recipe' %}">
-            {% csrf_token %}
-            {% for hidden in form.hidden_fields %}
+{% block title_block %}
+    Create a recipe
+{% endblock %}
+
+{% block body_block %}
+<div>
+    <form id="recipe_form" method="POST" action="{% url 'recipes:add_recipe' %}">
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
             {{ hidden }}
-            {% endfor %}
-            {% for field in form.visible_fields %}
+        {% endfor %}
+        {% for field in form.visible_fields %}
             {{ field.errors }}
             {{ field.help_text }}
             {{ field }}
-            {% endfor %}
-            <input type="submit" name="submit" value="Create recipe" />
-        </form>
-    </div>
-    {% endblock %}
-
-</head>
-</html>
+        <br>
+        {% endfor %}
+        <input type="submit" name="submit" value="Create recipe" />
+    </form>
+</div>
+{% endblock %}

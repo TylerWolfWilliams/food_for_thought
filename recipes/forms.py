@@ -4,15 +4,15 @@ from recipes.models import Recipe, UserProfile, Review, Category
 
 
 class RecipeForm(forms.ModelForm):
-    title = forms.CharField(max_length=100, help_text="Please enter the name of the recipe.")
-    image = forms.ImageField()
-    content = forms.CharField(max_length=10000, help_text="Please enter instructions for this recipe.")
-    ingredients = forms.CharField(max_length=10000, help_text="Please enter the ingredients for the recipe.")
-    tags = forms.CharField(max_length=1000, help_text="Please enter tags", required=False)
-    cooking_time = forms.IntegerField(min_value=0)
-    servings = forms.CharField(max_length=100, help_text="How many servings?")
+    title = forms.CharField(max_length=100, help_text="Name of Recipe: ")
+    image = forms.ImageField(help_text="Upload Image: ")
+    content = forms.CharField(max_length=10000, help_text="Instructions: ")
+    ingredients = forms.CharField(max_length=10000, help_text="Ingredients: ")
+    tags = forms.CharField(max_length=1000, help_text="Tags (optional): ", required=False)
+    cooking_time = forms.IntegerField(min_value=0, help_text="Cooking Time: ")
+    servings = forms.CharField(max_length=100, help_text="Servings: ")
 
-    category = forms.ModelMultipleChoiceField(Category.objects.all(), required = False)
+    category = forms.ModelMultipleChoiceField(Category.objects.all(), required=False)
 
     class Meta:
         model = Recipe
