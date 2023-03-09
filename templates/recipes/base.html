@@ -1,17 +1,31 @@
 <!DOCTYPE html>
 {% load staticfiles %}
-
 <html>
-    <head>
-        {% block title_block %}
-        <title>Food For Thought</title>
-        {% endblock %}
-    </head>
-    <body>
-
-        <main>
-            {% block body_block %}
-            {% endblock %}
-        </main>
-    </body>
+<head>
+    <title>Food For Thought</title>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'recipes:home' %}"><img src="{% static 'images/home-icon.png' %}" alt="Home"></a></li>
+            <li><a href="{% url 'recipes:categories' %}">Categories</a></li>
+            {# <li><a href="{% url 'recipes:myaccount/add_recipe' %}">Make a recipe</a></li> #}
+        </ul>
+    </nav>
+    <form>
+        <input type="text" placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
+    {% if user.is_authenticated %}
+    <a href="{% url 'recipes:logout' %}">Logout</a>
+    {% else %}
+    <a href="{% url 'recipes:login' %}">Login</a>
+    {% endif %}
+</header>
+<main>
+    {% block body_block %}
+    {% endblock %}
+</main>
+</body>
 </html>
