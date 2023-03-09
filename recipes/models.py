@@ -29,13 +29,13 @@ class Recipe(models.Model):
     content = models.CharField(max_length=10000)
     ingredients = models.CharField(max_length=1000)
     cooking_time = models.DurationField()
-    serving = models.CharField(max_length=100)
+    servings = models.CharField(max_length=100)
     tags = models.CharField(max_length=1000)
 
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
+        self.slug = slugify(self.title + "-" + str(self.id))
         super(Recipe, self).save(*args, **kwargs)
 
     def __str__(self):
