@@ -13,6 +13,9 @@ class Category(models.Model):
         self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
 
+    class Meta:
+        verbose_name_plural = "Categories"
+
     def __str__(self):
         return self.name
 
@@ -55,4 +58,4 @@ class Review(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 
     content = models.CharField(max_length=1000)
-    rating = models.FloatField()
+    rating = models.IntegerField()

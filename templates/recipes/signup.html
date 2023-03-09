@@ -1,7 +1,27 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
 
+{% block title_block %}
+<title>Sign Up</title>
+{% endblock %}
 
 {% block body_block %}
 <h1>Sign Up</h1>
+<div>
+    {% if registered %}
+    <strong>Thank you for registering!</strong>
+    <a href="{% url 'recipes:home' %}">Return to the homepage.</a><br />
+    {% else %}
+    <strong>Sign up here!</strong><br />
+    <form id="user_form" method="post" action="{% url 'recipes:signup' %}" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+
+        <input type="submit" name="submit" value="Register" />
+    </form>
+    {% endif %}
+</div>
 {% endblock %}

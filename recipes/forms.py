@@ -12,11 +12,11 @@ class RecipeForm(forms.ModelForm):
     image = forms.ImageField()
     content = forms.CharField(max_length=10000, help_text="Please enter instructions for this recipe.")
     ingredients = forms.CharField(max_length=10000, help_text="Please enter the ingredients for the recipe.")
-    tags = forms.CharField(max_length=1000, help_text="Please enter tags")
-    cooking_time = forms.DurationField()
+    tags = forms.CharField(max_length=1000, help_text="Please enter tags", required=False)
+    cooking_time = forms.IntegerField(min_value=0)
     servings = forms.CharField(max_length=100, help_text="How many servings?")
 
-    category = forms.CharField(max_length=100, label="Category: ", widget=forms.Select(choices=CATEGORIES))
+    category = forms.CharField(max_length=100, label="Category: ", widget=forms.Select(choices=CATEGORIES), required = False)
 
     class Meta:
         model = Recipe
@@ -32,6 +32,8 @@ class UserForm(forms.ModelForm):
 
 
 class UserProfileForm(forms.ModelForm):
+    picture = forms.ImageField(required=False)
+
     class Meta:
         model = UserProfile
         fields = ('picture', 'bio',)
@@ -39,7 +41,7 @@ class UserProfileForm(forms.ModelForm):
 
 class ReviewForm(forms.ModelForm):
     content = forms.CharField(max_length=1000, help_text="Please enter your thoughts on the recipe.")
-    rating = forms.FloatField()
+    rating = forms.IntegerField(min_value=1, max_value=10)
 
     class Meta:
         model = Review
