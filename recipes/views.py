@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponse
-from recipes.models import Category, Recipe, Review
+from recipes.models import Category, Recipe, Review, UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm
@@ -11,7 +11,7 @@ from django.db.models import Avg
 
 def home(request):
     category_list = Category.objects.order_by("?")[:5]
-    recipe_list = Recipe.objects.annotate(average_rating = Avg('review__rating')).order_by('-average_rating')[:5]
+    recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:5]
 
     context_dict = {'categories': category_list, 'recipes': recipe_list}
 
@@ -102,7 +102,7 @@ def sign_up(request):
         user_form = UserForm()
         profile_form = UserProfileForm()
 
-    context_dict['user_form': user_form, 'profile_form': profile_form, 'registered':registered]
+    context_dict = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered}
 
     return render(request, 'recipes/signup.html', context=context_dict)
 
@@ -127,6 +127,7 @@ def show_recipe(request, recipe_name_slug, recipe_id):
 
     return render(request, 'recipes/recipe.html', context=context_dict)
 
+
 @login_required
 def show_user_account(request):
     current_user = request.user
@@ -137,9 +138,11 @@ def show_user_account(request):
 
     written_reviews = Review.objects.filter(author=current_user)
 
-    context_dict = {"current_user": current_user, "saved_recipes":saved_recipes, "written_recipes":written_recipes, "written_reviews":written_reviews}
+    context_dict = {"current_user": current_user, "saved_recipes": saved_recipes, "written_recipes": written_recipes,
+                    "written_reviews": written_reviews}
 
-    return render(request, 'recipes/myaccount.html', context=context_dict)
+    return render(request, 'recipes/my_account.html', context=context_dict)
+
 
 @login_required
 def show_user_recipes(request):
@@ -147,9 +150,10 @@ def show_user_recipes(request):
 
     written_recipes = Recipe.objects.filter(author=current_user)
 
-    context_dict = {"written_recipes":written_recipes}
+    context_dict = {"written_recipes": written_recipes}
 
-    return render(request, 'recipes/myrecipes.html', context=context_dict)
+    return render(request, 'recipes/my_recipes.html', context=context_dict)
+
 
 @login_required
 def add_recipe(request):
@@ -175,10 +179,41 @@ def add_recipe(request):
     context_dict = {'form': form}
     return render(request, 'recipes/add_recipe.html', context=context_dict)
 
+
 @login_required
 def show_user_reviews(request):
-    pass
+    current_user = request.user
+
+    written_reviews = Review.objects.filter(author=current_user)
+
+    context_dict = {'written_reviews': written_reviews}
+
+    return render(request, 'recipes/my_reviews.html', context=context_dict)
 
 
+@login_required
+def show_user_saved_recipes(request):
+    current_user = request.user
+
+    saved_recipes = current_user.saved
+
+    context_dict = {'saved_recipes': saved_recipes}
+
+    return render(request, 'recipes/saved_recipes', context=context_dict)
 
 
+def show_non_user_account(request, username):
+    try:
+        user = UserProfile.objects.get(username=username)
+
+        written_recipes = Recipe.objects.filter(author=user)
+
+        written_reviews = Review.objects.filter(author=user)
+
+        context_dict = {"user": user, "written_recipes": written_recipes,
+                        "written_reviews": written_reviews}
+
+    except UserProfile.DoesNotExist:
+        context_dict = {"user": None, "written_recipes": None, "written_reviews": None}
+
+    return render(request, 'recipes/others_account.html', context=context_dict)

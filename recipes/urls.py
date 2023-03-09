@@ -15,4 +15,7 @@ urlpatterns = [
     path('myaccount/', views.show_user_account, name='show_user_account'),
     path('myaccount/myrecipes/', views.show_user_recipes, name='show_user_recipes'),
     path('myaccount/addrecipe/', views.add_recipe, name='add_recipe'),
+    path('myaccount/myreviews/', views.show_user_reviews, name='show_user_reviews'),
+    path('myaccount/mysavedrecipes', views.show_user_saved_recipes, name='show_user_saved_recipes'),
+    path('<str:username>/', views.show_non_user_account, name='show_non_user_account'),
 ]
