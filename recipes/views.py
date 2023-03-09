@@ -19,7 +19,7 @@ def home(request):
 
 
 def categories(request):
-    category_list = Category.objects.all()
+    category_list = Category.objects.order_by('name')
 
     context_dict = {'categories': category_list}
 
