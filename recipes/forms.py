@@ -2,10 +2,6 @@ from django import forms
 from django.contrib.auth.models import User
 from recipes.models import Recipe, UserProfile, Review, Category
 
-category_list = Category.objects.all()
-CATEGORIES = []
-for category in category_list:
-    CATEGORIES.append((category, category.slug))
 
 class RecipeForm(forms.ModelForm):
     title = forms.CharField(max_length=100, help_text="Please enter the name of the recipe.")
@@ -16,12 +12,11 @@ class RecipeForm(forms.ModelForm):
     cooking_time = forms.IntegerField(min_value=0)
     servings = forms.CharField(max_length=100, help_text="How many servings?")
 
-    category = forms.CharField(max_length=100, label="Category: ", widget=forms.Select(choices=CATEGORIES), required = False)
+    category = forms.ModelMultipleChoiceField(Category.objects.all(), required = False)
 
     class Meta:
         model = Recipe
-        exclude = ('author',)
-
+        exclude = ('author', 'slug',)
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
