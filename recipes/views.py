@@ -10,7 +10,7 @@ from django.db.models import Avg
 
 
 def home(request):
-    category_list = Category.objects.order_by("?")[:5]
+    category_list = Category.objects.order_by('name')[:5]
     recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:5]
 
     context_dict = {'categories': category_list, 'recipes': recipe_list}
