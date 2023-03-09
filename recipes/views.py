@@ -80,7 +80,6 @@ def user_logout(request):
 
 
 def sign_up(request):
-    context_dict = {}
     registered = False
 
     if request.method == 'POST':
