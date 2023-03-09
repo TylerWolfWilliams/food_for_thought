@@ -8,6 +8,7 @@ from recipes.forms import UserForm, UserProfileForm, RecipeForm
 
 from django.db.models import Avg
 
+
 def home(request):
     category_list = Category.objects.order_by("?")[:5]
     recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:5]
@@ -60,12 +61,16 @@ def user_login(request):
                 login(request, user)
                 return redirect(reverse('recipes:home'))
             else:
-                return HttpResponse("Your Food For Thought account is disabled")
+                context_dict = {'message': 'Your Food For Thought account is disabled'}
         else:
             print(f"Invalid login details: {username}, {password}")
-            return HttpResponse("Invalid login details given, please enter valid details")
+            context_dict = {'message': 'Invalid login details given, please enter valid details'}
+
+        return render(request, "recipes/login.html", context=context_dict)
+
     else:
-        return render(request, "recipes/login.html")
+        context_dict = {'message': None}
+        return render(request, "recipes/login.html", context=context_dict)
 
 
 @login_required
