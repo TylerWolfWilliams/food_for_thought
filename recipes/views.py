@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from recipes.models import Category, Recipe, Review, UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm
+from recipes.forms import UserForm, UserProfileForm, RecipeForm
 
 from django.db.models import Avg
 
