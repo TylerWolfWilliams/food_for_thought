@@ -2,4 +2,50 @@
 {% load staticfiles %}
 
 {% block body_block %}
+<h2>Your Account</h2>
+<li><img src="{{ current_user.picture.url }}" alt="{{ current_user.user }} image"></li>
+<li>{{ current_user.bio }}</li>
+
+<div>
+   <h2><a href="{% url 'recipes:show_user_saved_recipes' %}">Saved Recipes</a></h2>
+{% if saved_recipes %}
+   <ul>
+   {% for recipe in saved_recipes %}
+       <li><img src="{{ recipe.image.url }}" alt="{{ recipe.title }} image"></li>
+       <li><a href="{% url 'recipes:show_recipe' recipe.slug recipe.id %}">{{ recipe.title }}</a> {{ recipe.average_rating }}</li>
+   {% endfor %}
+   </ul>
+{% else %}
+   <strong>There are no recipes present.</strong>
+{% endif %}
+</div>
+
+<div>
+   <h2><a href="{% url 'recipes:show_user_recipes' %}">Your Recipes</a></h2>
+{% if written_recipes %}
+   <ul>
+   {% for recipe in written_recipes %}
+       <li><img src="{{ recipe.image.url }}" alt="{{ recipe.title }} image"></li>
+       <li><a href="{% url 'recipes:show_recipe' recipe.slug recipe.id %}">{{ recipe.title }}</a> {{ recipe.average_rating }}</li>
+   {% endfor %}
+   </ul>
+{% else %}
+   <strong>There are no recipes present.</strong>
+{% endif %}
+</div>
+
+<div>
+   <h2><a href="{% url 'recipes:show_user_reviews' %}">Your Reviews</a></h2>
+{% if written_reviews %}
+   <ul>
+   {% for review in written_reviews %}
+       <li>{{ review.recipe.title }}</li>
+       <li>{{ review.rating }}</li>
+       <li>{{ review.content }}</li>
+   {% endfor %}
+   </ul>
+{% else %}
+   <strong>There are no recipes present.</strong>
+{% endif %}
+</div>
 {% endblock %}
