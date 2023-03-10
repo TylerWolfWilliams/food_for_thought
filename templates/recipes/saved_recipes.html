@@ -2,4 +2,17 @@
 {% load staticfiles %}
 
 {% block body_block %}
+<div>
+   <h2>Saved Recipes</h2>
+{% if saved_recipes %}
+   <ul>
+   {% for recipe in saved_recipes %}
+       <li><img src="{{ recipe.image.url }}" alt="{{ recipe.title }} image"></li>
+       <li><a href="{% url 'recipes:show_recipe' recipe.slug recipe.id %}">{{ recipe.title }}</a> {{ recipe.average_rating }}</li>
+   {% endfor %}
+   </ul>
+{% else %}
+   <strong>There are no recipes present.</strong>
+{% endif %}
+</div>
 {% endblock %}

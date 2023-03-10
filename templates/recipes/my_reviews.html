@@ -2,4 +2,18 @@
 {% load staticfiles %}
 
 {% block body_block %}
+<div>
+   <h2>Your Reviews</h2>
+{% if written_reviews %}
+   <ul>
+   {% for review in written_reviews %}
+       <li>{{ review.recipe.title }}</li>
+       <li>{{ review.rating }}</li>
+       <li>{{ review.content }}</li>
+   {% endfor %}
+   </ul>
+{% else %}
+   <strong>There are no recipes present.</strong>
+{% endif %}
+
 {% endblock %}
