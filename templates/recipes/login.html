@@ -1,6 +1,12 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
 
+{% block head_block %}
+    <script	src="jquery.js"></script>
+    <style>#myButton {background-color:#00ff00;}
+    </style>
+{% endblock %}
+
 
 {% block body_block %}
 <h1>Login</h1>
@@ -15,5 +21,12 @@
     <br />
     <input type="submit" value="Submit" />
 </form>
-<p>Don't have an account? Sign up <a href="{% url 'recipes:signup' %}">here!</a></p>
+<p>Don't have an account?</p>
+
+<button id="myButton">Sign Up Here!</button>
+<script type="text/javascript">
+    document.getElementById("myButton").onclick = function () {
+        location.href = "{% url 'recipes:signup' %}";
+    };
+</script>
 {% endblock %}
