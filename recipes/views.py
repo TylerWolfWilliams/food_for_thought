@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from recipes.models import Category, Recipe, Review, UserProfile
 from django.contrib.auth import authenticate, login, logout
@@ -114,30 +115,36 @@ def show_recipe(request, recipe_name_slug, recipe_id):
     context_dict = {}
 
     try:
-        recipe1 = Recipe.objects.get(id=recipe_id)
+        recipe1 = Recipe.objects.get(slug=recipe_name_slug)
 
-        if recipe1.slug == recipe_name_slug:
-            context_dict['recipe'] = recipe1
+        if recipe1.id == recipe_id:
+
+            if recipe1.slug == recipe_name_slug:
+                context_dict['recipe'] = recipe1
+            else:
+                context_dict['recipe'] = None
+
+            reviews = Review.objects.filter(recipe_id=recipe_id)
+
+            context_dict['reviews'] = reviews
+
+            return render(request, 'recipes/recipe.html', context=context_dict)
         else:
-            context_dict['recipe'] = None
-
-        reviews = Review.objects.filter(recipe_id=recipe_id)
-
-        context_dict['reviews'] = reviews
+            return redirect(reverse('recipes:home'))
 
     except Recipe.DoesNotExist:
-        context_dict['recipe'] = None
-
-    return render(request, 'recipes/recipe.html', context=context_dict)
+        return redirect(reverse('recipes:home'))
 
 
 @login_required
 def show_user_account(request):
     current_user = request.user
 
-    current_user_profile = UserProfile.objects.filter(user=current_user)
+    current_user_profile = UserProfile.objects.get(user=current_user)
 
-    saved_recipes = []
+    saved_recipes = current_user_profile.saved.all()
+
+    print(saved_recipes)
 
     written_recipes = Recipe.objects.filter(author=current_user)
 
@@ -200,16 +207,20 @@ def show_user_reviews(request):
 def show_user_saved_recipes(request):
     current_user = request.user
 
-    saved_recipes = current_user.saved
+    current_user_profile = UserProfile.objects.get(user=current_user)
+
+    saved_recipes = current_user_profile.saved.all()
 
     context_dict = {'saved_recipes': saved_recipes}
 
-    return render(request, 'recipes/saved_recipes', context=context_dict)
+    return render(request, 'recipes/saved_recipes.html', context=context_dict)
 
 
 def show_non_user_account(request, username):
     try:
-        user = UserProfile.objects.get(username=username)
+        user = User.objects.get(username=username)
+
+        print(type(user))
 
         written_recipes = Recipe.objects.filter(author=user)
 
@@ -217,8 +228,8 @@ def show_non_user_account(request, username):
 
         context_dict = {"user": user, "written_recipes": written_recipes,
                         "written_reviews": written_reviews}
+        return render(request, 'recipes/others_account.html', context=context_dict)
 
     except UserProfile.DoesNotExist:
-        context_dict = {"user": None, "written_recipes": None, "written_reviews": None}
+        return redirect(reverse('recipes:home'))
 
-    return render(request, 'recipes/others_account.html', context=context_dict)
