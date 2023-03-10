@@ -2,10 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 
-
 class Category(models.Model):
     name = models.CharField(max_length=100)
-    image = models.ImageField()
+    image = models.ImageField(upload_to = "category_images/")
 
     slug = models.SlugField(unique=True)
 
@@ -25,7 +24,7 @@ class Recipe(models.Model):
     category = models.ManyToManyField(Category)
 
     title = models.CharField(max_length=100)
-    image = models.ImageField()
+    image = models.ImageField(upload_to = lambda instance, filename: f'user_{instance.author.id}/recipes/{filename}')
     content = models.CharField(max_length=10000)
     ingredients = models.CharField(max_length=1000)
     cooking_time = models.DurationField()
@@ -46,7 +45,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     saved = models.ManyToManyField(Recipe, related_name="saved")
 
-    picture = models.ImageField()
+    picture = models.ImageField(upload_to = lambda instance, filename: f'user_{instance.user.id}/profile/{filename}')
     bio = models.CharField(max_length=1000)
 
     def __str__(self):
