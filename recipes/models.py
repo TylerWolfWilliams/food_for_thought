@@ -20,16 +20,18 @@ class Category(models.Model):
 
 
 class Recipe(models.Model):
+    def upload_folder(instance, filename):
+        return f'user_{instance.author.id}/recipes/{filename}'
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ManyToManyField(Category)
 
     title = models.CharField(max_length=100)
-    image = models.ImageField(upload_to = lambda instance, filename: f'user_{instance.author.id}/recipes/{filename}')
+    image = models.ImageField(upload_to = upload_folder)
     content = models.CharField(max_length=10000)
     ingredients = models.CharField(max_length=1000)
     cooking_time = models.DurationField()
     servings = models.CharField(max_length=100)
-    tags = models.CharField(max_length=1000)
+    tags = models.CharField(max_length=1000, blank = True)
 
     slug = models.SlugField(unique=True)
 
@@ -42,10 +44,12 @@ class Recipe(models.Model):
 
 
 class UserProfile(models.Model):
+    def upload_folder(instance, filename):
+        return f'user_{instance.user.id}/profile/{filename}'
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     saved = models.ManyToManyField(Recipe, related_name="saved")
 
-    picture = models.ImageField(upload_to = lambda instance, filename: f'user_{instance.user.id}/profile/{filename}')
+    picture = models.ImageField(upload_to = upload_folder)
     bio = models.CharField(max_length=1000)
 
     def __str__(self):
