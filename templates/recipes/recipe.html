@@ -1,5 +1,22 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
 
+
 {% block body_block %}
+
+<div>
+    <form id="review_form" method="POST" action="{% url 'recipes:show_recipe' %}">
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        {% for field in form.visible_fields %}
+            {{ field.errors }}
+            {{ field.help_text }}
+            {{ field }}
+        <br>
+        {% endfor %}
+        <input type="submit" name="submit" value="Post review" />
+    </form>
+</div>
 {% endblock %}

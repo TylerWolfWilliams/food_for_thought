@@ -11,7 +11,6 @@ class RecipeForm(forms.ModelForm):
     tags = forms.CharField(max_length=1000, help_text="Tags (optional): ", required=False)
     cooking_time = forms.IntegerField(min_value=0, help_text="Cooking Time: ")
     servings = forms.CharField(max_length=100, help_text="Servings: ")
-
     category = forms.ModelMultipleChoiceField(Category.objects.all(), required=False)
 
     class Meta:
@@ -35,8 +34,8 @@ class UserProfileForm(forms.ModelForm):
 
 
 class ReviewForm(forms.ModelForm):
-    content = forms.CharField(max_length=1000, help_text="Please enter your thoughts on the recipe.")
-    rating = forms.IntegerField(min_value=1, max_value=10)
+    content = forms.CharField(max_length=1000, help_text="Enter your thoughts on the recipe.")
+    rating = forms.ChoiceField(widget=forms.RadioSelect(), choices=((i, str(i)) for i in range(1, 6)))
 
     class Meta:
         model = Review
