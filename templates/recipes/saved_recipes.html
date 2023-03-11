@@ -8,7 +8,7 @@
    <ul>
    {% for recipe in saved_recipes %}
        <li><img src="{{ recipe.image.url }}" alt="{{ recipe.title }} image"></li>
-       <li><a href="{% url 'recipes:show_recipe' recipe.slug recipe.id %}">{{ recipe.title }}</a> {{ recipe.average_rating }}</li>
+       <li><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a> {{ recipe.average_rating }}</li>
    {% endfor %}
    </ul>
 {% else %}

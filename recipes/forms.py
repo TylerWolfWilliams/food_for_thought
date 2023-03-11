@@ -9,7 +9,7 @@ class RecipeForm(forms.ModelForm):
     content = forms.CharField(max_length=10000, help_text="Instructions: ")
     ingredients = forms.CharField(max_length=10000, help_text="Ingredients: ")
     tags = forms.CharField(max_length=1000, help_text="Tags (optional): ", required=False)
-    cooking_time = forms.IntegerField(min_value=0, help_text="Cooking Time: ")
+    cooking_time = forms.CharField(help_text="Cooking Time: ")
     servings = forms.CharField(max_length=100, help_text="Servings: ")
     category = forms.ModelMultipleChoiceField(Category.objects.all(), required=False)
 

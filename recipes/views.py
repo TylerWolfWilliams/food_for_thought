@@ -111,26 +111,17 @@ def sign_up(request):
     return render(request, 'recipes/signup.html', context=context_dict)
 
 
-def show_recipe(request, recipe_name_slug, recipe_id):
+def show_recipe(request, user_id, recipe_name_slug):
     context_dict = {}
 
     try:
-        recipe1 = Recipe.objects.get(slug=recipe_name_slug)
+        recipe = Recipe.objects.get(slug=recipe_name_slug, author = User.objects.get(id = user_id))
+        reviews = Review.objects.filter(recipe_id=recipe.id)
 
-        if recipe1.id == recipe_id:
+        context_dict['recipe'] = recipe
+        context_dict['reviews'] = reviews
 
-            if recipe1.slug == recipe_name_slug:
-                context_dict['recipe'] = recipe1
-            else:
-                context_dict['recipe'] = None
-
-            reviews = Review.objects.filter(recipe_id=recipe_id)
-
-            context_dict['reviews'] = reviews
-
-            return render(request, 'recipes/recipe.html', context=context_dict)
-        else:
-            return redirect(reverse('recipes:home'))
+        return render(request, 'recipes/recipe.html', context=context_dict)
 
     except Recipe.DoesNotExist:
         return redirect(reverse('recipes:home'))
@@ -172,7 +163,7 @@ def add_recipe(request):
     form = RecipeForm()
 
     if request.method == "POST":
-        form = RecipeForm(request.POST)
+        form = RecipeForm(request.POST, request.FILES)
 
         if form.is_valid():
             recipe = form.save(commit=False)
@@ -181,10 +172,9 @@ def add_recipe(request):
             if 'image' in request.FILES:
                 recipe.image = request.FILES['image']
 
-            recipe.average_rating = 0
             recipe.save()
 
-            return redirect(reverse('recipe:show_user_account'))
+            return redirect(reverse('recipes:show_user_account'))
         else:
             print(form.errors)
 
