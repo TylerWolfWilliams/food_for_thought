@@ -1,13 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.contrib.auth.models import User
-from django.http import HttpResponse
-from recipes.models import Category, Recipe, Review, UserProfile
+from django.http import HttpResponse, Http404
+
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from recipes.forms import UserForm, UserProfileForm, RecipeForm
 
 from django.db.models import Avg
+
+from recipes.models import Category, Recipe, Review, UserProfile
+from recipes.forms import UserForm, UserProfileForm, RecipeForm
 
 
 def home(request):
@@ -30,16 +32,11 @@ def categories(request):
 def show_category(request, category_name_slug):
     context_dict = {}
 
-    try:
-        category = Category.objects.get(slug=category_name_slug)
-        recipes = Recipe.objects.filter(category=category)
+    category = get_object_or_404(Category, slug = category_name_slug)
+    recipes = Recipe.objects.filter(category=category).distinct()
 
-        context_dict['category'] = category
-        context_dict['recipes'] = recipes
-
-    except Category.DoesNotExist:
-        context_dict['category'] = None
-        context_dict['recipes'] = None
+    context_dict['category'] = category
+    context_dict['recipes'] = recipes
 
     return render(request, 'recipes/category.html', context=context_dict)
 
@@ -85,7 +82,7 @@ def sign_up(request):
 
     if request.method == 'POST':
         user_form = UserForm(request.POST)
-        profile_form = UserProfileForm(request.POST)
+        profile_form = UserProfileForm(request.POST, request.FILES)
 
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
@@ -114,17 +111,13 @@ def sign_up(request):
 def show_recipe(request, user_id, recipe_name_slug):
     context_dict = {}
 
-    try:
-        recipe = Recipe.objects.get(slug=recipe_name_slug, author = User.objects.get(id = user_id))
-        reviews = Review.objects.filter(recipe_id=recipe.id)
+    recipe = get_object_or_404(Recipe, slug=recipe_name_slug, author = User.objects.get(id = user_id))
+    reviews = Review.objects.filter(recipe_id=recipe.id)
 
-        context_dict['recipe'] = recipe
-        context_dict['reviews'] = reviews
+    context_dict['recipe'] = recipe
+    context_dict['reviews'] = reviews
 
-        return render(request, 'recipes/recipe.html', context=context_dict)
-
-    except Recipe.DoesNotExist:
-        return redirect(reverse('recipes:home'))
+    return render(request, 'recipes/recipe.html', context=context_dict)
 
 
 @login_required
@@ -206,20 +199,16 @@ def show_user_saved_recipes(request):
     return render(request, 'recipes/saved_recipes.html', context=context_dict)
 
 
-def show_non_user_account(request, username):
-    try:
-        user = User.objects.get(username=username)
+def show_non_user_account(request, user_id):
+    user = get_object_or_404(User, id=user_id)
 
-        print(type(user))
+    print(type(user))
 
-        written_recipes = Recipe.objects.filter(author=user)
+    written_recipes = Recipe.objects.filter(author=user)
 
-        written_reviews = Review.objects.filter(author=user)
+    written_reviews = Review.objects.filter(author=user)
 
-        context_dict = {"user": user, "written_recipes": written_recipes,
-                        "written_reviews": written_reviews}
-        return render(request, 'recipes/others_account.html', context=context_dict)
-
-    except UserProfile.DoesNotExist:
-        return redirect(reverse('recipes:home'))
+    context_dict = {"user": user, "written_recipes": written_recipes,
+                    "written_reviews": written_reviews}
+    return render(request, 'recipes/others_account.html', context=context_dict)
 

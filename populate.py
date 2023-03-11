@@ -1,6 +1,5 @@
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE',
-                      'food_for_thought.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'food_for_thought.settings')
 
 import django, datetime
 django.setup()
