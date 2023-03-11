@@ -5,6 +5,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 import django, datetime
 django.setup()
 from recipes.models import Category, Recipe, UserProfile, Review, User
+from django.core.files.images import ImageFile
 
 def get_user(username):
     return User.objects.get(username = username)
@@ -16,21 +17,48 @@ def get_recipe(title):
     return Recipe.objects.get(title = title)
 
 def populate():
+    categories = [{
+        "name": "Baked",
+        "image": "test.jpg"
+        }, {
+        "name": "Fried",
+        "image": "test.jpg"
+        }]
+
+    for category in categories:
+        c = Category.objects.get_or_create(name = category["name"])[0]
+        with open(category["image"], "rb") as i:
+            c.image = ImageFile(i)
+            c.save()
+
     users = [{
         "auth": {"username": "paul", "password": "123"},
         "profile": {
             "bio": "I like to cook!"
-            }
+            },
+        "recipes": [{
+            "title": "Bread",
+            "content": "Put dough in oven.",
+            "cooking_time": datetime.timedelta(10),
+            "image": "test.jpg"
+            }]
         }, {
         "auth": {"username": "mrbean62", "password": "cool"},
         "profile": {
             "bio": "havin fun"
-            }
+            },
+        "recipes": []
         }, {
         "auth": {"username": "coolboy4572", "password": "cool"},
         "profile": {
             "bio": "havin more fun"
-            }
+            },
+        "recipes": [{
+            "title": "Rice",
+            "content": "Put rice in oil.",
+            "cooking_time": datetime.timedelta(10),
+            "image": "test.jpg"
+            }]
         }
     ]
 
@@ -40,33 +68,12 @@ def populate():
         u.save()
         up.save()
 
-    categories = [{
-        "name": "Baked"
-        }, {
-        "name": "Fried"
-        }]
+        for recipe in user["recipes"]:
+            r = Recipe.objects.get_or_create(**recipe, author = u)[0]
+            with open(recipe["image"], "rb") as i:
+                r.image = ImageFile(i)
+                r.save()
 
-    for category in categories:
-        c = Category.objects.get_or_create(**category)[0]
-        c.save()
-
-    recipes = [{
-        "title": "Bread",
-        "author": get_user("paul"),
-        "content": "Put dough in oven.",
-        "cooking_time": datetime.timedelta(0)
-        # "category": get_category("Baked")
-        }, {
-        "title": "Rice",
-        "author": get_user("coolboy4572"),
-        "content": "Put rice in oil.",
-        "cooking_time": datetime.timedelta(0)
-        # "category": get_category("Fried")
-        }]
-
-    for recipe in recipes:
-        r = Recipe.objects.get_or_create(**recipe)[0]
-        r.save()
 
     reviews = [{
         "author": get_user("paul"),
@@ -79,7 +86,9 @@ def populate():
         r = Review.objects.get_or_create(**review)[0]
         r.save()
 
+
     
-if __name__ == '__main__':
-    print('Populating databse')
+if __name__ == "__main__":
+    print("Populating databse")
     populate()
+    print("done")
