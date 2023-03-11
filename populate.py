@@ -32,7 +32,7 @@ def populate():
             c.save()
 
     users = [{
-        "auth": {"username": "paul", "password": "123"},
+        "auth": {"username": "paul"},
         "profile": {
             "bio": "I like to cook!"
             },
@@ -43,13 +43,13 @@ def populate():
             "image": "test.jpg"
             }]
         }, {
-        "auth": {"username": "mrbean62", "password": "cool"},
+        "auth": {"username": "mrbean62"},
         "profile": {
             "bio": "havin fun"
             },
         "recipes": []
         }, {
-        "auth": {"username": "coolboy4572", "password": "cool"},
+        "auth": {"username": "coolboy4572"},
         "profile": {
             "bio": "havin more fun"
             },
