@@ -5,7 +5,7 @@ from recipes.models import Recipe, UserProfile, Review, Category
 
 class RecipeForm(forms.ModelForm):
     title = forms.CharField(max_length=100, help_text="Name of Recipe: ")
-    image = forms.ImageField(help_text="Upload Image: ")
+    image = forms.ImageField(help_text="Upload Image: ", required=False)
     content = forms.CharField(max_length=10000, help_text="Instructions: ")
     ingredients = forms.CharField(max_length=10000, help_text="Ingredients: ")
     tags = forms.CharField(max_length=1000, help_text="Tags (optional): ", required=False)
