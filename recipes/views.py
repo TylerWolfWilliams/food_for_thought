@@ -163,7 +163,7 @@ def add_recipe(request):
     form = RecipeForm()
 
     if request.method == "POST":
-        form = RecipeForm(request.POST)
+        form = RecipeForm(request.POST, request.FILES)
 
         if form.is_valid():
             recipe = form.save(commit=False)
@@ -172,10 +172,9 @@ def add_recipe(request):
             if 'image' in request.FILES:
                 recipe.image = request.FILES['image']
 
-            recipe.average_rating = 0
             recipe.save()
 
-            return redirect(reverse('recipe:show_user_account'))
+            return redirect(reverse('recipes:show_user_account'))
         else:
             print(form.errors)
 

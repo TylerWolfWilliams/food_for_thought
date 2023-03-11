@@ -24,7 +24,7 @@ class Recipe(models.Model):
         return f'user_{instance.author.id}/recipes/{filename}'
 
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ManyToManyField(Category)
+    category = models.ManyToManyField(Category, blank = True)
 
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to = upload_folder)
@@ -51,10 +51,10 @@ class UserProfile(models.Model):
     def upload_folder(instance, filename):
         return f'user_{instance.user.id}/profile/{filename}'
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    saved = models.ManyToManyField(Recipe, related_name="saved")
+    saved = models.ManyToManyField(Recipe, related_name="saved", blank = True)
 
-    picture = models.ImageField(upload_to = upload_folder)
-    bio = models.CharField(max_length=1000)
+    picture = models.ImageField(upload_to = upload_folder, blank = True)
+    bio = models.CharField(max_length=1000, blank = True)
 
     def __str__(self):
         return self.user.username
@@ -66,3 +66,6 @@ class Review(models.Model):
 
     content = models.CharField(max_length=1000)
     rating = models.IntegerField()
+
+    class Meta:
+        unique_together = ('author', 'recipe',)
