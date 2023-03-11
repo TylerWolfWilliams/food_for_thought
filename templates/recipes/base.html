@@ -20,11 +20,16 @@
 
 <body>
     <header>
-        <nav>
-            <ul>
-                <li><a href="{% url 'recipes:home' %}"><img src="{% static 'images/home-icon.png' %}" alt="Home"></a></li>
-                <li><a href="{% url 'recipes:categories' %}">Categories</a></li>
-            </ul>
+        <nav class = "navbar navbar-expand-md">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'recipes:home' %}">
+                    <img src="{% static 'images/home-icon.png' %}" alt="Home" width="50" height="50">
+                </a>
+
+                <ul class= "navbar-nav">
+                    <li><a href="{% url 'recipes:categories' %}">Categories</a></li>
+                </ul>
+            </div>
         </nav>
         <form>
             <input type="text" placeholder="Search...">
