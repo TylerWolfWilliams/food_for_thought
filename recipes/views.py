@@ -134,7 +134,7 @@ def show_user_account(request):
 
     written_reviews = Review.objects.filter(author=current_user)
 
-    context_dict = {"current_user": current_user, "saved_recipes": saved_recipes, "written_recipes": written_recipes,
+    context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes, "written_recipes": written_recipes,
                     "written_reviews": written_reviews}
 
     return render(request, 'recipes/my_account.html', context=context_dict)
