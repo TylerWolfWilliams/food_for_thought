@@ -192,7 +192,7 @@ def show_user_reviews(request):
 def show_user_saved_recipes(request):
     current_user = request.user
 
-    current_user_profile = UserProfile.objects.get(user=current_user)
+    # current_user_profile = UserProfile.objects.get(user=current_user)
 
     saved_recipes = current_user_profile.saved.all()
 
