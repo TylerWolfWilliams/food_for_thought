@@ -118,7 +118,7 @@ def show_recipe(request, user_id, recipe_name_slug):
     context_dict['recipe'] = recipe
     context_dict['average_rating'] = average_rating
     context_dict['reviews'] = reviews
-    if not Review.objects.filter(author = request.user, recipe = recipe).exists():
+    if request.user.is_authenticated and not Review.objects.filter(author = request.user, recipe = recipe).exists():
         form = ReviewForm()
 
         if request.method == "POST":
