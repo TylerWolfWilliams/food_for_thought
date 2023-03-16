@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <title>
         {% block title_block %}
@@ -20,7 +20,7 @@
 
 <body>
     <header>
-        <nav class = "navbar navbar-expand-md">
+        <nav class="navbar bg-body-tertiary">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{% url 'recipes:home' %}">
                     <img src="{% static 'images/home-icon.png' %}" alt="Home" width="50" height="50">
@@ -29,25 +29,31 @@
                 <ul class= "navbar-nav">
                     <li><a href="{% url 'recipes:categories' %}">Categories</a></li>
                 </ul>
+
+                <form class="d-flex" role="search" action="{% url 'recipes:show_results' %}" method="get">
+                    <input name="q" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+
+                {% if user.is_authenticated %}
+                <a href="{% url 'recipes:add_recipe' %}">Add a Recipe</a><br>
+                <a href="{% url 'recipes:show_user_account' %}">
+                    My Account
+                    <img src="{{ user.userprofile.picture.url }}" alt="Profile Picture" width="40" height="40">
+                </a>
+                <a href="{% url 'recipes:logout' %}">Logout</a>
+                {% else %}
+                <a href="{% url 'recipes:login' %}">Login</a>
+                {% endif %}
+
             </div>
         </nav>
-        <form>
-            <input type="text" placeholder="Search...">
-            <button type="submit">Search</button>
-        </form>
-        {% if user.is_authenticated %}
-        <a href="{% url 'recipes:add_recipe' %}">Add a Recipe</a><br>
-        <a href="{% url 'recipes:show_user_account' %}">My Account</a>
-        <a href="{% url 'recipes:logout' %}">Logout</a>
-        {% else %}
-        <a href="{% url 'recipes:login' %}">Login</a>
-        {% endif %}
     </header>
     <main>
         {% block body_block %}
         {% endblock %}
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
