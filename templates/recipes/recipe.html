@@ -26,6 +26,7 @@
     <h4>{{ recipe.content }}</h4>
 </div>
 
+{% if review_form %}
 <div>
     <form id="review_form" method="POST" enctype="multipart/form-data" action="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">
         {% csrf_token %}
@@ -40,4 +41,5 @@
         <input type="submit" name="submit" value="Post review" />
     </form>
 </div>
+{% endif %}
 {% endblock %}

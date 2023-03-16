@@ -118,22 +118,25 @@ def show_recipe(request, user_id, recipe_name_slug):
     context_dict['recipe'] = recipe
     context_dict['average_rating'] = average_rating
     context_dict['reviews'] = reviews
-    form = ReviewForm()
+    try:
+        Review.objects.get(author = request.user, recipe = recipe)
+    except Model.DoesNotExist:
+        form = ReviewForm()
 
-    if request.method == "POST":
-        form = ReviewForm(request.POST)
+        if request.method == "POST":
+            form = ReviewForm(request.POST)
 
-        if form.is_valid():
-            review = form.save(commit=False)
-            review.author = request.user
-            review.recipe = recipe
-            review.save()
+            if form.is_valid():
+                review = form.save(commit=False)
+                review.author = request.user
+                review.recipe = recipe
+                review.save()
 
-        return redirect(reverse('recipes:show_recipe',args=[user_id,recipe_name_slug]))
-    else:
-        print(form.errors)
+            return redirect(reverse('recipes:show_recipe',args=[user_id,recipe_name_slug]))
+        else:
+            print(form.errors)
 
-    context_dict['review_form'] = form
+        context_dict['review_form'] = form
 
     return render(request, 'recipes/recipe.html', context=context_dict)
 
