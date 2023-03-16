@@ -118,9 +118,7 @@ def show_recipe(request, user_id, recipe_name_slug):
     context_dict['recipe'] = recipe
     context_dict['average_rating'] = average_rating
     context_dict['reviews'] = reviews
-    try:
-        Review.objects.get(author = request.user, recipe = recipe)
-    except Model.DoesNotExist:
+    if not Review.objects.filter(author = request.user, recipe = recipe).exists():
         form = ReviewForm()
 
         if request.method == "POST":
@@ -132,7 +130,7 @@ def show_recipe(request, user_id, recipe_name_slug):
                 review.recipe = recipe
                 review.save()
 
-            return redirect(reverse('recipes:show_recipe',args=[user_id,recipe_name_slug]))
+            return redirect(reverse('recipes:show_recipe', args=[user_id, recipe_name_slug]))
         else:
             print(form.errors)
 
@@ -211,7 +209,7 @@ def show_user_reviews(request):
 def show_user_saved_recipes(request):
     current_user = request.user
 
-    # current_user_profile = UserProfile.objects.get(user=current_user)
+    current_user_profile = UserProfile.objects.get(user=current_user)
 
     saved_recipes = current_user_profile.saved.all()
 
