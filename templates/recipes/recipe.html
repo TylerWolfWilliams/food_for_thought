@@ -7,10 +7,10 @@
     <h2>{{ recipe.title }}</h2>
     <li>Serves: {{ recipe.servings }}</li>
     <li>Cooking Time: {{ recipe.cooking_time }}</li>
-    <li>Rating: </li>
+    <li>Rating: {{ average_rating }}</li>
     <li>Tags: {{ recipe.tags }}</li>
     <li><img src="{{ recipe.image.url }}" alt="{{ recipe.title }} image"></li>
-    <li>Author: {{ recipe.author }}</li>
+    <li>Author: <a href = "{% url 'recipes:show_non_user_account' recipe.author.id %}">{{ recipe.author }}</a></li>
 {% if categories %}
     <li>Category: <a href="{% url 'recipes:show_category' category.slug %}">{{ recipe.category.name }}</a></li>
 {% endif %}

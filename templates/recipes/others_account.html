@@ -2,12 +2,12 @@
 {% load staticfiles %}
 
 {% block body_block %}
-<h2>{{ user.user }}</h2>
-<li><img src="{{ user.picture.url }}" alt="{{ user.user }} image"></li>
-<li>{{ current_user.bio }}</li>
+<h2>{{ user.username }}</h2>
+<li><img src="{{ user_profile.picture.url }}" alt="{{ user.username }} image"></li>
+<li>{{ user_profile.bio }}</li>
 
 <div>
-   <h2>{{ user.user }} Recipes</h2>
+   <h2>{{ user.username }}'s Recipes</h2>
 {% if written_recipes %}
    <ul>
    {% for recipe in written_recipes %}
@@ -21,7 +21,7 @@
 </div>
 
 <div>
-   <h2>{{ user.user }} Reviews</h2>
+   <h2>{{ user.username }}'s Reviews</h2>
 {% if written_reviews %}
    <ul>
    {% for review in written_reviews %}
@@ -31,7 +31,7 @@
    {% endfor %}
    </ul>
 {% else %}
-   <strong>There are no recipes present.</strong>
+   <strong>There are no reviews present.</strong>
 {% endif %}
 </div>
 {% endblock %}
