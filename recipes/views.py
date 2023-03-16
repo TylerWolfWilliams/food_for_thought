@@ -112,9 +112,11 @@ def show_recipe(request, user_id, recipe_name_slug):
     context_dict = {}
 
     recipe = get_object_or_404(Recipe, slug=recipe_name_slug, author = User.objects.get(id = user_id))
+    average_rating = Review.objects.filter(recipe = recipe).aggregate(Avg('rating'))['rating__avg']
     reviews = Review.objects.filter(recipe_id=recipe.id)
 
     context_dict['recipe'] = recipe
+    context_dict['average_rating'] = average_rating
     context_dict['reviews'] = reviews
 
     return render(request, 'recipes/recipe.html', context=context_dict)
@@ -134,7 +136,7 @@ def show_user_account(request):
 
     written_reviews = Review.objects.filter(author=current_user)
 
-    context_dict = {"current_user": current_user, "saved_recipes": saved_recipes, "written_recipes": written_recipes,
+    context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes, "written_recipes": written_recipes,
                     "written_reviews": written_reviews}
 
     return render(request, 'recipes/my_account.html', context=context_dict)
@@ -201,6 +203,7 @@ def show_user_saved_recipes(request):
 
 def show_non_user_account(request, user_id):
     user = get_object_or_404(User, id=user_id)
+    user_profile = UserProfile.objects.get(user = user)
 
     print(type(user))
 
@@ -209,6 +212,6 @@ def show_non_user_account(request, user_id):
     written_reviews = Review.objects.filter(author=user)
 
     context_dict = {"user": user, "written_recipes": written_recipes,
-                    "written_reviews": written_reviews}
+                    "written_reviews": written_reviews, "user_profile": user_profile}
     return render(request, 'recipes/others_account.html', context=context_dict)
 

@@ -53,7 +53,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     saved = models.ManyToManyField(Recipe, related_name="saved", blank = True)
 
-    picture = models.ImageField(upload_to = upload_folder, blank = True)
+    picture = models.ImageField(upload_to = upload_folder, blank = True, default = "test.jpg")
     bio = models.CharField(max_length=1000, blank = True)
 
     def __str__(self):

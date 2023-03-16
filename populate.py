@@ -88,6 +88,6 @@ def populate():
 
     
 if __name__ == "__main__":
-    print("Populating databse")
+    print("Populating database")
     populate()
     print("done")
