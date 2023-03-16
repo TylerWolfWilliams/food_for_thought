@@ -27,17 +27,16 @@
 </div>
 
 <div>
-    <form id="review_form" method="POST" action="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">
+    <form id="review_form" method="POST" enctype="multipart/form-data" action="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">
         {% csrf_token %}
-        {% for hidden in form.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
-        {% for field in form.visible_fields %}
-            {{ field.errors }}
-            {{ field.help_text }}
-            {{ field }}
+        Review: <input type="radio" name="rating" value="1" />
+        <input type="radio" name="rating" value="2" />
+        <input type="radio" name="rating" value="3" />
+        <input type="radio" name="rating" value="4" />
+        <input type="radio" name="rating" value="5" />
         <br>
-        {% endfor %}
+        Comment: <input type="text" name="content" value="" size="1000" />
+
         <input type="submit" name="submit" value="Post review" />
     </form>
 </div>
