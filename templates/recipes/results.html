@@ -2,4 +2,25 @@
 {% load staticfiles %}
 
 {% block body_block %}
+<form action="./" method="get">
+    Search: <input type="text" name="q" value={{ request }}></br>
+
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+            Default checkbox
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+        <label class="form-check-label" for="flexCheckChecked">
+            Checked checkbox
+        </label>
+    </div>
+
+</form>
+<h1>Results for "{{ request }}"</h1>
+{% for recipe in results %}
+<a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a> <br>
+{% endfor %}
 {% endblock %}

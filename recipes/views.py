@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 from django.db.models import Avg
+from django.db.models import Q
 
 from recipes.models import Category, Recipe, Review, UserProfile
 from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm
@@ -42,7 +43,13 @@ def show_category(request, category_name_slug):
 
 
 def show_results(request):
-    context_dict = {}
+    req = request.GET.get('q')
+    if req is None:
+        req = ""
+    query = Q()
+    query |= Q(title__icontains=req)
+    results = Recipe.objects.filter(query)
+    context_dict = {"results": results, "request": req}
 
     return render(request, 'recipes/results.html', context=context_dict)
 
@@ -118,7 +125,7 @@ def show_recipe(request, user_id, recipe_name_slug):
     context_dict['recipe'] = recipe
     context_dict['average_rating'] = average_rating
     context_dict['reviews'] = reviews
-    if request.user.is_authenticated and not Review.objects.filter(author = request.user, recipe = recipe).exists():
+    if request.user.is_authenticated and not Review.objects.filter(author = request.user, recipe = recipe).exists() and not recipe.author == request.user:
         form = ReviewForm()
 
         if request.method == "POST":
@@ -222,11 +229,9 @@ def show_non_user_account(request, user_id):
     user = get_object_or_404(User, id=user_id)
     user_profile = UserProfile.objects.get(user = user)
 
-    print(type(user))
+    written_recipes = Recipe.objects.filter(author=user)[:5]
 
-    written_recipes = Recipe.objects.filter(author=user)
-
-    written_reviews = Review.objects.filter(author=user)
+    written_reviews = Review.objects.filter(author=user)[:5]
 
     context_dict = {"user": user, "written_recipes": written_recipes,
                     "written_reviews": written_reviews, "user_profile": user_profile}
