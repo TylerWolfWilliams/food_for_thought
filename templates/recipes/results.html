@@ -4,23 +4,40 @@
 {% block body_block %}
 <form action="./" method="get">
     Search: <input type="text" name="q" value={{ request }}></br>
-
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-        <label class="form-check-label" for="flexCheckDefault">
-            Default checkbox
-        </label>
-    </div>
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-        <label class="form-check-label" for="flexCheckChecked">
-            Checked checkbox
-        </label>
-    </div>
-
+    {{ form }}
+    <input type="submit">
 </form>
-<h1>Results for "{{ request }}"</h1>
-{% for recipe in results %}
-<a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a> <br>
-{% endfor %}
+
+{% if results %}
+    <h2>Results for "{{ request }}":</h2>
+
+    {% for recipe in results %}
+    <div class="card mb-3" style="max-width: 300px; margin-left: 10px">
+      <div class="row g-0">
+        <div class="col-md-4">
+            <img src="{{ recipe.image.url }}" class="img-fluid rounded-start" alt="{{ recipe.title }} image">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+
+            <a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">
+              <h5 class="card-title">{{ recipe.title }}</h5>
+            </a>
+
+            <p class="card-text"><small class="text-muted">
+                Written by
+                <a href="{% url 'recipes:show_non_user_account' recipe.author.id %}">
+                    {{ recipe.author.username }}
+                </a>
+            </small></p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+{% else %}
+<h2>No results.</h2>
+{% endif %}
+
 {% endblock %}

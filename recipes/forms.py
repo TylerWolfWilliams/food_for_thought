@@ -40,3 +40,10 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         exclude = ('author', 'recipe',)
+
+class SearchForm(forms.Form):
+    fields = forms.MultipleChoiceField(choices = [("title", "Title"), ("ing", "Ingredients"), ("tags", "Tags")])
+    category = forms.ModelMultipleChoiceField(Category.objects.all(), required=False)
+    time_to_cook = forms.DurationField(required = False)
+    author = forms.ModelChoiceField(UserProfile.objects.all(), required=False)
+

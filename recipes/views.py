@@ -10,7 +10,7 @@ from django.db.models import Avg
 from django.db.models import Q
 
 from recipes.models import Category, Recipe, Review, UserProfile
-from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm
+from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm, SearchForm
 
 
 def home(request):
@@ -43,13 +43,40 @@ def show_category(request, category_name_slug):
 
 
 def show_results(request):
-    req = request.GET.get('q')
-    if req is None:
-        req = ""
+    print(type(request.GET))
+    req = request.GET.get('q', default="")
+
+    search_types = {
+            'title': Q(title__icontains=req),
+            'ing': Q(ingredients__icontains=req),
+            'tags': Q(tags__icontains=req)
+            }
+
+    form = SearchForm(request.GET)
+
+    context_dict = {"request": req, "form": form}
     query = Q()
-    query |= Q(title__icontains=req)
-    results = Recipe.objects.filter(query)
-    context_dict = {"results": results, "request": req}
+    if form.is_valid():
+        fields = form.cleaned_data['fields']
+        categories = form.cleaned_data['category']
+        time = form.cleaned_data['time_to_cook']
+        author = form.cleaned_data['author']
+
+        for field in fields:
+            query |= search_types[field]#.get(field, Q())
+
+        if categories.exists():
+            query &= Q(category__in = categories)
+
+        if time:
+            query &= Q(cooking_time__lte = time)
+
+        if author:
+            query &= Q(author = User.objects.get(userprofile=author))
+
+        print(query)
+        results = Recipe.objects.filter(query)
+        context_dict["results"] = results
 
     return render(request, 'recipes/results.html', context=context_dict)
 
