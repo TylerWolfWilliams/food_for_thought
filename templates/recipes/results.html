@@ -2,11 +2,13 @@
 {% load staticfiles %}
 
 {% block body_block %}
-<form action="./" method="get">
-    Search: <input type="text" name="q" value={{ request }}></br>
+<!-- <div class="container"> -->
+<form role="search" action="./" method="get">
+    Search: <input type="search" name="q" value="{{ request }}" placeholder="Search" class="form-control me-2">
+    <button class="btn btn-outline-success" type="submit">Search</button></br>
     {{ form }}
-    <input type="submit">
 </form>
+<!-- </div> -->
 
 {% if results %}
     <h2>Results for "{{ request }}":</h2>

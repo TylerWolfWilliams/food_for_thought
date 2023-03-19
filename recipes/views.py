@@ -43,27 +43,21 @@ def show_category(request, category_name_slug):
 
 
 def show_results(request):
-    print(type(request.GET))
     req = request.GET.get('q', default="")
-
-    search_types = {
-            'title': Q(title__icontains=req),
-            'ing': Q(ingredients__icontains=req),
-            'tags': Q(tags__icontains=req)
-            }
+    req_words = set(req.split())
 
     form = SearchForm(request.GET)
-
     context_dict = {"request": req, "form": form}
-    query = Q()
-    if form.is_valid():
-        fields = form.cleaned_data['fields']
-        categories = form.cleaned_data['category']
-        time = form.cleaned_data['time_to_cook']
-        author = form.cleaned_data['author']
 
-        for field in fields:
-            query |= search_types[field]#.get(field, Q())
+    query = Q()
+    for word in req_words:
+        query |= Q(title__icontains=word) | Q(ingredients__icontains=word) | Q(tags__icontains=word)
+
+    if form.is_valid():
+        categories = form.cleaned_data['category']
+        time = form.cleaned_data['time']
+        author = form.cleaned_data['author']
+        sort = form.cleaned_data['sort']
 
         if categories.exists():
             query &= Q(category__in = categories)
@@ -75,7 +69,19 @@ def show_results(request):
             query &= Q(author = User.objects.get(userprofile=author))
 
         print(query)
-        results = Recipe.objects.filter(query)
+        results = Recipe.objects.filter(query).annotate(average_rating=Avg('review__rating'))
+
+        sorts = {
+                'rd': '-average_rating',
+                'ra': 'average_rating',
+                'aa': 'title',
+                'ad': '-title'
+                }
+        if sort:
+            print(results)
+            results = results.order_by(sorts[sort])
+            print(results)
+
         context_dict["results"] = results
 
     return render(request, 'recipes/results.html', context=context_dict)
