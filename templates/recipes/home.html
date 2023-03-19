@@ -5,12 +5,16 @@
 <div>
    <h2><a href="{% url 'recipes:categories' %}">Categories</a></h2>
 {% if categories %}
-   <ul>
+<div class="card-group">
    {% for category in categories %}
-       <li><img src="{{ category.image.url }}" alt="{{ category.name }} image" width="50" height="50"></li>
-       <li><a href="{% url 'recipes:show_category' category.slug %}">{{ category.name }}</a></li>
+   <div class="card">
+       <img class="card-img-top" src="{{ category.image.url }}" alt="{{ category.name }} image">
+       <div class="card-body">
+           <h5 class="card-title"><a href="{% url 'recipes:show_category' category.slug %}">{{ category.name }}</a></h5>
+        </div>
+    </div>
    {% endfor %}
-   </ul>
+</div>
 {% else %}
    <strong>There are no categories present.</strong>
 {% endif %}
@@ -20,12 +24,20 @@
 <div>
    <h2>Highest Rated Recipes</h2>
 {% if recipes %}
-   <ul>
+<div class="card-group">
    {% for recipe in recipes %}
-       <li><img src="{{ recipe.image.url }}" alt="{{ recipe.title }} image" width="50" height="50"></li>
-       <li><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a> {{ recipe.average_rating }}</li>
+   <div class="card">
+       <img class="card-img-top" src="{{ recipe.image.url }}" alt="{{ recipe.title }} image">
+       <div class="card-body">
+           <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5>
+           <p class="card-text">Rating: {{ recipe.average_rating }}</p>
+        </div>
+        <div class="card-footer">
+           <p class="card-text"><small class="text-muted">Written by {{ recipe.author.username }}</small></p>
+        </div>
+    </div>
    {% endfor %}
-   </ul>
+</div>
 {% else %}
    <strong>There are no recipes present.</strong>
 {% endif %}

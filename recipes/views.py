@@ -198,18 +198,6 @@ def show_user_account(request):
 
     return render(request, 'recipes/my_account.html', context=context_dict)
 
-
-@login_required
-def show_user_recipes(request):
-    current_user = request.user
-
-    written_recipes = Recipe.objects.filter(author=current_user)
-
-    context_dict = {"written_recipes": written_recipes}
-
-    return render(request, 'recipes/my_recipes.html', context=context_dict)
-
-
 @login_required
 def add_recipe(request):
     form = RecipeForm()
@@ -232,6 +220,16 @@ def add_recipe(request):
 
     context_dict = {'form': form}
     return render(request, 'recipes/add_recipe.html', context=context_dict)
+
+@login_required
+def show_user_recipes(request):
+    current_user = request.user
+
+    written_recipes = Recipe.objects.filter(author=current_user)
+
+    context_dict = {'written_recipes': written_recipes}
+
+    return render(request, 'recipes/my_recipes.html', context=context_dict)
 
 
 @login_required
@@ -260,6 +258,9 @@ def show_user_saved_recipes(request):
 
 def show_non_user_account(request, user_id):
     user = get_object_or_404(User, id=user_id)
+    if user == request.user:
+        return redirect(reverse('recipes:show_user_account'))
+
     user_profile = UserProfile.objects.get(user = user)
 
     written_recipes = Recipe.objects.filter(author=user)[:5]
@@ -269,4 +270,12 @@ def show_non_user_account(request, user_id):
     context_dict = {"user": user, "written_recipes": written_recipes,
                     "written_reviews": written_reviews, "user_profile": user_profile}
     return render(request, 'recipes/others_account.html', context=context_dict)
+
+def show_non_user_recipes(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    written_recipes = Recipe.objects.filter(author=user)
+
+    context_dict = {'written_recipes': written_recipes}
+
+    return render(request, 'recipes/others_recipes.html', context=context_dict)
 
