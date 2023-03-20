@@ -187,13 +187,23 @@ def show_user_account(request):
 
     saved_recipes = current_user_profile.saved.all()
 
+    recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating'))
+
+    print(type(saved_recipes))
+    print(type(recipe_list))
+
+    saved_recipes_ratings = []
+
+    for recipe in saved_recipes:
+        saved_recipes_ratings.append(Recipe.objects.annotate(average_rating=Avg('review__rating')).get(author=recipe.author, title = recipe.title))
+
     print(saved_recipes)
 
     written_recipes = Recipe.objects.filter(author=current_user)
 
     written_reviews = Review.objects.filter(author=current_user)
 
-    context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes, "written_recipes": written_recipes,
+    context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes_ratings, "written_recipes": written_recipes,
                     "written_reviews": written_reviews}
 
     return render(request, 'recipes/my_account.html', context=context_dict)
