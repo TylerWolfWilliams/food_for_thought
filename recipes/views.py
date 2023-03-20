@@ -6,15 +6,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from django.db.models import Avg
-from django.db.models import Q
+from django.db.models import Avg, Count, Q
 
 from recipes.models import Category, Recipe, Review, UserProfile
 from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm, SearchForm
 
 
 def home(request):
-    category_list = Category.objects.order_by('name')[:5]
+    category_list = Category.objects.annotate(number_of_recipes=Count('recipe')).order_by('name')[:5]
     recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:5]
 
     context_dict = {'categories': category_list, 'recipes': recipe_list}

@@ -1,32 +1,28 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
 
-{% block head_block %}
-    <script	src="jquery.js"></script>
-    <style>#myButton {background-color:#00ff00;}
-    </style>
-{% endblock %}
-
-
 {% block body_block %}
-<h1>Login</h1>
-{% if message %}
-    {{ message }}
-{% endif %}
-<form id="login_form" method="post" action="{% url 'recipes:login' %}">
-    {% csrf_token %}
-    Username: <input type="text" name="username" value="" size="50" />
-    <br />
-    Password: <input type="password" name="password" value="" size="50" />
-    <br />
-    <input type="submit" value="Submit" />
-</form>
-<p>Don't have an account?</p>
-
-<button id="myButton">Sign Up Here!</button>
-<script type="text/javascript">
-    document.getElementById("myButton").onclick = function () {
-        location.href = "{% url 'recipes:signup' %}";
-    };
-</script>
+<div class="row justify-content-md-center">
+    <div class="col col-lg-4">
+        <h1>Login</h1>
+        {% if message %}
+            {{ message }}
+        {% endif %}
+        <form id="login_form" method="post" action="{% url 'recipes:login' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="usernameInput" class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" id="usernameInput">
+            </div>
+            <div class="mb-3">
+                <label for="passwordInput" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="passwordInput">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        </br>
+        <p>Don't have an account?</p>
+        <a href="{% url 'recipes:signup' %}" class="btn btn-success">Sign Up</a>
+    </div>
+</div>
 {% endblock %}

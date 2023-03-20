@@ -8,9 +8,9 @@
 <div class="card-group">
    {% for category in categories %}
    <div class="card">
-       <img class="card-img-top" src="{{ category.image.url }}" alt="{{ category.name }} image">
+       <img class="card-img-top object-fit-cover" src="{{ category.image.url }}" alt="{{ category.name }} image">
        <div class="card-body">
-           <h5 class="card-title"><a href="{% url 'recipes:show_category' category.slug %}">{{ category.name }}</a></h5>
+           <h5 class="card-title"><a href="{% url 'recipes:show_category' category.slug %}">{{ category.name }}</a> - {{ category.number_of_recipes }} recipes</h5>
         </div>
     </div>
    {% endfor %}
@@ -27,13 +27,13 @@
 <div class="card-group">
    {% for recipe in recipes %}
    <div class="card">
-       <img class="card-img-top" src="{{ recipe.image.url }}" alt="{{ recipe.title }} image">
+       <img class="card-img-top object-fit-cover" src="{{ recipe.image.url }}" alt="{{ recipe.title }} image">
        <div class="card-body">
            <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5>
-           <p class="card-text">Rating: {{ recipe.average_rating }}</p>
+           <p class="card-text"><i class="bi bi-star-fill text-warning"></i> {{ recipe.average_rating|floatformat:"1" }}</p>
         </div>
         <div class="card-footer">
-           <p class="card-text"><small class="text-muted">Written by {{ recipe.author.username }}</small></p>
+            <p class="card-text"><small class="text-muted">Written by <a href="{% url 'recipes:show_non_user_account' recipe.author.id %}">{{ recipe.author.username }}</a></small></p>
         </div>
     </div>
    {% endfor %}
