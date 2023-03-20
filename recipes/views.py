@@ -185,19 +185,9 @@ def show_user_account(request):
 
     current_user_profile = UserProfile.objects.get(user=current_user)
 
-    saved_recipes = current_user_profile.saved.all()
-
     recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating'))
 
-    print(type(saved_recipes))
-    print(type(recipe_list))
-
-    saved_recipes_ratings = []
-
-    for recipe in saved_recipes:
-        saved_recipes_ratings.append(Recipe.objects.annotate(average_rating=Avg('review__rating')).get(author=recipe.author, title = recipe.title))
-
-    print(saved_recipes)
+    saved_recipes_ratings = current_user_profile.saved.annotate(average_rating=Avg('review__rating'))
 
     written_recipes = Recipe.objects.filter(author=current_user)
 
