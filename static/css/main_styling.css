@@ -1,5 +1,5 @@
 a {
-    color:#198754
+    color:var(--bs-success);
 }
 
 h1 {
@@ -8,6 +8,6 @@ h1 {
     padding: 40px;
 }
 
-main {
+/* main { this can be set with a class
     padding:40px;
-}
+} */
