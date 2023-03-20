@@ -19,4 +19,7 @@ urlpatterns = [
     path('myaccount/addrecipe/', views.add_recipe, name='add_recipe'),
     path('myaccount/myreviews/', views.show_user_reviews, name='show_user_reviews'),
     path('myaccount/mysavedrecipes', views.show_user_saved_recipes, name='show_user_saved_recipes'),
+    path('<int:user_id>/editaccount/', views.edit_account, name='edit_account'),
+    path('deleteaccount/confirm', views.delete_account_confirmation, name='delete_account_confirmation'),
+    path('deleteaccount/', views.delete_account, name='delete_account'),
 ]

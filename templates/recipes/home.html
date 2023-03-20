@@ -2,8 +2,9 @@
 {% load staticfiles %}
 
 {% block body_block %}
+<h1>Food For Thought</h1>
 <div>
-   <h2><a href="{% url 'recipes:categories' %}">Categories</a></h2>
+   <h2><a href="{% url 'recipes:categories' %}">Categories</a></h2><br>
 {% if categories %}
 <div class="card-group">
    {% for category in categories %}
@@ -14,7 +15,7 @@
         </div>
     </div>
    {% endfor %}
-</div>
+</div> <br>
 {% else %}
    <strong>There are no categories present.</strong>
 {% endif %}
@@ -22,7 +23,7 @@
 
 
 <div>
-   <h2>Highest Rated Recipes</h2>
+   <h2>Highest Rated Recipes</h2><br>
 {% if recipes %}
 <div class="card-group">
    {% for recipe in recipes %}
@@ -37,7 +38,7 @@
         </div>
     </div>
    {% endfor %}
-</div>
+</div><br>
 {% else %}
    <strong>There are no recipes present.</strong>
 {% endif %}

@@ -2,6 +2,12 @@
 {% load staticfiles %}
 
 {% block body_block %}
+
+{% if deleted %}
+    <strong>Account successfully deleted. </strong>
+    <a href="{% url 'recipes:home' %}">Return to the homepage.</a><br />
+{% else %}
+
 <div class = "container text-center mt-50" style="margin-top:50px">
     <div class="row" style="margin-bottom:50px">
         <div class="col">
@@ -9,8 +15,8 @@
                 <img src="{{ current_user.picture.url }}" class="img-thumbnail rounded float-start" alt="Profile image">
                 <div class="card-body">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-outline-success">Edit</button>
-                        <button type="button" class="btn btn-outline-success">Delete</button>
+                        <a href="{% url 'recipes:edit_account' current_user.user.id %}" class="btn btn-outline-success">Edit Account</a>
+                        <a href="{% url 'recipes:delete_account_confirmation' %}" class="btn btn-outline-success" id="deleteButton">Delete Account</a>
                     </div>
                 </div>
             </div>
@@ -28,6 +34,12 @@
             </div>
         </div>
     </div>
+
+    {% if error_message %}
+        <div class="row mb-50">
+            {{ error_message }}
+        </div>
+    {% endif %}
 
     <hr class="border border-success border-3 opacity-75" style="margin-bottom:50px">
 
@@ -102,4 +114,5 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}
