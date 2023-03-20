@@ -180,33 +180,21 @@ def show_recipe(request, user_id, recipe_name_slug):
 
 
 @login_required
-def show_user_account(request, error_message=None):
+def show_user_account(request):
     current_user = request.user
 
     current_user_profile = UserProfile.objects.get(user=current_user)
 
-    saved_recipes = current_user_profile.saved.all()
-
     recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating'))
 
-    saved_recipes_ratings = []
-
-    for recipe in saved_recipes:
-        saved_recipes_ratings.append(
-            Recipe.objects.annotate(average_rating=Avg('review__rating')).get(author=recipe.author, title=recipe.title))
+    saved_recipes_ratings = current_user_profile.saved.annotate(average_rating=Avg('review__rating'))
 
     written_recipes = Recipe.objects.filter(author=current_user)
 
     written_reviews = Review.objects.filter(author=current_user)
 
-    context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes_ratings,
-                    "written_recipes": written_recipes,
-                    "written_reviews": written_reviews, "deleted": False}
-
-    if error_message is not None:
-        context_dict["error_message"] = error_message
-    else:
-        context_dict["error_message"] = None
+    context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes_ratings, "written_recipes": written_recipes,
+                    "written_reviews": written_reviews}
 
     return render(request, 'recipes/my_account.html', context=context_dict)
 
