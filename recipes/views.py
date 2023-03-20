@@ -12,6 +12,8 @@ from django.db.models import Q
 from recipes.models import Category, Recipe, Review, UserProfile
 from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm, SearchForm
 
+from django.contrib.messages import constants as messages
+
 
 def home(request):
     category_list = Category.objects.order_by('name')[:5]
@@ -33,7 +35,7 @@ def categories(request):
 def show_category(request, category_name_slug):
     context_dict = {}
 
-    category = get_object_or_404(Category, slug = category_name_slug)
+    category = get_object_or_404(Category, slug=category_name_slug)
     recipes = Recipe.objects.filter(category=category).distinct()
 
     context_dict['category'] = category
@@ -60,27 +62,24 @@ def show_results(request):
         sort = form.cleaned_data['sort']
 
         if categories.exists():
-            query &= Q(category__in = categories)
+            query &= Q(category__in=categories)
 
         if time:
-            query &= Q(cooking_time__lte = time)
+            query &= Q(cooking_time__lte=time)
 
         if author:
-            query &= Q(author = User.objects.get(userprofile=author))
+            query &= Q(author=User.objects.get(userprofile=author))
 
-        print(query)
         results = Recipe.objects.filter(query).annotate(average_rating=Avg('review__rating'))
 
         sorts = {
-                'rd': '-average_rating',
-                'ra': 'average_rating',
-                'aa': 'title',
-                'ad': '-title'
-                }
+            'rd': '-average_rating',
+            'ra': 'average_rating',
+            'aa': 'title',
+            'ad': '-title'
+        }
         if sort:
-            print(results)
             results = results.order_by(sorts[sort])
-            print(results)
 
         context_dict["results"] = results
 
@@ -151,14 +150,15 @@ def sign_up(request):
 def show_recipe(request, user_id, recipe_name_slug):
     context_dict = {}
 
-    recipe = get_object_or_404(Recipe, slug=recipe_name_slug, author = User.objects.get(id = user_id))
-    average_rating = Review.objects.filter(recipe = recipe).aggregate(Avg('rating'))['rating__avg']
+    recipe = get_object_or_404(Recipe, slug=recipe_name_slug, author=User.objects.get(id=user_id))
+    average_rating = Review.objects.filter(recipe=recipe).aggregate(Avg('rating'))['rating__avg']
     reviews = Review.objects.filter(recipe_id=recipe.id)
 
     context_dict['recipe'] = recipe
     context_dict['average_rating'] = average_rating
     context_dict['reviews'] = reviews
-    if request.user.is_authenticated and not Review.objects.filter(author = request.user, recipe = recipe).exists() and not recipe.author == request.user:
+    if request.user.is_authenticated and not Review.objects.filter(author=request.user,
+                                                                   recipe=recipe).exists() and not recipe.author == request.user:
         form = ReviewForm()
 
         if request.method == "POST":
@@ -180,7 +180,7 @@ def show_recipe(request, user_id, recipe_name_slug):
 
 
 @login_required
-def show_user_account(request):
+def show_user_account(request, error_message=None):
     current_user = request.user
 
     current_user_profile = UserProfile.objects.get(user=current_user)
@@ -189,24 +189,27 @@ def show_user_account(request):
 
     recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating'))
 
-    print(type(saved_recipes))
-    print(type(recipe_list))
-
     saved_recipes_ratings = []
 
     for recipe in saved_recipes:
-        saved_recipes_ratings.append(Recipe.objects.annotate(average_rating=Avg('review__rating')).get(author=recipe.author, title = recipe.title))
-
-    print(saved_recipes)
+        saved_recipes_ratings.append(
+            Recipe.objects.annotate(average_rating=Avg('review__rating')).get(author=recipe.author, title=recipe.title))
 
     written_recipes = Recipe.objects.filter(author=current_user)
 
     written_reviews = Review.objects.filter(author=current_user)
 
-    context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes_ratings, "written_recipes": written_recipes,
-                    "written_reviews": written_reviews}
+    context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes_ratings,
+                    "written_recipes": written_recipes,
+                    "written_reviews": written_reviews, "deleted": False}
+
+    if error_message is not None:
+        context_dict["error_message"] = error_message
+    else:
+        context_dict["error_message"] = None
 
     return render(request, 'recipes/my_account.html', context=context_dict)
+
 
 @login_required
 def add_recipe(request):
@@ -230,6 +233,7 @@ def add_recipe(request):
 
     context_dict = {'form': form}
     return render(request, 'recipes/add_recipe.html', context=context_dict)
+
 
 @login_required
 def show_user_recipes(request):
@@ -271,7 +275,7 @@ def show_non_user_account(request, user_id):
     if user == request.user:
         return redirect(reverse('recipes:show_user_account'))
 
-    user_profile = UserProfile.objects.get(user = user)
+    user_profile = UserProfile.objects.get(user=user)
 
     written_recipes = Recipe.objects.filter(author=user)[:5]
 
@@ -281,6 +285,7 @@ def show_non_user_account(request, user_id):
                     "written_reviews": written_reviews, "user_profile": user_profile}
     return render(request, 'recipes/others_account.html', context=context_dict)
 
+
 def show_non_user_recipes(request, user_id):
     user = get_object_or_404(User, id=user_id)
     written_recipes = Recipe.objects.filter(author=user)
@@ -289,3 +294,36 @@ def show_non_user_recipes(request, user_id):
 
     return render(request, 'recipes/others_recipes.html', context=context_dict)
 
+
+@login_required
+def edit_account(request, user_id):
+    pass
+
+
+@login_required
+def delete_account_confirmation(request):
+    current_user = request.user
+
+    context_dict = {'user': current_user}
+
+    return render(request, 'recipes/delete_account_confirmation.html', context=context_dict)
+
+@login_required
+def delete_account(request):
+    is_deleted = False
+
+    try:
+        current_user = request.user
+        current_user.delete()
+        is_deleted = True
+
+    except Exception as e:
+        show_user_account(request, "Could not delete account. Encountered following error: " + e)
+
+    context_dict = {'deleted': is_deleted}
+
+    return render(request, 'recipes/my_account.html', context=context_dict)
+
+# def user_logout(request):
+#     logout(request)
+#     return redirect(reverse('recipes:home'))

@@ -50,6 +50,7 @@ class Recipe(models.Model):
 class UserProfile(models.Model):
     def upload_folder(instance, filename):
         return f'user_{instance.user.id}/profile/{filename}'
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     saved = models.ManyToManyField(Recipe, related_name="saved", blank = True)
 
