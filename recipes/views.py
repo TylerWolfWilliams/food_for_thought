@@ -343,7 +343,7 @@ def edit_review(request, user_id, review_id):
     else:
         form = ReviewForm(instance=review)
 
-    context_dict = {'review_form':form, 'review_id':review_id, 'recipe_name': review.recipe.title}
+    context_dict = {'review_form':form, 'review_id':review_id, 'recipe_name': review.recipe.title, 'review_content':review.content, 'values':["1", "2", "3", "4", "5"], 'checked_val':str(review.rating)}
 
     return render(request, 'recipes/edit_review.html', context=context_dict)
 

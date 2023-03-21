@@ -12,14 +12,16 @@
         {% csrf_token %}
         <div class="mb-3 input-group">
             Review:
-            <input class="form-check-input" type="radio" name="rating" value="1" />
-            <input class="form-check-input" type="radio" name="rating" value="2" />
-            <input class="form-check-input" type="radio" name="rating" value="3" />
-            <input class="form-check-input" type="radio" name="rating" value="4" />
-            <input class="form-check-input" type="radio" name="rating" value="5" />
+            {% for val in values %}
+                {% if val == checked_val %}
+                    <input class="form-check-input" type="radio" name="rating" value={{ val }} checked/>
+                {% else %}
+                    <input class="form-check-input" type="radio" name="rating" value={{ val }} />
+                {% endif %}
+            {% endfor %}
         </div>
         <div class="mb-3">
-            Comment: <textarea class="form-control" name="content" maxlength="1000"></textarea>
+            Comment: <textarea class="form-control" name="content" maxlength="1000">{{ review_content }}</textarea>
         </div>
         <input class="btn btn-primary" type="submit" name="submit" value="Save Changes" />
     </form>
