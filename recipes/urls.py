@@ -22,4 +22,12 @@ urlpatterns = [
     path('<int:user_id>/editaccount/', views.edit_account, name='edit_account'),
     path('deleteaccount/confirm', views.delete_account_confirmation, name='delete_account_confirmation'),
     path('deleteaccount/', views.delete_account, name='delete_account'),
+    path('<int:user_id>/<int:review_id>/editreview/', views.edit_review, name='edit_review'),
+    path('<int:user_id>/<int:review_id>/deletereview/confirm/', views.delete_review_confirmation,
+         name='delete_review_confirmation'),
+    path('<int:user_id>/<int:review_id>/deletereview/', views.delete_review, name='delete_review'),
+    path('<int:user_id>/<int:recipe_id>/editrecipe/', views.edit_recipe, name='edit_recipe'),
+    path('<int:user_id>/<int:recipe_id>/deleterecipe/confirm/', views.delete_recipe_confirmation,
+         name='delete_recipe_confirmation'),
+    path('<int:user_id>/<int:recipe_id>/deleterecipe/', views.delete_recipe, name='delete_recipe'),
 ]

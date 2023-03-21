@@ -1,6 +1,6 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.http import HttpResponse, Http404
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -10,8 +10,6 @@ from django.db.models import Avg, Count, Q
 
 from recipes.models import Category, Recipe, Review, UserProfile
 from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm, SearchForm
-
-from django.contrib.messages import constants as messages
 
 
 def home(request):
@@ -179,23 +177,28 @@ def show_recipe(request, user_id, recipe_name_slug):
 
 
 @login_required
-def show_user_account(request):
-    current_user = request.user
+def show_user_account(request, msg=None):
+    if msg is None:
+        current_user = request.user
 
-    current_user_profile = UserProfile.objects.get(user=current_user)
+        current_user_profile = UserProfile.objects.get(user=current_user)
 
-    recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating'))
+        recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating'))
 
-    saved_recipes_ratings = current_user_profile.saved.annotate(average_rating=Avg('review__rating'))
+        saved_recipes_ratings = current_user_profile.saved.annotate(average_rating=Avg('review__rating'))
 
-    written_recipes = Recipe.objects.filter(author=current_user)
+        written_recipes = Recipe.objects.filter(author=current_user)
 
-    written_reviews = Review.objects.filter(author=current_user)
+        written_reviews = Review.objects.filter(author=current_user)
 
-    context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes_ratings, "written_recipes": written_recipes,
-                    "written_reviews": written_reviews}
+        context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes_ratings,
+                        "written_recipes": written_recipes,
+                        "written_reviews": written_reviews}
 
-    return render(request, 'recipes/my_account.html', context=context_dict)
+        return render(request, 'recipes/my_account.html', context=context_dict)
+
+    else:
+        return HttpResponse(msg)
 
 
 @login_required
@@ -277,7 +280,7 @@ def show_non_user_recipes(request, user_id):
     user = get_object_or_404(User, id=user_id)
     written_recipes = Recipe.objects.filter(author=user)
 
-    context_dict = {'written_recipes': written_recipes, "account_user":user}
+    context_dict = {'written_recipes': written_recipes, "account_user": user}
 
     return render(request, 'recipes/others_recipes.html', context=context_dict)
 
@@ -288,8 +291,37 @@ def edit_account(request, user_id):
 
 
 @login_required
+def edit_review(request, user_id, review_id):
+    pass
+
+
+@login_required
+def edit_recipe(request, user_id, recipe_id):
+    pass
+
+
+@login_required
 def delete_account_confirmation(request):
-    return render(request, 'recipes/delete_account_confirmation.html')
+    context_dict = {'type': 'account', 'detail_name': 'username', 'detail': request.user.username}
+
+    return render(request, 'recipes/delete_confirmation.html', context_dict)
+
+
+@login_required
+def delete_review_confirmation(request, user_id, review_id):
+    context_dict = {'type': 'review', 'detail_name': 'the recipe name',
+                    'detail': Review.objects.get(id=review_id).recipe.title, 'object_id': review_id}
+
+    return render(request, 'recipes/delete_confirmation.html', context_dict)
+
+
+@login_required
+def delete_recipe_confirmation(request, user_id, recipe_id):
+    context_dict = {'type': 'recipe', 'detail_name': 'the name',
+                    'detail': Recipe.objects.get(id=recipe_id).title, 'object_id': recipe_id}
+
+    return render(request, 'recipes/delete_confirmation.html', context_dict)
+
 
 @login_required
 def delete_account(request):
@@ -307,6 +339,26 @@ def delete_account(request):
 
     return render(request, 'recipes/my_account.html', context=context_dict)
 
-# def user_logout(request):
-#     logout(request)
-#     return redirect(reverse('recipes:home'))
+
+@login_required
+def delete_review(request, user_id, review_id):
+    try:
+        review = Review.objects.get(id=review_id)
+        review.delete()
+
+    except Exception as e:
+        show_user_account(request, "Could not delete review. Encountered following error: " + e)
+
+    return redirect(reverse('recipes:show_user_account'))
+
+
+@login_required
+def delete_recipe(request, user_id, recipe_id):
+    try:
+        recipe = Recipe.objects.get(id=recipe_id)
+        recipe.delete()
+
+    except Exception as e:
+        show_user_account(request, "Could not delete recipe. Encountered following error: " + e)
+
+    return redirect(reverse('recipes:show_user_account'))

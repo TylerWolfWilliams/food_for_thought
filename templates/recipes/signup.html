@@ -10,7 +10,7 @@
 <div>
     {% if registered %}
         <strong>Thank you for registering!</strong>
-        <a href="{% url 'recipes:home' %}">Return to the homepage.</a><br />
+        <a href="{% url 'recipes:login' %}">Return to the login.</a><br />
     {% else %}
     <strong>Sign up here!</strong><br />
     <form id="user_form" method="post" action="{% url 'recipes:signup' %}" enctype="multipart/form-data">
