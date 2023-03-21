@@ -1,37 +1,70 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
 
+{% block head_block %}
+    <script type="text/javascript" src="D:\Python\Second Year\Semester 2\Web App\Team Project\food_for_thought\static\javascript\my_account_javascript.js"></script>
+{% endblock %}
+
 {% block body_block %}
-<h2>{{ account_user.username }}</h2>
-<li><img src="{{ user_profile.picture.url }}" alt="{{ account_user.username }} image"></li>
-<li>{{ user_profile.bio }}</li>
 
-<div>
-   <h2><a href="{% url 'recipes:show_non_user_recipes' account_user.id %}">{{ account_user.username }}'s Recipes</a></h2><br>
-{% if written_recipes %}
-   <ul>
-   {% for recipe in written_recipes %}
-       <li><img src="{{ recipe.image.url }}" alt="{{ recipe.title }} image"></li>
-       <li><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a> {{ recipe.average_rating }}</li>
-   {% endfor %}
-   </ul>
-{% else %}
-   <strong>There are no recipes present.</strong>
-{% endif %}
-</div>
+<div class = "container text-center mt-50" style="margin-top:50px">
+    <div class="row" style="margin-bottom:50px">
+        <div class="col">
+            <div class="card w-75">
+                <img src="{{ user_profile.picture.url }}" class="img-thumbnail rounded float-start" alt="Profile image">
+            </div>
+        </div>
+        <div class="col">
+            <div class="card w-75 border-success border-3">
+                <div class="card-body">
+                    <h2 class="card-title">{{ account_user.username }}</h2><br>
+                    <p class="card-text">
+                        <b>Name:</b> {{ account_user.first_name }} {{ account_user.last_name }}<br>
+                        <b>Email:</b> {{ account_user.email }}<br>
+                        <b>Bio:</b> {{ user_profile.bio }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div>
-   <h2>{{ account_user.username }}'s Reviews</h2>
-{% if written_reviews %}
-   <ul>
-   {% for review in written_reviews %}
-       <li>{{ review.recipe.title }}</li>
-       <li>{{ review.rating }}</li>
-       <li>{{ review.content }}</li>
-   {% endfor %}
-   </ul>
-{% else %}
-   <strong>There are no reviews present.</strong>
-{% endif %}
+    <hr class="border border-success border-3 opacity-75" style="margin-bottom:50px">
+
+    <div class="row" style="margin-bottom:50px">
+        <div class="col">
+           <h2>{{ account_user.username }}'s Reviews</h2><br>
+            {% if written_reviews %}
+                {% for review in written_reviews %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{% url 'recipes:show_recipe' review.recipe.author.id review.recipe.slug %}">{{ review.recipe.title }}</a></h5>
+                                <p class="card-text" style="text-align:left">
+                                    {{ review.content }} <br>
+                                    Rating: {{ review.rating }}
+                                </p>
+                        </div>
+                    </div><br>
+                {% endfor %}
+            {% else %}
+           <strong>There are no reviews present.</strong>
+        {% endif %}
+        </div>
+
+        <div class="col align-items-center">
+           <h2><a href="{% url 'recipes:show_non_user_recipes' account_user.id %}">{{ account_user.username }}'s Recipes</a></h2><br>
+        {% if written_recipes %}
+           {% for recipe in written_recipes %}
+                   <div class="card w-50 mx-auto">
+                       <img class="card-img-top" src="{{ recipe.image.url }}" alt="{{ recipe.title }} image">
+                       <div class="card-body">
+                           <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a>{{ recipe.average_rating }}</h5>
+                       </div>
+                   </div><br>
+           {% endfor %}
+        {% else %}
+           <strong>There are no recipes present.</strong>
+        {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}
