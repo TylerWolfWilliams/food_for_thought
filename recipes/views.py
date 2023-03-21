@@ -167,9 +167,9 @@ def show_recipe(request, user_id, recipe_name_slug):
                 review.recipe = recipe
                 review.save()
 
-            return redirect(reverse('recipes:show_recipe', args=[user_id, recipe_name_slug]))
-        else:
-            print(form.errors)
+                return redirect(reverse('recipes:show_recipe', args=[user_id, recipe_name_slug]))
+            else:
+                print(form.errors)
 
         context_dict['review_form'] = form
 
@@ -323,7 +323,29 @@ def edit_account(request):
 
 @login_required
 def edit_review(request, user_id, review_id):
-    pass
+    review = Review.objects.get(id=review_id)
+
+    print(review.recipe.title)
+
+    if request.method == "POST":
+        form = ReviewForm(request.POST, instance=review)
+
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.author = request.user
+            review.recipe = review.recipe
+            review.save()
+
+            return redirect(reverse('recipes:show_user_account'))
+        else:
+            print(form.errors)
+
+    else:
+        form = ReviewForm(instance=review)
+
+    context_dict = {'review_form':form, 'review_id':review_id, 'recipe_name': review.recipe.title}
+
+    return render(request, 'recipes/edit_review.html', context=context_dict)
 
 
 @login_required

@@ -1,0 +1,27 @@
+{% extends 'recipes/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Edit Review
+{% endblock %}
+
+{% block body_block %}
+<h1>Edit Review For {{ recipe_name }}</h1>
+<div>
+    <form id="review_form" method="POST" action="{% url 'recipes:edit_review' user.id review_id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3 input-group">
+            Review:
+            <input class="form-check-input" type="radio" name="rating" value="1" />
+            <input class="form-check-input" type="radio" name="rating" value="2" />
+            <input class="form-check-input" type="radio" name="rating" value="3" />
+            <input class="form-check-input" type="radio" name="rating" value="4" />
+            <input class="form-check-input" type="radio" name="rating" value="5" />
+        </div>
+        <div class="mb-3">
+            Comment: <textarea class="form-control" name="content" maxlength="1000"></textarea>
+        </div>
+        <input class="btn btn-primary" type="submit" name="submit" value="Save Changes" />
+    </form>
+</div>
+{% endblock %}
