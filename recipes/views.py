@@ -268,7 +268,7 @@ def show_non_user_account(request, user_id):
 
     written_reviews = Review.objects.filter(author=user)[:5]
 
-    context_dict = {"user": user, "written_recipes": written_recipes,
+    context_dict = {"account_user": user, "written_recipes": written_recipes,
                     "written_reviews": written_reviews, "user_profile": user_profile}
     return render(request, 'recipes/others_account.html', context=context_dict)
 
@@ -277,7 +277,7 @@ def show_non_user_recipes(request, user_id):
     user = get_object_or_404(User, id=user_id)
     written_recipes = Recipe.objects.filter(author=user)
 
-    context_dict = {'written_recipes': written_recipes}
+    context_dict = {'written_recipes': written_recipes, "account_user":user}
 
     return render(request, 'recipes/others_recipes.html', context=context_dict)
 
@@ -289,11 +289,7 @@ def edit_account(request, user_id):
 
 @login_required
 def delete_account_confirmation(request):
-    current_user = request.user
-
-    context_dict = {'user': current_user}
-
-    return render(request, 'recipes/delete_account_confirmation.html', context=context_dict)
+    return render(request, 'recipes/delete_account_confirmation.html')
 
 @login_required
 def delete_account(request):

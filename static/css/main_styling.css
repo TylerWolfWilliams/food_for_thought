@@ -2,7 +2,7 @@ a {
     color:var(--bs-success);
 }
 
-h1 {
+.fftTitle {
     text-align:center;
     font-family: "Lucida Handwriting";
     padding: 40px;
