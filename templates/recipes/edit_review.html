@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block body_block %}
-<h1>Edit Review For {{ recipe_name }}</h1>
+<h1>Edit Review For {{ recipe_name }}</h1><br>
 <div>
     <form id="review_form" method="POST" action="{% url 'recipes:edit_review' user.id review_id %}" enctype="multipart/form-data">
         {% csrf_token %}
