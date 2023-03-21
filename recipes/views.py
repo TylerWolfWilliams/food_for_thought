@@ -325,7 +325,7 @@ def delete_recipe_confirmation(request, user_id, recipe_id):
 
 @login_required
 def unsave_recipe_confirmation(request, user_id, recipe_id):
-    context_dict = {'action': 'unsave', 'type': 'recipe', 'detail_name': 'the name',
+    context_dict = {'action': 'unsave', 'type': 'saved recipe', 'detail_name': 'the name',
                     'detail': Recipe.objects.get(id=recipe_id).title, 'object_id': recipe_id}
 
     return render(request, 'recipes/delete_confirmation.html', context_dict)
@@ -375,8 +375,10 @@ def delete_recipe(request, user_id, recipe_id):
 @login_required
 def unsave_recipe(request, user_id, recipe_id):
     try:
-        recipe = Recipe.objects.get(id=recipe_id)
-        request.user.entry_set.remove(recipe)
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        user = request.user
+        user_profile = UserProfile.objects.get(user=user)
+        user_profile.saved.remove(recipe)
 
     except Exception as e:
         show_user_account(request, "Could not unsave recipe. Encountered following error: " + e)
