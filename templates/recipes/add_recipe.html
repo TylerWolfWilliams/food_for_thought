@@ -10,15 +10,26 @@
 <div>
     <form enctype="multipart/form-data" id="recipe_form" method="POST" action="{% url 'recipes:add_recipe' %}">
         {% csrf_token %}
-        {% for hidden in form.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
-        {% for field in form.visible_fields %}
-            {{ field.help_text }}
+        <div class="mb-3">
+            {% for field in form.visible_fields %}
+            <label class="form-label">{{ field.help_text }}</label>
+            {% if category %}
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Category
+                </button>
+                <ul class="dropdown-menu">
+                    {% for category in Category.objects.all %}
+                    <li><a class="dropdown-item" href="#">{{ category.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% else %}
             {{ field }}
-            {{ field.errors }}
-        <br>
-        {% endfor %}
+            {% endif %}
+            <br>
+            {% endfor %}
+        </div>
         <input type="submit" name="submit" value="Create recipe" />
     </form>
 </div>
