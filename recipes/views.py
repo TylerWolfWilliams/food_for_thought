@@ -13,7 +13,7 @@ from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm, Sea
 
 
 def home(request):
-    category_list = Category.objects.annotate(number_of_recipes=Count('recipe')).order_by('name')[:5]
+    category_list = Category.objects.annotate(number_of_recipes=Count('recipe')).order_by('-number_of_recipes')[:5]
     recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:5]
 
     context_dict = {'categories': category_list, 'recipes': recipe_list}
@@ -216,6 +216,8 @@ def add_recipe(request):
                 recipe.image = request.FILES['image']
 
             recipe.save()
+
+            recipe.category.add(*form.cleaned_data['category'])
 
             return redirect(reverse('recipes:show_user_account'))
         else:
