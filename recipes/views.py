@@ -326,7 +326,28 @@ def edit_review(request, user_id, review_id):
 
 @login_required
 def edit_recipe(request, user_id, recipe_id):
-    pass
+    recipe = Recipe.objects.get(id=recipe_id)
+
+    if request.method == "POST":
+        form = RecipeForm(request.POST, request.FILES, instance=recipe)
+
+        if form.is_valid():
+            recipe = form.save(commit=False)
+            recipe.author = request.user
+
+            if 'image' in request.FILES:
+                recipe.image = request.FILES['image']
+
+            recipe.save()
+
+            return redirect(reverse('recipes:show_user_account'))
+        else:
+            print(form.errors)
+    else:
+        form = RecipeForm(instance=recipe)
+
+    context_dict = {'form': form, 'recipe': recipe_id}
+    return render(request, 'recipes/edit_recipe_page.html', context=context_dict)
 
 
 @login_required
