@@ -288,8 +288,37 @@ def show_non_user_recipes(request, user_id):
 
 
 @login_required
-def edit_account(request, user_id):
-    pass
+def edit_account(request):
+    edited = False
+
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+
+            user.set_password(user.password)
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+
+            profile.save()
+
+            edited = True
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=user_profile)
+
+    context_dict = {'user_form': user_form, 'profile_form': profile_form, 'edited':edited}
+
+    return render(request, 'recipes/update_profile.html', context=context_dict)
 
 
 @login_required
@@ -327,7 +356,7 @@ def delete_recipe_confirmation(request, user_id, recipe_id):
 
 @login_required
 def unsave_recipe_confirmation(request, user_id, recipe_id):
-    context_dict = {'action': 'unsave', 'type': 'recipe', 'detail_name': 'the name',
+    context_dict = {'action': 'unsave', 'type': 'saved recipe', 'detail_name': 'the name',
                     'detail': Recipe.objects.get(id=recipe_id).title, 'object_id': recipe_id}
 
     return render(request, 'recipes/delete_confirmation.html', context_dict)
@@ -377,8 +406,10 @@ def delete_recipe(request, user_id, recipe_id):
 @login_required
 def unsave_recipe(request, user_id, recipe_id):
     try:
-        recipe = Recipe.objects.get(id=recipe_id)
-        request.user.entry_set.remove(recipe)
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        user = request.user
+        user_profile = UserProfile.objects.get(user=user)
+        user_profile.saved.remove(recipe)
 
     except Exception as e:
         show_user_account(request, "Could not unsave recipe. Encountered following error: " + e)

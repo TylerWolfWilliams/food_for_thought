@@ -1,0 +1,26 @@
+{% extends 'recipes/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Edit Account
+{% endblock %}
+
+{% block body_block %}
+<h1>Edit Account</h1>
+<div>
+    {% if edited %}
+        <strong>Saves Changed.</strong>
+        <a href="{% url 'recipes:login' %}">Please log back it.</a><br />
+    {% endif %}
+    <br>
+    <form id="user_form" method="post" action="{% url 'recipes:edit_account' %}" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+
+        <input type="submit" name="submit" value="Save Changes" />
+    </form>
+</div>
+{% endblock %}

@@ -15,7 +15,7 @@
                 <img src="{{ current_user.picture.url }}" class="img-thumbnail rounded float-start" alt="Profile image">
                 <div class="card-body">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <a href="{% url 'recipes:edit_account' user.id %}" class="btn btn-outline-success">Edit Account</a>
+                        <a href="{% url 'recipes:edit_account' %}" class="btn btn-outline-success">Edit Account</a>
                         <a href="{% url 'recipes:delete_account_confirmation' %}" class="btn btn-outline-success">Delete Account</a>
                     </div>
                 </div>

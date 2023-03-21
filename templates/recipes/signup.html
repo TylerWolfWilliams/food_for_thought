@@ -8,7 +8,7 @@
 {% block body_block %}
 <h1>Sign Up</h1>
 <div>
-    {% if registered %}
+    {% if registered and not editing %}
         <strong>Thank you for registering!</strong>
         <a href="{% url 'recipes:login' %}">Return to the login.</a><br />
     {% else %}
