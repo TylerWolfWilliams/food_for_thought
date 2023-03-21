@@ -286,8 +286,37 @@ def show_non_user_recipes(request, user_id):
 
 
 @login_required
-def edit_account(request, user_id):
-    pass
+def edit_account(request):
+    edited = False
+
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+
+            user.set_password(user.password)
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+
+            profile.save()
+
+            edited = True
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=user_profile)
+
+    context_dict = {'user_form': user_form, 'profile_form': profile_form, 'edited':edited}
+
+    return render(request, 'recipes/update_profile.html', context=context_dict)
 
 
 @login_required
