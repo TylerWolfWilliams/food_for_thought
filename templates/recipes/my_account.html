@@ -54,7 +54,7 @@
                         <p class="card-text">Rating: {{ recipe.average_rating }}</p>
                     </div>
                     <div class="card-footer">
-                        <button class="btn btn-outline-success" type="submit">Unsave</button>
+                        <a href="{% url 'recipes:unsave_recipe_confirmation' user.id recipe.id %}" class="btn btn-outline-success">Unsave</a>
                     </div>
                 </div>
             {% endfor %}

@@ -302,14 +302,14 @@ def edit_recipe(request, user_id, recipe_id):
 
 @login_required
 def delete_account_confirmation(request):
-    context_dict = {'type': 'account', 'detail_name': 'username', 'detail': request.user.username}
+    context_dict = {'action': 'delete', 'type': 'account', 'detail_name': 'username', 'detail': request.user.username}
 
     return render(request, 'recipes/delete_confirmation.html', context_dict)
 
 
 @login_required
 def delete_review_confirmation(request, user_id, review_id):
-    context_dict = {'type': 'review', 'detail_name': 'the recipe name',
+    context_dict = {'action': 'delete', 'type': 'review', 'detail_name': 'the recipe name',
                     'detail': Review.objects.get(id=review_id).recipe.title, 'object_id': review_id}
 
     return render(request, 'recipes/delete_confirmation.html', context_dict)
@@ -317,7 +317,15 @@ def delete_review_confirmation(request, user_id, review_id):
 
 @login_required
 def delete_recipe_confirmation(request, user_id, recipe_id):
-    context_dict = {'type': 'recipe', 'detail_name': 'the name',
+    context_dict = {'action': 'delete', 'type': 'recipe', 'detail_name': 'the name',
+                    'detail': Recipe.objects.get(id=recipe_id).title, 'object_id': recipe_id}
+
+    return render(request, 'recipes/delete_confirmation.html', context_dict)
+
+
+@login_required
+def unsave_recipe_confirmation(request, user_id, recipe_id):
+    context_dict = {'action': 'unsave', 'type': 'recipe', 'detail_name': 'the name',
                     'detail': Recipe.objects.get(id=recipe_id).title, 'object_id': recipe_id}
 
     return render(request, 'recipes/delete_confirmation.html', context_dict)
@@ -360,5 +368,17 @@ def delete_recipe(request, user_id, recipe_id):
 
     except Exception as e:
         show_user_account(request, "Could not delete recipe. Encountered following error: " + e)
+
+    return redirect(reverse('recipes:show_user_account'))
+
+
+@login_required
+def unsave_recipe(request, user_id, recipe_id):
+    try:
+        recipe = Recipe.objects.get(id=recipe_id)
+        request.user.entry_set.remove(recipe)
+
+    except Exception as e:
+        show_user_account(request, "Could not unsave recipe. Encountered following error: " + e)
 
     return redirect(reverse('recipes:show_user_account'))

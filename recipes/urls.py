@@ -30,4 +30,7 @@ urlpatterns = [
     path('<int:user_id>/<int:recipe_id>/deleterecipe/confirm/', views.delete_recipe_confirmation,
          name='delete_recipe_confirmation'),
     path('<int:user_id>/<int:recipe_id>/deleterecipe/', views.delete_recipe, name='delete_recipe'),
+    path('<int:user_id>/<int:recipe_id>/unsaverecipe/confirm/', views.unsave_recipe_confirmation,
+         name='unsave_recipe_confirmation'),
+    path('<int:user_id>/<int:recipe_id>/unsaverecipe/', views.unsave_recipe, name='unsave_recipe'),
 ]
