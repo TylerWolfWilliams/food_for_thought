@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -136,6 +137,7 @@ def sign_up(request):
             profile.save()
 
             registered = True
+
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
@@ -184,7 +186,8 @@ def show_user_account(request, msg=None):
 
         current_user_profile = UserProfile.objects.get(user=current_user)
 
-        saved_recipes_ratings = current_user_profile.saved.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:4]
+        saved_recipes_ratings = current_user_profile.saved.annotate(average_rating=Avg('review__rating')).order_by(
+            '-average_rating')[:4]
 
         written_recipes = Recipe.objects.filter(author=current_user)
 
@@ -258,7 +261,8 @@ def show_user_saved_recipes(request):
 
     current_user_profile = UserProfile.objects.get(user=current_user)
 
-    saved_recipes = current_user_profile.saved.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')
+    saved_recipes = current_user_profile.saved.annotate(average_rating=Avg('review__rating')).order_by(
+        '-average_rating')
 
     context_dict = {'saved_recipes': saved_recipes}
 
@@ -319,7 +323,7 @@ def edit_account(request):
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=user_profile)
 
-    context_dict = {'user_form': user_form, 'profile_form': profile_form, 'edited':edited}
+    context_dict = {'user_form': user_form, 'profile_form': profile_form, 'edited': edited}
 
     return render(request, 'recipes/update_profile.html', context=context_dict)
 
@@ -346,14 +350,15 @@ def edit_review(request, review_id):
     else:
         form = ReviewForm(instance=review)
 
-    context_dict = {'review_form':form, 'review': review, 'recipe': review.recipe, 'values':["1", "2", "3", "4", "5"], 'checked_val':str(review.rating)}
+    context_dict = {'review_form': form, 'review': review, 'recipe': review.recipe, 'values': ["1", "2", "3", "4", "5"],
+                    'checked_val': str(review.rating)}
 
     return render(request, 'recipes/edit_review.html', context=context_dict)
 
 
 @login_required
 def edit_recipe(request, recipe_id):
-    recipe = Recipe.objects.get(id=recipe_id, author = request.user)
+    recipe = Recipe.objects.get(id=recipe_id, author=request.user)
 
     if request.method == "POST":
         form = RecipeForm(request.POST, request.FILES, instance=recipe)

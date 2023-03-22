@@ -9,27 +9,59 @@
 <div>
     <form enctype="multipart/form-data" id="recipe_form" method="POST" action="{% url 'recipes:edit_recipe' recipe.id %}">
         {% csrf_token %}
-        <div class="mb-3">
-            {% for field in form.visible_fields %}
-            <label class="form-label">{{ field.help_text }}</label>
-            {% if category %}
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Category
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    {% for category in Category.objects.all %}
-                        <li><a class="dropdown-item" href="#">{{ category.name }}</a></li>
-                    {% endfor %}
-                </ul>
+
+        <div class="justify-content-md-center">
+            <div class="mb-3 row">
+
+                <div class="col">
+                    <input type="text" name="title" class="form-control" placeholder="Name of Recipe" value="{{ recipe.title }}">
+                </div>
+                <div class="col">
+                    <input type="file" name="image" accept=".jpg, .png, .jpeg" class="form-control" placeholder="Upload an image" value="{{ recipe.image }}">
+                </div>
+                <div class="col input-group mb-3">
+                    <label class="input-group-text" for="categoryInput">Category:</label>
+                    <select class="form-select" id="categoryInput" name="category">
+                        {% for c in form.getCategories %}
+                             {% ifequal c recipe.category %}
+                                  <option name="{{ c.name }}" value="{{ c }}" selected>{{ c.name }}</option>
+                             {% else %}
+                                  <option name="{{ c.name }}" value="{{ c }}">{{ c.name }}</option>
+                             {% endifequal %}
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-            {% else %}
-            {{ field }}
-            {% endif %}
-            <br>
-            {% endfor %}
+
+            <div class="mb-3 row text-center">
+                <div class="col">
+                    <textarea class="form-control" placeholder="Method" style="height: 200px" name="content" >{{ recipe.content }}</textarea>
+                </div>
+                <div class="col">
+                    <textarea class="form-control" placeholder="Ingredients" name="ingredients" style="height: 200px" >{{ recipe.ingredients }}</textarea>
+
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col">
+                    <input type="number" aria-valuemin="1" class="form-control" placeholder="Number of Servings" name="servings" value="{{ recipe.servings }}">
+
+                </div>
+                <div class="col input-group">
+                    <span class="input-group-text" id="basic-addon3">Cooking Time (Hours:Mins)</span>
+                    <input type="time" class="form-control" name="cooking_time" value="{{ recipe.cooking_time }}">
+
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="tags" placeholder="Tags (Optional)" value="{{ recipe.tags }}">
+                </div>
+            </div>
+
         </div>
-        <input type="submit" name="submit" value="Save Changes" />
+        <div class="text-center">
+            <button type="submit" name="submit" value="Update recipe" class="btn btn-outline-success">Update Recipe</button>
+        </div>
     </form>
 </div>
 {% endblock %}

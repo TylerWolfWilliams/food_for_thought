@@ -12,7 +12,7 @@
         <div>
             {% if edited %}
                  <strong>Changes saved.</strong>
-                 <a href="{% url 'recipes:login' %}">Please log back it.</a><br />
+                 <a href="{% url 'recipes:login' %}">Please log back in.</a><br />
             {% endif %}
             <br>
             <form id="user_form" method="post" action="{% url 'recipes:edit_account' %}" enctype="multipart/form-data">

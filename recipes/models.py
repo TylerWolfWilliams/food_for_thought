@@ -34,7 +34,7 @@ class Recipe(models.Model):
     content = models.CharField(max_length=10000)
     ingredients = models.CharField(max_length=1000)
     cooking_time = models.DurationField()
-    servings = models.CharField(max_length=100)
+    servings = models.IntegerField()
     tags = models.CharField(max_length=1000, blank=True)
 
     slug = models.SlugField()
@@ -57,7 +57,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     saved = models.ManyToManyField(Recipe, related_name="saved", blank=True)
 
-    picture = models.ImageField(upload_to=upload_folder, blank=True, default="test.jpg")
+    picture = models.ImageField(upload_to=upload_folder, blank=True, default="blank_profile_pic.png")
     bio = models.CharField(max_length=1000, blank=True)
 
     def __str__(self):
