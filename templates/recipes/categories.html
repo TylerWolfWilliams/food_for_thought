@@ -3,17 +3,22 @@
 
 
 {% block body_block %}
-<div>
-    <h2>Categories</h2>
-{% if categories %}
-    <ul>
-    {% for category in categories %}
-        <li><img src="{{ category.image.url }}" alt="{{ category.name }} img"></li>
-        <li><a href="{% url 'recipes:show_category' category.slug %}">{{ category.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <strong>There are no categories present.</strong>
-{% endif %}
+<div class = "container text-center mt-50" style="margin-top:50px">
+   <h2>Categories</h2><br>
+    <div class="row h-100" style="margin-bottom:50px">
+        {% if categories %}
+            {% for category in categories %}
+                <div class="card w-25 mx-auto" style="display:inline-block;margin-bottom:20px">
+                    <img src="{{ category.image.url }}" class="card-img-top" style="height:250px" alt="{{ category.name }} image">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{% url 'recipes:show_category' category.slug %}">{{ category.name }}</a></h5>
+                        <p class="card-text">Number of Recipes: {{ category.number_of_recipes }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+           <strong>There are no recipes present.</strong>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

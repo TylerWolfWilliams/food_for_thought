@@ -18,7 +18,7 @@ def get_recipe(title):
 def populate():
     categories = [{
         "name": "Baked",
-        "image": "test.jpg"
+        "image": "test.jpg",
         }, {
         "name": "Fried",
         "image": "test.jpg"
@@ -86,7 +86,7 @@ def populate():
         r.save()
 
 
-    
+
 if __name__ == "__main__":
     print("Populating database")
     populate()
