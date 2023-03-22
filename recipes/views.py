@@ -137,6 +137,7 @@ def sign_up(request):
             profile.save()
 
             registered = True
+
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
