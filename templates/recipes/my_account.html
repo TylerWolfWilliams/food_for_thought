@@ -41,6 +41,7 @@
 
        <h2><a href="{% url 'recipes:show_user_saved_recipes' %}">Saved Recipes</a></h2><br>
         {% if saved_recipes %}
+           <h3 class="mb-5">Top Rated:</h3>
             {% recipes_grid saved_recipes request.user %}
         {% else %}
             <strong>There are no recipes present.</strong>
@@ -48,55 +49,42 @@
 
     <hr class="border border-success border-3 opacity-75 mb-5">
 
-    <div class="row mb-5">
-        <div class="col">
-           <h2><a href="{% url 'recipes:show_user_reviews' %}">Your Reviews</a></h2><br>
-            {% if written_reviews %}
-                {% for review in written_reviews %}
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title"><a href="{% url 'recipes:show_recipe' review.recipe.author.id review.recipe.slug %}">{{ review.recipe.title }}</a></h5>
-                                <p class="card-text">
-                                    {{ review.content }} <br>
-                                    Rating: {{ review.rating }}
-                                </p>
-                        </div>
-                        <div class="card-footer">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="{% url 'recipes:edit_review' review.id %}" class="btn btn-outline-success">Edit</a>
-                                {% confirm_review_deletion review %}
-                            </div>
-                        </div>
-                    </div><br>
-                {% endfor %}
-            {% else %}
-           <strong>There are no reviews present.</strong>
-        {% endif %}
-        </div>
-
-        <div class="col align-items-center">
+    <!-- <div class="row mb-5"> -->
+    <!--     <div class="col"> -->
+    <!--        <h2><a href="{% url 'recipes:show_user_reviews' %}">Your Reviews</a></h2><br> -->
+    <!--         {% if written_reviews %} -->
+    <!--             {% for review in written_reviews %} -->
+    <!--                 <div class="card"> -->
+    <!--                     <div class="card-body"> -->
+    <!--                         <h5 class="card-title"><a href="{% url 'recipes:show_recipe' review.recipe.author.id review.recipe.slug %}">{{ review.recipe.title }}</a></h5> -->
+    <!--                             <p class="card-text"> -->
+    <!--                                 {{ review.content }} <br> -->
+    <!--                                 Rating: {{ review.rating }} -->
+    <!--                             </p> -->
+    <!--                     </div> -->
+    <!--                     <div class="card-footer"> -->
+    <!--                         <div class="btn-group" role="group" aria-label="Basic example"> -->
+    <!--                             <a href="{% url 'recipes:edit_review' review.id %}" class="btn btn-outline-success">Edit</a> -->
+    <!--                             {% confirm_review_deletion review %} -->
+    <!--                         </div> -->
+    <!--                     </div> -->
+    <!--                 </div><br> -->
+    <!--             {% endfor %} -->
+    <!--         {% else %} -->
+    <!--        <strong>There are no reviews present.</strong> -->
+    <!--     {% endif %} -->
+    <!--     </div> -->
+    <!---->
+    <!--     <div class="col align-items-center"> -->
            <h2><a href="{% url 'recipes:show_user_recipes' %}">Your Recipes</a></h2><br>
         {% if written_recipes %}
-           {% for recipe in written_recipes %}
-                   <div class="card w-50 mx-auto">
-                       <img class="card-img-top" src="{{ recipe.image.url }}" alt="{{ recipe.title }} image">
-                       <div class="card-body">
-                           <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5><br>
-                               Rating: {{ recipe.average_rating }}
-                       </div>
-                       <div class="card-footer">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="{% url 'recipes:edit_recipe' recipe.id %}" class="btn btn-outline-success">Edit</a>
-                                {% confirm_recipe_deletion recipe %}
-                            </div>
-                        </div>
-                   </div><br>
-           {% endfor %}
+            <h3 class="mb-5">Top Rated:</h3>
+            {% recipes_grid written_recipes request.user %}
         {% else %}
            <strong>There are no recipes present.</strong>
         {% endif %}
-        </div>
-    </div>
+<!--         </div> -->
+<!--     </div> -->
 </div>
 {% endif %}
 {% endblock %}

@@ -22,12 +22,14 @@
                 </div>
                 <div class="col input-group mb-3">
                     <label class="input-group-text" for="categoryInput">Category:</label>
-                    <select class="form-select" id="categoryInput" name="category">
-                        <option selected disabled>None</option>
-                        {% for c in form.getCategories %}
-                             <option name="{{ c.name }}" value="{{ c }}">{{ c.name }}</option>
-                        {% endfor %}
-                    </select>
+                    {{ form.category }}
+                    <!-- <label class="input-group-text" for="categoryInput">Category:</label> -->
+                    <!-- <select class="form-select" id="categoryInput" name="category"> -->
+                    <!--     <option selected disabled>None</option> -->
+                    <!--     {% for c in form.getCategories %} -->
+                    <!--          <option name="{{ c.name }}" value="{{ c }}">{{ c.name }}</option> -->
+                    <!--     {% endfor %} -->
+                    <!-- </select> -->
                 </div>
             </div>
 

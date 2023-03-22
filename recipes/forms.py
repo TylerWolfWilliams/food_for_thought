@@ -12,6 +12,7 @@ class RecipeForm(forms.ModelForm):
     cooking_time = forms.DurationField(label="Cooking Time")
     servings = forms.IntegerField(label="Servings", min_value=1)
     category = forms.ModelMultipleChoiceField(Category.objects.all(), required=False)
+    category.widget.attrs.update({ "id": "categoryInput", "multiple": "multiple"})
 
     def getCategories(self):
         return [c for c in Category.objects.all()]
