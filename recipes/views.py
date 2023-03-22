@@ -1,6 +1,6 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.http import HttpResponse, Http404
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -11,11 +11,9 @@ from django.db.models import Avg, Count, Q
 from recipes.models import Category, Recipe, Review, UserProfile
 from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm, SearchForm
 
-from django.contrib.messages import constants as messages
-
 
 def home(request):
-    category_list = Category.objects.annotate(number_of_recipes=Count('recipe')).order_by('name')[:5]
+    category_list = Category.objects.annotate(number_of_recipes=Count('recipe')).order_by('-number_of_recipes')[:5]
     recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:5]
 
     context_dict = {'categories': category_list, 'recipes': recipe_list}
@@ -169,9 +167,9 @@ def show_recipe(request, user_id, recipe_name_slug):
                 review.recipe = recipe
                 review.save()
 
-            return redirect(reverse('recipes:show_recipe', args=[user_id, recipe_name_slug]))
-        else:
-            print(form.errors)
+                return redirect(reverse('recipes:show_recipe', args=[user_id, recipe_name_slug]))
+            else:
+                print(form.errors)
 
         context_dict['review_form'] = form
 
@@ -179,23 +177,28 @@ def show_recipe(request, user_id, recipe_name_slug):
 
 
 @login_required
-def show_user_account(request):
-    current_user = request.user
+def show_user_account(request, msg=None):
+    if msg is None:
+        current_user = request.user
 
-    current_user_profile = UserProfile.objects.get(user=current_user)
+        current_user_profile = UserProfile.objects.get(user=current_user)
 
-    recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating'))
+        saved_recipes_ratings = current_user_profile.saved.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:4]
 
-    saved_recipes_ratings = current_user_profile.saved.annotate(average_rating=Avg('review__rating'))
+        written_recipes = Recipe.objects.filter(author=current_user)
 
-    written_recipes = Recipe.objects.filter(author=current_user)
+        written_recipes = written_recipes.annotate(average_rating=Avg('review__rating'))[:4]
 
-    written_reviews = Review.objects.filter(author=current_user)
+        written_reviews = Review.objects.filter(author=current_user)[:5]
 
-    context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes_ratings, "written_recipes": written_recipes,
-                    "written_reviews": written_reviews}
+        context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes_ratings,
+                        "written_recipes": written_recipes,
+                        "written_reviews": written_reviews}
 
-    return render(request, 'recipes/my_account.html', context=context_dict)
+        return render(request, 'recipes/my_account.html', context=context_dict)
+
+    else:
+        return HttpResponse(msg)
 
 
 @login_required
@@ -214,6 +217,8 @@ def add_recipe(request):
 
             recipe.save()
 
+            recipe.category.add(*form.cleaned_data['category'])
+
             return redirect(reverse('recipes:show_user_account'))
         else:
             print(form.errors)
@@ -227,6 +232,8 @@ def show_user_recipes(request):
     current_user = request.user
 
     written_recipes = Recipe.objects.filter(author=current_user)
+
+    written_recipes = written_recipes.annotate(average_rating=Avg('review__rating'))
 
     context_dict = {'written_recipes': written_recipes}
 
@@ -250,7 +257,7 @@ def show_user_saved_recipes(request):
 
     current_user_profile = UserProfile.objects.get(user=current_user)
 
-    saved_recipes = current_user_profile.saved.all()
+    saved_recipes = current_user_profile.saved.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')
 
     context_dict = {'saved_recipes': saved_recipes}
 
@@ -277,19 +284,128 @@ def show_non_user_recipes(request, user_id):
     user = get_object_or_404(User, id=user_id)
     written_recipes = Recipe.objects.filter(author=user)
 
-    context_dict = {'written_recipes': written_recipes, "account_user":user}
+    context_dict = {'written_recipes': written_recipes, "account_user": user}
 
     return render(request, 'recipes/others_recipes.html', context=context_dict)
 
 
 @login_required
-def edit_account(request, user_id):
-    pass
+def edit_account(request):
+    edited = False
+
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+
+            user.set_password(user.password)
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+
+            profile.save()
+
+            edited = True
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=user_profile)
+
+    context_dict = {'user_form': user_form, 'profile_form': profile_form, 'edited':edited}
+
+    return render(request, 'recipes/update_profile.html', context=context_dict)
+
+
+@login_required
+def edit_review(request, user_id, review_id):
+    review = Review.objects.get(id=review_id)
+
+    print(review.recipe.title)
+
+    if request.method == "POST":
+        form = ReviewForm(request.POST, instance=review)
+
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.author = request.user
+            review.recipe = review.recipe
+            review.save()
+
+            return redirect(reverse('recipes:show_user_account'))
+        else:
+            print(form.errors)
+
+    else:
+        form = ReviewForm(instance=review)
+
+    context_dict = {'review_form':form, 'review_id':review_id, 'recipe_name': review.recipe.title, 'review_content':review.content, 'values':["1", "2", "3", "4", "5"], 'checked_val':str(review.rating)}
+
+    return render(request, 'recipes/edit_review.html', context=context_dict)
+
+
+@login_required
+def edit_recipe(request, user_id, recipe_id):
+    recipe = Recipe.objects.get(id=recipe_id)
+
+    if request.method == "POST":
+        form = RecipeForm(request.POST, request.FILES, instance=recipe)
+
+        if form.is_valid():
+            recipe = form.save(commit=False)
+            recipe.author = request.user
+
+            if 'image' in request.FILES:
+                recipe.image = request.FILES['image']
+
+            recipe.save()
+
+            return redirect(reverse('recipes:show_user_account'))
+        else:
+            print(form.errors)
+    else:
+        form = RecipeForm(instance=recipe)
+
+    context_dict = {'form': form, 'recipe': recipe_id}
+    return render(request, 'recipes/edit_recipe_page.html', context=context_dict)
 
 
 @login_required
 def delete_account_confirmation(request):
-    return render(request, 'recipes/delete_account_confirmation.html')
+    context_dict = {'action': 'delete', 'type': 'account', 'detail_name': 'username', 'detail': request.user.username}
+
+    return render(request, 'recipes/delete_confirmation.html', context_dict)
+
+
+@login_required
+def delete_review_confirmation(request, user_id, review_id):
+    context_dict = {'action': 'delete', 'type': 'review', 'detail_name': 'the recipe name',
+                    'detail': Review.objects.get(id=review_id).recipe.title, 'object_id': review_id}
+
+    return render(request, 'recipes/delete_confirmation.html', context_dict)
+
+
+@login_required
+def delete_recipe_confirmation(request, user_id, recipe_id):
+    context_dict = {'action': 'delete', 'type': 'recipe', 'detail_name': 'the name',
+                    'detail': Recipe.objects.get(id=recipe_id).title, 'object_id': recipe_id}
+
+    return render(request, 'recipes/delete_confirmation.html', context_dict)
+
+
+@login_required
+def unsave_recipe_confirmation(request, user_id, recipe_id):
+    context_dict = {'action': 'unsave', 'type': 'saved recipe', 'detail_name': 'the name',
+                    'detail': Recipe.objects.get(id=recipe_id).title, 'object_id': recipe_id}
+
+    return render(request, 'recipes/delete_confirmation.html', context_dict)
+
 
 @login_required
 def delete_account(request):
@@ -307,6 +423,40 @@ def delete_account(request):
 
     return render(request, 'recipes/my_account.html', context=context_dict)
 
-# def user_logout(request):
-#     logout(request)
-#     return redirect(reverse('recipes:home'))
+
+@login_required
+def delete_review(request, user_id, review_id):
+    try:
+        review = Review.objects.get(id=review_id)
+        review.delete()
+
+    except Exception as e:
+        show_user_account(request, "Could not delete review. Encountered following error: " + e)
+
+    return redirect(reverse('recipes:show_user_account'))
+
+
+@login_required
+def delete_recipe(request, user_id, recipe_id):
+    try:
+        recipe = Recipe.objects.get(id=recipe_id)
+        recipe.delete()
+
+    except Exception as e:
+        show_user_account(request, "Could not delete recipe. Encountered following error: " + e)
+
+    return redirect(reverse('recipes:show_user_account'))
+
+
+@login_required
+def unsave_recipe(request, user_id, recipe_id):
+    try:
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        user = request.user
+        user_profile = UserProfile.objects.get(user=user)
+        user_profile.saved.remove(recipe)
+
+    except Exception as e:
+        show_user_account(request, "Could not unsave recipe. Encountered following error: " + e)
+
+    return redirect(reverse('recipes:show_user_account'))

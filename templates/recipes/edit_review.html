@@ -1,0 +1,29 @@
+{% extends 'recipes/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Edit Review
+{% endblock %}
+
+{% block body_block %}
+<h1>Edit Review For {{ recipe_name }}</h1><br>
+<div>
+    <form id="review_form" method="POST" action="{% url 'recipes:edit_review' user.id review_id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3 input-group">
+            Review:
+            {% for val in values %}
+                {% if val == checked_val %}
+                    <input class="form-check-input" type="radio" name="rating" value={{ val }} checked/>
+                {% else %}
+                    <input class="form-check-input" type="radio" name="rating" value={{ val }} />
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            Comment: <textarea class="form-control" name="content" maxlength="1000">{{ review_content }}</textarea>
+        </div>
+        <input class="btn btn-primary" type="submit" name="submit" value="Save Changes" />
+    </form>
+</div>
+{% endblock %}
