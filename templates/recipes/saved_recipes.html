@@ -2,17 +2,25 @@
 {% load staticfiles %}
 
 {% block body_block %}
-<div>
-   <h2>Saved Recipes</h2>
-{% if saved_recipes %}
-   <ul>
-   {% for recipe in saved_recipes %}
-       <li><img src="{{ recipe.image.url }}" alt="{{ recipe.title }} image"></li>
-       <li><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a> {{ recipe.average_rating }}</li>
-   {% endfor %}
-   </ul>
-{% else %}
-   <strong>There are no recipes present.</strong>
-{% endif %}
+<div class = "container text-center mt-50" style="margin-top:50px">
+   <h2>Your Saved Recipes</h2><br>
+    <div class="row h-100" style="margin-bottom:50px">
+        {% if saved_recipes %}
+            {% for recipe in saved_recipes %}
+                <div class="card w-25 mx-auto" style="display:inline-block;margin-bottom:20px">
+                    <img src="{{ recipe.image.url }}" class="card-img-top" style="height:250px" alt="{{ recipe.title }} image">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5>
+                        <p class="card-text">Rating: {{ recipe.average_rating }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'recipes:unsave_recipe_confirmation' user.id recipe.id %}" class="btn btn-outline-success">Unsave</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+           <strong>There are no recipes present.</strong>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

@@ -183,13 +183,13 @@ def show_user_account(request, msg=None):
 
         current_user_profile = UserProfile.objects.get(user=current_user)
 
-        recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating'))
-
-        saved_recipes_ratings = current_user_profile.saved.annotate(average_rating=Avg('review__rating'))
+        saved_recipes_ratings = current_user_profile.saved.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:4]
 
         written_recipes = Recipe.objects.filter(author=current_user)
 
-        written_reviews = Review.objects.filter(author=current_user)
+        written_recipes = written_recipes.annotate(average_rating=Avg('review__rating'))[:4]
+
+        written_reviews = Review.objects.filter(author=current_user)[:5]
 
         context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes_ratings,
                         "written_recipes": written_recipes,
@@ -233,6 +233,8 @@ def show_user_recipes(request):
 
     written_recipes = Recipe.objects.filter(author=current_user)
 
+    written_recipes = written_recipes.annotate(average_rating=Avg('review__rating'))
+
     context_dict = {'written_recipes': written_recipes}
 
     return render(request, 'recipes/my_recipes.html', context=context_dict)
@@ -255,7 +257,7 @@ def show_user_saved_recipes(request):
 
     current_user_profile = UserProfile.objects.get(user=current_user)
 
-    saved_recipes = current_user_profile.saved.all()
+    saved_recipes = current_user_profile.saved.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')
 
     context_dict = {'saved_recipes': saved_recipes}
 
