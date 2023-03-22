@@ -2,18 +2,28 @@
 {% load staticfiles %}
 
 {% block body_block %}
-<div>
-    <h1>{{ category.name }}</h1>
+<div class = "container text-center mt-50" style="margin-top:50px">
+   <h2>{{ category.name }}</h2><br>
+    <div class="row h-100" style="margin-bottom:50px">
     <h2>Recipes</h2>
-{% if recipes %}
-    <ul>
-    {% for recipe in recipes %}
-        <li><img src="{{ recipe.image.url }}" alt="{{ recipe.title }} image"></li>
-        <li><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a> {{ recipe.average_rating }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <strong>There are no recipes present.</strong>
-{% endif %}
+        {% if recipes %}
+        <div class="card-group">
+           {% for recipe in recipes %}
+           <div class="card">
+               <img class="card-img-top object-fit-cover" src="{{ recipe.image.url }}" alt="{{ recipe.title }} image">
+               <div class="card-body">
+                   <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5>
+                   <p class="card-text"><i class="bi bi-star-fill text-warning"></i> {{ recipe.average_rating|floatformat:"1" }}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text"><small class="text-muted">Written by <a href="{% url 'recipes:show_non_user_account' recipe.author.id %}">{{ recipe.author.username }}</a></small></p>
+                </div>
+            </div>
+           {% endfor %}
+        </div><br>
+        {% else %}
+           <strong>There are no recipes present.</strong>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

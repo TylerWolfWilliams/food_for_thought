@@ -8,12 +8,12 @@
 {% block body_block %}
 <div class="row justify-content-md-center">
     <div class="col col-lg-4">
-        <h1>Sign Up</h1>
+        <h1>Sign Up</h1><br>
         {% if registered and not editing %}
              <strong>Thank you for registering!</strong>
              <a href="{% url 'recipes:login' %}">Return to the login.</a><br />
         {% else %}
-             <strong>Sign up here!</strong><br />
+             <strong>Sign up here!</strong><br /><br>
              <form id="user_form" method="post" action="{% url 'recipes:signup' %}" enctype="multipart/form-data">
 
                   {% csrf_token %}
@@ -35,10 +35,10 @@
                  <div class="input-group">
                      <label class="input-group-text" for="bioInput">Bio</label>
                      <textarea class="form-control" placeholder="Tell us a bit about yourself..." name="bio" id="bioInput"></textarea>
-                 </div>
+                 </div><br>
 
                  <div class="text-center">
-                     <button type="submit" name="submit" value="Register" class="btn btn-success">Register</button>
+                     <button type="submit" name="submit" value="Register" class="btn btn-outline-success">Register</button>
                  </div>
              </form>
         {% endif %}

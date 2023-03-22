@@ -22,7 +22,7 @@ def home(request):
 
 
 def categories(request):
-    category_list = Category.objects.order_by('name')
+    category_list = Category.objects.annotate(number_of_recipes=Count('recipe')).order_by('-number_of_recipes')
 
     context_dict = {'categories': category_list}
 
