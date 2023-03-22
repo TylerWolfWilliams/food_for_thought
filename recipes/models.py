@@ -31,7 +31,7 @@ class Recipe(models.Model):
     content = models.CharField(max_length=10000)
     ingredients = models.CharField(max_length=1000)
     cooking_time = models.DurationField()
-    servings = models.CharField(max_length=100)
+    servings = models.IntegerField()
     tags = models.CharField(max_length=1000, blank = True)
 
     slug = models.SlugField()

@@ -9,9 +9,12 @@ class RecipeForm(forms.ModelForm):
     content = forms.CharField(max_length=10000, help_text="Instructions: ")
     ingredients = forms.CharField(max_length=10000, help_text="Ingredients: ")
     tags = forms.CharField(max_length=1000, help_text="Tags (optional): ", required=False)
-    cooking_time = forms.CharField(help_text="Cooking Time: ")
-    servings = forms.CharField(max_length=100, help_text="Servings: ")
+    cooking_time = forms.DurationField(label="Cooking Time")
+    servings = forms.IntegerField(label="Servings", min_value=1)
     category = forms.ModelMultipleChoiceField(Category.objects.all(), required=False)
+
+    def getCategories(self):
+        return [c for c in Category.objects.all()]
 
     class Meta:
         model = Recipe
