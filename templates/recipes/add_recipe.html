@@ -11,18 +11,24 @@
     <form enctype="multipart/form-data" id="recipe_form" method="POST" action="{% url 'recipes:add_recipe' %}">
         {% csrf_token %}
 
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+        {% endif %}
+
         <div class="justify-content-md-center">
             <div class="mb-3 row">
 
                 <div class="col">
-                <input type="text" name="title" class="form-control" placeholder="Name of Recipe">
+                <input type="text" name="title" class="form-control" placeholder="Name of Recipe" required>
                 </div>
                 <div class="col">
-                    <input type="file" name="image" accept=".jpg, .png, .jpeg" class="form-control" placeholder="Upload an image" >
+                    <input type="file" name="image" accept=".jpg, .png, .jpeg" class="form-control" placeholder="Upload an image" required>
                 </div>
                 <div class="col input-group mb-3">
                     <label class="input-group-text" for="categoryInput">Category:</label>
-                    <select class="form-select" id="categoryInput" name="category">
+                    <select class="form-select" id="categoryInput" name="category" required>
                         <option selected disabled>None</option>
                         {% for c in form.getCategories %}
                              <option name="{{ c.name }}" value="{{ c }}">{{ c.name }}</option>
@@ -33,7 +39,7 @@
 
             <div class="mb-3 row text-center">
                 <div class="col">
-                    <textarea class="form-control" placeholder="Method" style="height: 200px" name="content" ></textarea>
+                    <textarea class="form-control" placeholder="Method" style="height: 200px" name="content" required></textarea>
                 </div>
                 <div class="col">
                     <textarea class="form-control" placeholder="Ingredients" name="ingredients" style="height: 200px" ></textarea>
@@ -43,12 +49,12 @@
 
             <div class="mb-3 row">
                 <div class="col">
-                    <input type="number" aria-valuemin="1" class="form-control" placeholder="Number of Servings" name="servings" >
+                    <input type="number" aria-valuemin="1" class="form-control" placeholder="Number of Servings" name="servings" required>
 
                 </div>
                 <div class="col input-group">
                     <span class="input-group-text" id="basic-addon3">Cooking Time (Hours:Mins)</span>
-                    <input type="time" class="form-control" name="cooking_time" >
+                    <input type="time" class="form-control" name="cooking_time" required>
 
                 </div>
                 <div class="col">

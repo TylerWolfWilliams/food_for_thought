@@ -212,6 +212,8 @@ def add_recipe(request):
     if request.method == "POST":
         form = RecipeForm(request.POST, request.FILES)
 
+        print(form['category'])
+
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
