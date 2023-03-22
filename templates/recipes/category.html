@@ -3,24 +3,41 @@
 
 {% block body_block %}
 <div class = "container text-center mt-5">
-   <h2>{{ category.name }}</h2><br>
-    <div class="row h-100 mb-5">
-    <h2>Recipes</h2>
-        {% if recipes %}
-        <div class="card-group">
-           {% for recipe in recipes %}
-           <div class="card">
-               <img class="card-img-top object-fit-cover" src="{{ recipe.image.url }}" alt="{{ recipe.title }} image">
-               <div class="card-body">
-                   <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5>
-                   <p class="card-text"><i class="bi bi-star-fill text-warning"></i> {{ recipe.average_rating|floatformat:"1" }}</p>
-                </div>
-                <div class="card-footer">
-                    <p class="card-text"><small class="text-muted">Written by <a href="{% url 'recipes:show_non_user_account' recipe.author.id %}">{{ recipe.author.username }}</a></small></p>
+    <div class="row mb-5">
+        <div class="col">
+            <div class="card w-75">
+                <img src="{{ category.image.url }}" class="img-thumbnail rounded float-start" alt="Profile image">
+            </div>
+        </div>
+        <div class="col">
+            <div class="card w-75 border-success border-3">
+                <div class="card-body">
+                    <h2 class="card-title">{{ category.name }}</h2><br>
+                    <p class="card-text">
+                        <b>Description: {{ category.description }}</b>
+                    </p>
                 </div>
             </div>
-           {% endfor %}
-        </div><br>
+        </div>
+    </div>
+
+    <hr class="border border-success border-3 opacity-75 mb-5">
+
+    <div class="row h-100 mb-5">
+        <h2>Recipes</h2><br>
+        {% if recipes %}
+            {% for recipe in recipes %}
+                <div class="card w-25 mx-auto">
+                    <img src="{{ recipe.image.url }}" class="card-img-top" height="250" alt="{{ recipe.title }} image">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5>
+                        <p class="card-text"><i class="bi bi-star-fill text-warning"></i> {{ recipe.average_rating|floatformat:"1" }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text"><small class="text-muted">Written by <a href="{% url 'recipes:show_non_user_account' recipe.author.id %}">{{ recipe.author.username }}</a></small></p>
+                    </div>
+                </div>
+            {% endfor %}
         {% else %}
            <strong>There are no recipes present.</strong>
         {% endif %}

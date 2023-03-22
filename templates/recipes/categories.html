@@ -4,7 +4,7 @@
 
 {% block body_block %}
 <div class = "container text-center mt-5">
-   <h2>Categories</h2><br>
+   <h1>Categories</h1><br>
     <div class="row h-100 mb-5">
         {% if categories %}
             {% for category in categories %}
@@ -13,11 +13,12 @@
                     <div class="card-body">
                         <h5 class="card-title"><a href="{% url 'recipes:show_category' category.slug %}">{{ category.name }}</a></h5>
                         <p class="card-text">Number of Recipes: {{ category.number_of_recipes }}</p>
+                        <p class="card-text">{{ category.description }}</p>
                     </div>
                 </div>
             {% endfor %}
         {% else %}
-           <strong>There are no recipes present.</strong>
+           <strong>There are no categories present.</strong>
         {% endif %}
     </div>
 </div>

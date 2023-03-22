@@ -33,7 +33,8 @@ def show_category(request, category_name_slug):
     context_dict = {}
 
     category = get_object_or_404(Category, slug=category_name_slug)
-    recipes = Recipe.objects.filter(category=category).distinct()
+    recipes = Recipe.objects.annotate(average_rating=Avg('review__rating')).filter(category=category).distinct()
+    # recipes = Recipe.objects.filter(category=category).distinct()
 
     context_dict['category'] = category
     context_dict['recipes'] = recipes
