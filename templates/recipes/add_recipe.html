@@ -8,30 +8,24 @@
 
 {% block body_block %}
 <div>
-    <form enctype="multipart/form-data" class="needs-validation" novalidate id="recipe_form" method="POST" action="{% url 'recipes:add_recipe' %}">
+    <form enctype="multipart/form-data" id="recipe_form" method="POST" action="{% url 'recipes:add_recipe' %}">
         {% csrf_token %}
 
         <div class="justify-content-md-center">
             <div class="mb-3 row">
 
                 <div class="col">
-                <input type="text" name="title" class="form-control" placeholder="Name of Recipe" required>
-                    <div class="invalid-feedback">
-                        Please enter a name for your recipe
-                    </div>
+                <input type="text" name="title" class="form-control" placeholder="Name of Recipe">
                 </div>
                 <div class="col">
-                    <input type="file" name="image" accept=".jpg, .png, .jpeg" class="form-control" placeholder="Upload an image" required>
-                    <div class="invalid-feedback">
-                        Please upload an image
-                    </div>
+                    <input type="file" name="image" accept=".jpg, .png, .jpeg" class="form-control" placeholder="Upload an image" >
                 </div>
                 <div class="col input-group mb-3">
                     <label class="input-group-text" for="categoryInput">Category:</label>
-                    <select class="form-select" id="categoryInput" name="category" required>
-                        <option selected>None</option>
+                    <select class="form-select" id="categoryInput" name="category">
+                        <option selected disabled>None</option>
                         {% for c in form.getCategories %}
-                        <option name="{{ c.id }}">{{ c.name }}</option>
+                             <option name="{{ c.name }}" value="{{ c }}">{{ c.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -39,35 +33,26 @@
 
             <div class="mb-3 row text-center">
                 <div class="col">
-                    <textarea class="form-control" placeholder="Method" style="height: 200px" name="content" required></textarea>
-                    <div class="invalid-feedback">
-                        Please provide cooking instructions
-                    </div>
+                    <textarea class="form-control" placeholder="Method" style="height: 200px" name="content" ></textarea>
                 </div>
                 <div class="col">
-                    <textarea class="form-control" placeholder="Ingredients" name="ingredients" style="height: 200px" required></textarea>
-                    <div class="invalid-feedback">
-                        Please enter ingredients
-                    </div>
+                    <textarea class="form-control" placeholder="Ingredients" name="ingredients" style="height: 200px" ></textarea>
+
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <div class="col">
-                    <input type="number" class="form-control" placeholder="Number of Servings" name="servings" required>
-                    <div class="invalid-feedback">
-                        Please enter number of servings
-                    </div>
+                    <input type="number" aria-valuemin="1" class="form-control" placeholder="Number of Servings" name="servings" >
+
                 </div>
                 <div class="col input-group">
                     <span class="input-group-text" id="basic-addon3">Cooking Time (Hours:Mins)</span>
-                    <input type="time" class="form-control" name="form.cooking_time" required>
-                    <div class="invalid-feedback">
-                        Please enter the cooking time
-                    </div>
+                    <input type="time" class="form-control" name="cooking_time" >
+
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" name="form.tags" placeholder="Tags (Optional)">
+                    <input type="text" class="form-control" name="tags" placeholder="Tags (Optional)">
                 </div>
             </div>
 
