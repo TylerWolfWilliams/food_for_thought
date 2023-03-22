@@ -1,25 +1,15 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
+{% load recipes_template_tags %}
 
 
 {% block body_block %}
 <div class = "container text-center mt-5">
-   <h1>Categories</h1><br>
-    <div class="row h-100 mb-5">
-        {% if categories %}
-            {% for category in categories %}
-                <div class="card w-25 mx-auto">
-                    <img src="{{ category.image.url }}" class="card-img-top" height="250" alt="{{ category.name }} image">
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="{% url 'recipes:show_category' category.slug %}">{{ category.name }}</a></h5>
-                        <p class="card-text">Number of Recipes: {{ category.number_of_recipes }}</p>
-                        <p class="card-text">{{ category.description }}</p>
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-           <strong>There are no categories present.</strong>
-        {% endif %}
-    </div>
+    <h1>Categories</h1><br>
+    {% if categories %}
+    {% categories_grid categories %}
+    {% else %}
+    <strong>There are no categories present.</strong>
+    {% endif %}
 </div>
 {% endblock %}

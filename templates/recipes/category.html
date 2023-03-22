@@ -1,5 +1,6 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
+{% load recipes_template_tags %}
 
 {% block body_block %}
 <div class = "container text-center mt-5">
@@ -26,18 +27,7 @@
     <div class="row h-100 mb-5">
         <h2>Recipes</h2><br>
         {% if recipes %}
-            {% for recipe in recipes %}
-                <div class="card w-25 mx-auto">
-                    <img src="{{ recipe.image.url }}" class="card-img-top" height="250" alt="{{ recipe.title }} image">
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5>
-                        <p class="card-text"><i class="bi bi-star-fill text-warning"></i> {{ recipe.average_rating|floatformat:"1" }}</p>
-                    </div>
-                    <div class="card-footer">
-                        <p class="card-text"><small class="text-muted">Written by <a href="{% url 'recipes:show_non_user_account' recipe.author.id %}">{{ recipe.author.username }}</a></small></p>
-                    </div>
-                </div>
-            {% endfor %}
+            {% recipes_grid recipes %}
         {% else %}
            <strong>There are no recipes present.</strong>
         {% endif %}

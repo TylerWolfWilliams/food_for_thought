@@ -13,8 +13,8 @@ from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm, Sea
 
 
 def home(request):
-    category_list = Category.objects.annotate(number_of_recipes=Count('recipe')).order_by('-number_of_recipes')[:5]
-    recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:5]
+    category_list = Category.objects.annotate(number_of_recipes=Count('recipe')).order_by('-number_of_recipes')[:4]
+    recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:4]
 
     context_dict = {'categories': category_list, 'recipes': recipe_list}
 

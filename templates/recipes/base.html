@@ -50,7 +50,7 @@
                     </form>
                 </div>
 
-                <div class="navbar-collapse collapse w-25 text-center">
+                <div class="navbar-collapse collapse w-25">
                     <ul class="navbar-nav ms-auto">
                         {% if user.is_authenticated %}
                         <li class="nav-item">
@@ -58,7 +58,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'recipes:show_user_account' %}">
-                                <img class="img-thumbnail float-start d-block" src="{{ user.userprofile.picture.url }}" alt="Profile Picture" width="40" height="40">
+                                <img class="img-thumbnail float-start d-flex img-fluid" src="{{ user.userprofile.picture.url }}" alt="Profile Picture" width="40" height="40">
                                 My Account
                             </a>
                         </li>
