@@ -324,7 +324,7 @@ def edit_account(request):
 
 
 @login_required
-def edit_review(request, user_id, review_id):
+def edit_review(request, review_id):
     review = Review.objects.get(id=review_id)
 
     print(review.recipe.title)
@@ -345,14 +345,14 @@ def edit_review(request, user_id, review_id):
     else:
         form = ReviewForm(instance=review)
 
-    context_dict = {'review_form':form, 'review_id':review_id, 'recipe_name': review.recipe.title, 'review_content':review.content, 'values':["1", "2", "3", "4", "5"], 'checked_val':str(review.rating)}
+    context_dict = {'review_form':form, 'review': review, 'recipe': review.recipe, 'values':["1", "2", "3", "4", "5"], 'checked_val':str(review.rating)}
 
     return render(request, 'recipes/edit_review.html', context=context_dict)
 
 
 @login_required
-def edit_recipe(request, user_id, recipe_id):
-    recipe = Recipe.objects.get(id=recipe_id)
+def edit_recipe(request, recipe_id):
+    recipe = Recipe.objects.get(id=recipe_id, author = request.user)
 
     if request.method == "POST":
         form = RecipeForm(request.POST, request.FILES, instance=recipe)
@@ -372,39 +372,8 @@ def edit_recipe(request, user_id, recipe_id):
     else:
         form = RecipeForm(instance=recipe)
 
-    context_dict = {'form': form, 'recipe': recipe_id}
+    context_dict = {'form': form, 'recipe': recipe}
     return render(request, 'recipes/edit_recipe_page.html', context=context_dict)
-
-
-@login_required
-def delete_account_confirmation(request):
-    context_dict = {'action': 'delete', 'type': 'account', 'detail_name': 'username', 'detail': request.user.username}
-
-    return render(request, 'recipes/delete_confirmation.html', context_dict)
-
-
-@login_required
-def delete_review_confirmation(request, user_id, review_id):
-    context_dict = {'action': 'delete', 'type': 'review', 'detail_name': 'the recipe name',
-                    'detail': Review.objects.get(id=review_id).recipe.title, 'object_id': review_id}
-
-    return render(request, 'recipes/delete_confirmation.html', context_dict)
-
-
-@login_required
-def delete_recipe_confirmation(request, user_id, recipe_id):
-    context_dict = {'action': 'delete', 'type': 'recipe', 'detail_name': 'the name',
-                    'detail': Recipe.objects.get(id=recipe_id).title, 'object_id': recipe_id}
-
-    return render(request, 'recipes/delete_confirmation.html', context_dict)
-
-
-@login_required
-def unsave_recipe_confirmation(request, user_id, recipe_id):
-    context_dict = {'action': 'unsave', 'type': 'saved recipe', 'detail_name': 'the name',
-                    'detail': Recipe.objects.get(id=recipe_id).title, 'object_id': recipe_id}
-
-    return render(request, 'recipes/delete_confirmation.html', context_dict)
 
 
 @login_required
@@ -413,6 +382,7 @@ def delete_account(request):
 
     try:
         current_user = request.user
+        logout(request)
         current_user.delete()
         is_deleted = True
 
@@ -425,9 +395,9 @@ def delete_account(request):
 
 
 @login_required
-def delete_review(request, user_id, review_id):
+def delete_review(request, review_id):
     try:
-        review = Review.objects.get(id=review_id)
+        review = Review.objects.get(id=review_id, author=request.user)
         review.delete()
 
     except Exception as e:
@@ -437,9 +407,9 @@ def delete_review(request, user_id, review_id):
 
 
 @login_required
-def delete_recipe(request, user_id, recipe_id):
+def delete_recipe(request, recipe_id):
     try:
-        recipe = Recipe.objects.get(id=recipe_id)
+        recipe = Recipe.objects.get(id=recipe_id, author=request.author)
         recipe.delete()
 
     except Exception as e:
@@ -449,7 +419,7 @@ def delete_recipe(request, user_id, recipe_id):
 
 
 @login_required
-def unsave_recipe(request, user_id, recipe_id):
+def unsave_recipe(request, recipe_id):
     try:
         recipe = get_object_or_404(Recipe, id=recipe_id)
         user = request.user

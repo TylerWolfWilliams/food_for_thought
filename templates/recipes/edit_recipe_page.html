@@ -7,7 +7,7 @@
 
 {% block body_block %}
 <div>
-    <form enctype="multipart/form-data" id="recipe_form" method="POST" action="{% url 'recipes:edit_recipe' user.id recipe %}">
+    <form enctype="multipart/form-data" id="recipe_form" method="POST" action="{% url 'recipes:edit_recipe' recipe.id %}">
         {% csrf_token %}
         <div class="mb-3">
             {% for field in form.visible_fields %}

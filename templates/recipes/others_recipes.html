@@ -2,13 +2,13 @@
 {% load staticfiles %}
 
 {% block body_block %}
-<div class = "container text-center mt-50" style="margin-top:50px">
+<div class = "container text-center mt-5">
    <h2>{{ account_user.username }} Recipes</h2><br>
-    <div class="row h-100" style="margin-bottom:50px">
+    <div class="row h-100 mb-5">
         {% if written_recipes %}
             {% for recipe in written_recipes %}
-                <div class="card w-25 mx-auto" style="display:inline-block;margin-bottom:20px">
-                    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }} image">
+                <div class="card w-25 mx-auto mb-2">
+                    <img class="card-img" src="{{ recipe.image.url }}" alt="{{ recipe.title }} image">
                         <div class="card-body">
                             <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5>
                             <p class="card-text">Rating: {{ recipe.average_rating }}</p>

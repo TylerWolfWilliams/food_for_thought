@@ -1,5 +1,6 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
+{% load recipes_template_tags %}
 
 {% block head_block %}
     <script type="text/javascript" src="D:\Python\Second Year\Semester 2\Web App\Team Project\food_for_thought\static\javascript\my_account_javascript.js"></script>
@@ -12,15 +13,15 @@
     <a href="{% url 'recipes:home' %}">Return to the homepage.</a><br />
 {% else %}
 
-<div class = "container text-center mt-50" style="margin-top:50px">
-    <div class="row" style="margin-bottom:50px">
+<div class = "container text-center mt-5">
+    <div class="row mb-5">
         <div class="col">
             <div class="card w-75">
                 <img src="{{ current_user.picture.url }}" class="img-thumbnail rounded float-start" alt="Profile image">
                 <div class="card-body">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <a href="{% url 'recipes:edit_account' %}" class="btn btn-outline-success">Edit Account</a>
-                        <a href="{% url 'recipes:delete_account_confirmation' %}" class="btn btn-outline-success">Delete Account</a>
+                        {% confirm_account_deletion %}
                     </div>
                 </div>
             </div>
@@ -39,9 +40,9 @@
         </div>
     </div>
 
-    <hr class="border border-success border-3 opacity-75" style="margin-bottom:50px">
+    <hr class="border border-success border-3 opacity-75 mb-5">
 
-    <div class="row" style="margin-bottom:50px">
+    <div class="row mb-5">
        <h2><a href="{% url 'recipes:show_user_saved_recipes' %}">Saved Recipes</a></h2><br>
         {% if saved_recipes %}
             {% for recipe in saved_recipes %}
@@ -52,7 +53,7 @@
                         <p class="card-text">Rating: {{ recipe.average_rating }}</p>
                     </div>
                     <div class="card-footer">
-                        <a href="{% url 'recipes:unsave_recipe_confirmation' user.id recipe.id %}" class="btn btn-outline-success">Unsave</a>
+                        {% confirm_recipe_unsave recipe %}
                     </div>
                 </div>
             {% endfor %}
@@ -61,9 +62,9 @@
         {% endif %}
     </div>
 
-    <hr class="border border-success border-3 opacity-75" style="margin-bottom:50px">
+    <hr class="border border-success border-3 opacity-75 mb-5">
 
-    <div class="row" style="margin-bottom:50px">
+    <div class="row mb-5">
         <div class="col">
            <h2><a href="{% url 'recipes:show_user_reviews' %}">Your Reviews</a></h2><br>
             {% if written_reviews %}
@@ -71,15 +72,15 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title"><a href="{% url 'recipes:show_recipe' review.recipe.author.id review.recipe.slug %}">{{ review.recipe.title }}</a></h5>
-                                <p class="card-text" style="text-align:left">
+                                <p class="card-text">
                                     {{ review.content }} <br>
                                     Rating: {{ review.rating }}
                                 </p>
                         </div>
                         <div class="card-footer">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="{% url 'recipes:edit_review' user.id review.id %}" class="btn btn-outline-success">Edit</a>
-                                <a href="{% url 'recipes:delete_review_confirmation' user.id review.id %}" class="btn btn-outline-success">Delete</a>
+                                <a href="{% url 'recipes:edit_review' review.id %}" class="btn btn-outline-success">Edit</a>
+                                {% confirm_review_deletion review %}
                             </div>
                         </div>
                     </div><br>
@@ -101,8 +102,8 @@
                        </div>
                        <div class="card-footer">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="{% url 'recipes:edit_recipe' user.id recipe.id %}" class="btn btn-outline-success">Edit</a>
-                                <a href="{% url 'recipes:delete_recipe_confirmation' user.id recipe.id %}" class="btn btn-outline-success">Delete</a>
+                                <a href="{% url 'recipes:edit_recipe' recipe.id %}" class="btn btn-outline-success">Edit</a>
+                                {% confirm_recipe_deletion recipe %}
                             </div>
                         </div>
                    </div><br>

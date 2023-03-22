@@ -1,24 +1,25 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
+{% load recipes_template_tags %}
 
 {% block body_block %}
-<div class = "container text-center mt-50" style="margin-top:50px">
+<div class = "container text-center mt-5">
     <h2>Your Reviews</h2><br>
-    <div class="row" style="margin-bottom:50px">
+    <div class="row mb-5">
         {% if written_reviews %}
             {% for review in written_reviews %}
-                <div class="card w-25" style="margin-bottom:20px; margin-left:10px">
+                <div class="card w-25 mb-2 ms-1">
                     <div class="card-body">
                         <h5 class="card-title"><a href="{% url 'recipes:show_recipe' review.recipe.author.id review.recipe.slug %}">{{ review.recipe.title }}</a></h5>
-                        <p class="card-text" style="text-align:left">
+                        <p class="card-text text-start">
                             {{ review.content }} <br>
                             Rating: {{ review.rating }}
                         </p>
                     </div>
                     <div class="card-footer">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <a href="{% url 'recipes:edit_review' user.id review.id %}" class="btn btn-outline-success">Edit</a>
-                            <a href="{% url 'recipes:delete_review_confirmation' user.id review.id %}" class="btn btn-outline-success">Delete</a>
+                            <a href="{% url 'recipes:edit_review' review.id %}" class="btn btn-outline-success">Edit</a>
+                            {% confirm_review_deletion review %}
                         </div>
                     </div>
                 </div>
