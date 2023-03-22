@@ -13,7 +13,7 @@
                     <div class="card-body">
                         <h5 class="card-title"><a href="{% url 'recipes:show_category' category.slug %}">{{ category.name }}</a></h5>
                         <p class="card-text">Number of Recipes: {{ category.number_of_recipes }}</p>
-                        <p class="card-text">Description:</p>
+                        <p class="card-text">{{ category.description }}</p>
                     </div>
                 </div>
             {% endfor %}

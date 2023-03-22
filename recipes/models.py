@@ -2,9 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 
+
 class Category(models.Model):
-    name = models.CharField(max_length=100, unique = True)
-    image = models.ImageField(upload_to = "category_images/")
+    name = models.CharField(max_length=100, unique=True)
+    image = models.ImageField(upload_to="category_images/")
+
+    description = models.CharField(max_length=500)
 
     slug = models.SlugField(unique=True)
 
@@ -24,15 +27,15 @@ class Recipe(models.Model):
         return f'user_{instance.author.id}/recipes/{filename}'
 
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ManyToManyField(Category, blank = True)
+    category = models.ManyToManyField(Category, blank=True)
 
     title = models.CharField(max_length=100)
-    image = models.ImageField(upload_to = upload_folder)
+    image = models.ImageField(upload_to=upload_folder)
     content = models.CharField(max_length=10000)
     ingredients = models.CharField(max_length=1000)
     cooking_time = models.DurationField()
     servings = models.CharField(max_length=100)
-    tags = models.CharField(max_length=1000, blank = True)
+    tags = models.CharField(max_length=1000, blank=True)
 
     slug = models.SlugField()
 
@@ -52,10 +55,10 @@ class UserProfile(models.Model):
         return f'user_{instance.user.id}/profile/{filename}'
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    saved = models.ManyToManyField(Recipe, related_name="saved", blank = True)
+    saved = models.ManyToManyField(Recipe, related_name="saved", blank=True)
 
-    picture = models.ImageField(upload_to = upload_folder, blank = True, default = "test.jpg")
-    bio = models.CharField(max_length=1000, blank = True)
+    picture = models.ImageField(upload_to=upload_folder, blank=True, default="test.jpg")
+    bio = models.CharField(max_length=1000, blank=True)
 
     def __str__(self):
         return self.user.username
