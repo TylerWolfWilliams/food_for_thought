@@ -14,18 +14,27 @@
              <a href="{% url 'recipes:login' %}">Return to the login.</a><br />
         {% else %}
              <strong>Sign up here!</strong><br /><br>
-             <form id="user_form" method="post" action="{% url 'recipes:signup' %}" enctype="multipart/form-data">
+             <form id="user_form" class="needs_validation" novalidate method="post" action="{% url 'recipes:signup' %}" enctype="multipart/form-data">
 
                   {% csrf_token %}
 
                  <div class = "mb-3">
                      <input type="text" class="form-control" name="username" placeholder="Username">
+                     <div class="invalid-feedback">
+                         Please enter a username
+                     </div>
                  </div>
                  <div class = "mb-3">
                      <input type="email" class="form-control" name="email" placeholder="Email">
+                     <div class="invalid-feedback">
+                         Please enter an email
+                     </div>
                  </div>
                  <div class = "mb-3">
                      <input type="password" class="form-control" name="password" placeholder="Password">
+                     <div class="invalid-feedback">
+                         Please enter a valid password
+                     </div>
                  </div>
 
                  <div class="input-group mb-3">

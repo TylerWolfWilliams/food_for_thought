@@ -30,6 +30,7 @@ class UserForm(forms.ModelForm):
 
 class UserProfileForm(forms.ModelForm):
     picture = forms.ImageField(required=False)
+    bio = forms.CharField(required=False)
 
     class Meta:
         model = UserProfile
