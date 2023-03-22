@@ -7,21 +7,34 @@
 
 {% block body_block %}
 <h1>Sign Up</h1>
-<div>
     {% if registered %}
         <strong>Thank you for registering!</strong>
-        <a href="{% url 'recipes:home' %}">Return to the homepage.</a><br />
+        <button type="button" class="btn btn-link" value="{% url 'recipes:home' %}">Return to homepage.</button>
     {% else %}
     <strong>Sign up here!</strong><br />
     <form id="user_form" method="post" action="{% url 'recipes:signup' %}" enctype="multipart/form-data">
-
         {% csrf_token %}
 
-        {{ user_form.as_p }}
-        {{ profile_form.as_p }}
+        <div class="col">
+            <img src="{% static 'images/defaultImage.jpeg' %}" class="img-thumbnail rounded-5" alt="Profile pic" />
 
-        <input type="submit" name="submit" value="Register" />
+        <input type="file" class="form-control" name="picture" id="pictureInput" accept=".jpg, .jpeg, .png">
+            {% if form.picture %}
+            <img src="{{ form.picture.url }}" class="img-thumbnail rounded-5" alt="Profile pic" />
+            {% endif %}
+        </div>
+
+        {% for field in user_form %}
+             <div class="mb-3">
+                  <input placeholder="{{ field.name.capitalize }}" type="text" class="form-control" name="{{ field.name }}" id="{{ field.Input }}">
+             </div>
+        {% endfor %}
+
+        <input placeholder="Tell us about yourself" type="text" class="form-control" id="bioInput">
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
     </form>
     {% endif %}
-</div>
 {% endblock %}
