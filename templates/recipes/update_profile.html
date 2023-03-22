@@ -6,21 +6,46 @@
 {% endblock %}
 
 {% block body_block %}
-<h1>Edit Account</h1>
-<div>
-    {% if edited %}
-        <strong>Saves Changed.</strong>
-        <a href="{% url 'recipes:login' %}">Please log back it.</a><br />
-    {% endif %}
-    <br>
-    <form id="user_form" method="post" action="{% url 'recipes:edit_account' %}" enctype="multipart/form-data">
+<div class="row justify-content-md-center">
+    <div class="col col-lg-4">
+        <h1>Edit Account</h1>
+        <div>
+            {% if edited %}
+                 <strong>Changes saved.</strong>
+                 <a href="{% url 'recipes:login' %}">Please log back it.</a><br />
+            {% endif %}
+            <br>
+            <form id="user_form" method="post" action="{% url 'recipes:edit_account' %}" enctype="multipart/form-data">
+                {% csrf_token %}
 
-        {% csrf_token %}
+                <div class = "mb-3">
+                    <input type="text" class="form-control" name="username" value="{{ user.get_username }}" placeholder="Username" >
+                </div>
 
-        {{ user_form.as_p }}
-        {{ profile_form.as_p }}
+                <div class = "mb-3">
+                    <input type="email" class="form-control" name="email" value="{{ user.email }}" placeholder="Email Address" >
+                </div>
 
-        <input type="submit" name="submit" value="Save Changes" />
-    </form>
+                <div class = "mb-3">
+                    <input type="password" class="form-control" name="password" placeholder="Password" >
+                </div>
+
+                <div class="input-group mb-3">
+                    <input type="file" class="form-control" name="picture" value="{{ user.userprofile.picture }}" >
+                    <button class="btn btn-danger" formaction="{{ user.userprofile.picture.clear }}" value="Remove pic">Remove pic</button>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-group-text" for="bioInput">Bio</label>
+                    <textarea class="form-control" name="bio" id="bioInput" placeholder="Tell us a bit about yourself...">{{ user.userprofile.bio }}</textarea>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" name="submit" value="Save Changes" class="btn btn-success">Save Changes</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}
