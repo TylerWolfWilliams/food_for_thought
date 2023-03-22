@@ -15,7 +15,7 @@ def confirm_recipe_deletion(recipe):
 
 @register.inclusion_tag('recipes/confirm.html')
 def confirm_review_deletion(review):
-    return {"button_message": "Delete Review", "message": f"delete your review for \"{review.recipe.title}\"", "action": reverse('recipes:delete_review', args=[review.id]), "modal_id": f"reviewDeletionModal{recipe.id}"}
+    return {"button_message": "Delete Review", "message": f"delete your review for \"{review.recipe.title}\"", "action": reverse('recipes:delete_review', args=[review.id]), "modal_id": f"reviewDeletionModal{review.id}"}
 
 @register.inclusion_tag('recipes/confirm.html')
 def confirm_recipe_unsave(recipe):

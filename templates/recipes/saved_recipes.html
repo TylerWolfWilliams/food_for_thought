@@ -1,20 +1,21 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
+{% load recipes_template_tags %}
 
 {% block body_block %}
-<div class = "container text-center mt-50" style="margin-top:50px">
+<div class = "container text-center mt-5">
    <h2>Your Saved Recipes</h2><br>
-    <div class="row h-100" style="margin-bottom:50px">
+    <div class="row h-100 mb-5">
         {% if saved_recipes %}
             {% for recipe in saved_recipes %}
-                <div class="card w-25 mx-auto" style="display:inline-block;margin-bottom:20px">
-                    <img src="{{ recipe.image.url }}" class="card-img-top" style="height:250px" alt="{{ recipe.title }} image">
+                <div class="card w-25 mx-auto mb-2">
+                    <img src="{{ recipe.image.url }}" class="card-img-top" height="250" alt="{{ recipe.title }} image">
                     <div class="card-body">
                         <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5>
                         <p class="card-text">Rating: {{ recipe.average_rating }}</p>
                     </div>
                     <div class="card-footer">
-                        <a href="{% url 'recipes:unsave_recipe_confirmation' user.id recipe.id %}" class="btn btn-outline-success">Unsave</a>
+                        {% confirm_recipe_unsave recipe %}
                     </div>
                 </div>
             {% endfor %}

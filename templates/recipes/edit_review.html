@@ -6,9 +6,9 @@
 {% endblock %}
 
 {% block body_block %}
-<h1>Edit Review For {{ recipe_name }}</h1><br>
+<h1>Edit Review For <a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h1><br>
 <div>
-    <form id="review_form" method="POST" action="{% url 'recipes:edit_review' user.id review_id %}" enctype="multipart/form-data">
+    <form id="review_form" method="POST" action="{% url 'recipes:edit_review' review.id %}" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3 input-group">
             Review:
@@ -21,7 +21,7 @@
             {% endfor %}
         </div>
         <div class="mb-3">
-            Comment: <textarea class="form-control" name="content" maxlength="1000">{{ review_content }}</textarea>
+            Comment: <textarea class="form-control" name="content" maxlength="1000">{{ review.content }}</textarea>
         </div>
         <input class="btn btn-primary" type="submit" name="submit" value="Save Changes" />
     </form>

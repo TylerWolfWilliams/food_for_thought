@@ -345,13 +345,13 @@ def edit_review(request, review_id):
     else:
         form = ReviewForm(instance=review)
 
-    context_dict = {'review_form':form, 'review_id':review_id, 'recipe_name': review.recipe.title, 'review_content':review.content, 'values':["1", "2", "3", "4", "5"], 'checked_val':str(review.rating)}
+    context_dict = {'review_form':form, 'review': review, 'recipe': review.recipe, 'values':["1", "2", "3", "4", "5"], 'checked_val':str(review.rating)}
 
     return render(request, 'recipes/edit_review.html', context=context_dict)
 
 
 @login_required
-def edit_recipe(request, user_id, recipe_id):
+def edit_recipe(request, recipe_id):
     recipe = Recipe.objects.get(id=recipe_id, author = request.user)
 
     if request.method == "POST":

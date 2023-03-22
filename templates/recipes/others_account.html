@@ -7,8 +7,8 @@
 
 {% block body_block %}
 
-<div class = "container text-center mt-50" style="margin-top:50px">
-    <div class="row" style="margin-bottom:50px">
+<div class = "container text-center mt-5">
+    <div class="row mb-5">
         <div class="col">
             <div class="card w-75">
                 <img src="{{ user_profile.picture.url }}" class="img-thumbnail rounded float-start" alt="Profile image">
@@ -28,9 +28,9 @@
         </div>
     </div>
 
-    <hr class="border border-success border-3 opacity-75" style="margin-bottom:50px">
+    <hr class="border border-success border-3 opacity-75 mb-5">
 
-    <div class="row" style="margin-bottom:50px">
+    <div class="row mb-5">
         <div class="col">
            <h2>{{ account_user.username }}'s Reviews</h2><br>
             {% if written_reviews %}
@@ -38,7 +38,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title"><a href="{% url 'recipes:show_recipe' review.recipe.author.id review.recipe.slug %}">{{ review.recipe.title }}</a></h5>
-                                <p class="card-text" style="text-align:left">
+                                <p class="card-text text-start">
                                     {{ review.content }} <br>
                                     Rating: {{ review.rating }}
                                 </p>
