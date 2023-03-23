@@ -6,7 +6,7 @@
 <div class="container justify-content-md-center mb-3">
     <div class="text-center mb-3">
         <h2 class="text-center">{{ recipe.title }}</h2>
-        <div class="mx-2">
+        <div class="m-2">
             Author: <a href = "{% url 'recipes:show_non_user_account' recipe.author.id %}">{{ recipe.author }}</a>
         </div>
         <div class="mb-2">
@@ -14,12 +14,13 @@
                  {% include 'recipes/toggle_save_button.html' with recipe=recipe %}
             {% endif %}
         </div>
+        <hr class="border border-success border-3 opacity-75 mb-5">
     </div>
     <div class="row">
-    <div class="card mb-3" style="max-width: 540px;">
+    <div class="card mb-3 mx-4" style="max-width: 540px;">
         <div class="row g-0">
             <div class="col-md-4 p-1 justify-content-end">
-                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }} image" class="img-fluid rounded-start card-img-left">
+                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }} image" class="img-fluid rounded-start object-fit-cover card-img-center">
             </div>
 
         <div class="col-md-8">
@@ -43,22 +44,26 @@
         </div>
         </div>
     </div>
-        <div class="col mx-6">
+        <div class="col mx-5">
             <h2 class="text-center">Ingredients</h2><br>
             <p>{{ recipe.ingredients }}</p>
         </div>
     </div>
 
+    <hr class="border border-success border-3 opacity-75 mb-5">
+
     <div class="row justify-content-around">
-        <div class="col">
+        <div class="col mx-5">
             <h2 class="text-center">Method</h2>
             <p>{{ recipe.content }}</p>
         </div>
     </div>
 </div>
 
+<hr class="border border-success border-3 opacity-75 mb-5">
+
 <div class="row">
-    <div class="col">
+    <div class="col mx-5">
         {% if review_form %}
              <h3 class="text-center">Leave a Review:</h3>
              <div>
@@ -84,17 +89,16 @@
     </div>
 
     {% if review_form %}
-          <div class="col">
+          <div class="col mx-5">
               {% else %}
-    <div>
+    <div class="mx-5">
         {% endif %}
     {% if reviews %}
          <h3 class="text-center">Reviews</h3>
     {% endif %}
-        <div data-bs-spy="scroll" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="scrollspy-example bg-body-tertiary p-3 rounded-2" tabindex="0">
     {% for review in reviews %}
-         <div class="card mb-3 row justify-content-center">
-             <div class="card-body justify-content-center">
+         <div class="card mb-3 row justify-content-center mx-5">
+             <div class="card-body justify-content-center ">
                  <div class="col-4">
                      <h5 class="card-title"><a href="{% url 'recipes:show_non_user_account' review.author.id %}">{{ review.author.username }}</a></h5>
                  </div>
@@ -105,7 +109,6 @@
              </div>
          </div>
     {% endfor %}
-        </div>
     </div>
 </div>
 
