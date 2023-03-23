@@ -5,17 +5,17 @@
 {% block body_block %}
 <div class="container justify-content-md-center mb-3">
     <div class="text-center mb-3">
-        <h2 class="text-center">{{ recipe.title }}</h2>
+        <h1 class="text-center m-3">{{ recipe.title }}</h1>
         <div class="mx-2">
             Author: <a href = "{% url 'recipes:show_non_user_account' recipe.author.id %}">{{ recipe.author }}</a>
         </div>
-        <div class="mb-2">
+        <div class="m-4">
             {% if user.is_authenticated %}
                  {% include 'recipes/toggle_save_button.html' with recipe=recipe %}
             {% endif %}
         </div>
     </div>
-    <div class="row">
+    <div class="row mt-5">
     <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
             <div class="col-md-4 p-1 justify-content-end">
@@ -45,23 +45,25 @@
     </div>
         <div class="col mx-6">
             <h2 class="text-center">Ingredients</h2><br>
-            <p>{{ recipe.ingredients }}</p>
+            <p class="p-2">{{ recipe.ingredients }}</p>
         </div>
     </div>
 
-    <div class="row justify-content-around">
+    <div class="row justify-content-around mt-5">
         <div class="col">
-            <h2 class="text-center">Method</h2>
+            <h2 class="text-center">Method</h2><br>
             <p>{{ recipe.content }}</p>
         </div>
     </div>
 </div>
 
+<hr class="border border-success border-3 opacity-75 mb-5 mt-5">
+
 <div class="row">
     <div class="col">
         {% if review_form %}
-             <h3 class="text-center">Leave a Review:</h3>
-             <div>
+            <h3 class="text-center">Leave a Review:</h3>
+            <div>
                  <form id="review_form" method="POST" action="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">
                      {% csrf_token %}
                          <div class="rating">
