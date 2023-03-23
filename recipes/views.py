@@ -13,6 +13,8 @@ from django.db.models import Avg, Count, Q
 from recipes.models import Category, Recipe, Review, UserProfile
 from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm, SearchForm
 
+from datetime import timedelta
+
 
 def home(request):
     category_list = Category.objects.annotate(number_of_recipes=Count('recipe')).order_by('-number_of_recipes')[:4]
@@ -49,7 +51,6 @@ def show_results(request):
     req_words = set(req.split())
 
     form = SearchForm(request.GET)
-    print(form.as_p())
     context_dict = {"req": req, "form": form}
 
     query = Q()
@@ -66,7 +67,7 @@ def show_results(request):
             query &= Q(category__in=categories)
 
         if time:
-            query &= Q(cooking_time__lte=time)
+            query &= Q(cooking_time__lte=timedelta(hours = time))
 
         if author:
             query &= Q(author=User.objects.get(userprofile=author))
@@ -214,6 +215,7 @@ def add_recipe(request):
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
+            recipe.cooking_time = timedelta(hours=form.cleaned_data["cooking_time"])
 
             if 'image' in request.FILES:
                 recipe.image = request.FILES['image']

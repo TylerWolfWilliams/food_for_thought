@@ -1,7 +1,7 @@
 {% load recipes_template_tags %}
 
 <div class="card h-100" id="recipe{{ recipe.id }}">
-    <img src="{{ recipe.image.url }}" class="card-img-top" height="250" alt="{{ recipe.title }} image">
+    <img src="{{ recipe.image.url }}" class="card-img-top object-fit-cover" height="250" alt="{{ recipe.title }} image">
     <div class="card-body text-start">
         <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5>
         <p class="card-text"><i class="bi bi-star-fill text-warning"></i> 
