@@ -10,6 +10,13 @@
 <div>
     <form id="review_form" method="POST" action="{% url 'recipes:edit_review' review.id %}" enctype="multipart/form-data">
         {% csrf_token %}
+
+        {% if review_form.errors %}
+            <div class="alert alert-danger">
+                {{ review_form.errors }}
+            </div>
+        {% endif %}
+
         <div class="mb-3 input-group">
             Review:
             {% for val in values %}
