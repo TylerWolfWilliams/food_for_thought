@@ -48,8 +48,9 @@ class ReviewForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
     category = forms.ModelMultipleChoiceField(Category.objects.all(), required=False)
-    category.widget.attrs.update({"class": "select2-fancy-choice", "multiple": "multiple"})
-    time = forms.DurationField(required = False)
+    category.widget.attrs.update({"id": "categoryInput", "multiple": "multiple"})
+    time = forms.DurationField(required = False, widget=forms.TimeInput)
+    time.widget.attrs.update({"class": "form-control"})
     author = forms.ModelChoiceField(UserProfile.objects.all(), required=False)
     author.widget.attrs.update({"class": "select2-fancy-choice"})
     sort = forms.ChoiceField(choices=(('rd', "Rating Descending"), ('ra', "Rating Ascending"), ('aa', "Alphabetical"), ('ad', "Reverse Alphabetical")))

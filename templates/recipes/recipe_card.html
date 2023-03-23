@@ -5,7 +5,13 @@
 <img src="{{ recipe.image.url }}" class="card-img-top" height="250" alt="{{ recipe.title }} image">
 <div class="card-body">
     <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5>
-    <p class="card-text"><i class="bi bi-star-fill text-warning"></i> {{ recipe.average_rating|floatformat:"1" }}</p>
+    <p class="card-text"><i class="bi bi-star-fill text-warning"></i> 
+    {% if recipe.average_rating %}
+    {{ recipe.average_rating|floatformat:"1" }}
+    {% else %}
+    No Ratings
+    {% endif %}
+    </p>
 
 </div>
 {% if recipe.author == user %}
