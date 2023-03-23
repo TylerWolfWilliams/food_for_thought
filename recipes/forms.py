@@ -40,7 +40,8 @@ class UserProfileForm(forms.ModelForm):
 
 class ReviewForm(forms.ModelForm):
     content = forms.CharField(max_length=1000, help_text="Enter your thoughts on the recipe.")
-    rating = forms.ChoiceField(widget=forms.RadioSelect(), choices=((i, str(i)) for i in range(1, 6)))
+    rating_choices = [(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")]
+    rating = forms.ChoiceField(widget=forms.RadioSelect(), choices=rating_choices, required=False)
 
     class Meta:
         model = Review
