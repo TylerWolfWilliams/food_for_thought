@@ -11,7 +11,7 @@ class RecipeForm(forms.ModelForm):
     tags = forms.CharField(max_length=1000, help_text="Tags (optional): ", required=False)
     cooking_time = forms.FloatField(label="Cooking Time")
     servings = forms.IntegerField(label="Servings", min_value=1)
-    category = forms.ModelMultipleChoiceField(Category.objects.all(), required=False)
+    category = forms.ModelMultipleChoiceField(Category.objects.none(), required=False)
     category.widget.attrs.update({ "id": "categoryInput", "multiple": "multiple"})
 
     def getCategories(self):
@@ -48,13 +48,13 @@ class ReviewForm(forms.ModelForm):
         exclude = ('author', 'recipe',)
 
 class SearchForm(forms.Form):
-    category = forms.ModelMultipleChoiceField(Category.objects.all(), label = "Categories", required=False)
+    category = forms.ModelMultipleChoiceField(Category.objects.none(), label = "Categories", required=False)
     category.widget.attrs.update({"id": "categoryInput", "multiple": "multiple"})
 
     time = forms.FloatField(label="Max time in hours", required = False)
     time.widget.attrs.update({"class": "form-control", "step": "0.01"})
 
-    author = forms.ModelChoiceField(UserProfile.objects.all(), required=False)
+    author = forms.ModelChoiceField(UserProfile.objects.none(), required=False)
     author.widget.attrs.update({"id": "authorInput"})
 
     sort = forms.ChoiceField(choices=(('rd', "Rating Descending"), ('ra', "Rating Ascending"), ('aa', "Alphabetical"), ('ad', "Reverse Alphabetical")))

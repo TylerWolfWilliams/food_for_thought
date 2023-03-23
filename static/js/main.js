@@ -1,14 +1,14 @@
 $(document).ready(function() {
     $('#authorInput').select2({
         theme: 'bootstrap-5',
-        placeholder: 'None',
+        placeholder: 'Search...',
         ajax: {
             url: '/recipes/fetch_author/',
             dataType: 'json'
         }
     });
     $('#categoryInput').select2({
-        placeholder: 'None',
+        placeholder: 'Search...',
         theme: 'bootstrap-5',
         ajax: {
             url: '/recipes/fetch_cats/',
