@@ -15,13 +15,15 @@
 
     <div class="card-footer text-center">
         {% if recipe.author == user %}
-        <div class="btn-group" role="group">
-            <a href="{% url 'recipes:edit_recipe' recipe.id %}" class="btn btn-outline-success">Edit</a>
-            {% confirm_recipe_deletion recipe %}
-        </div>
+            <div class="btn-group" role="group">
+                <a href="{% url 'recipes:edit_recipe' recipe.id %}" class="btn btn-outline-success">Edit</a>
+                {% confirm_recipe_deletion recipe %}
+            </div>
         {% else %}
-        {% include 'recipes/toggle_save_button.html' with recipe=recipe %}
-        <p class="card-text"><small class="text-muted">Written by <a href="{% url 'recipes:show_non_user_account' recipe.author.id %}">{{ recipe.author.username }}</a></small></p>
+            {% if user.is_authenticated %}
+                {% include 'recipes/toggle_save_button.html' with recipe=recipe %}
+            {% endif %}
+            <p class="card-text"><small class="text-muted">Written by <a href="{% url 'recipes:show_non_user_account' recipe.author.id %}">{{ recipe.author.username }}</a></small></p>
         {% endif %}
     </div>
 

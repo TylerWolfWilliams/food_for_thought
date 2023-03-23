@@ -8,7 +8,7 @@
             <input type="search" name="q" value="{{ req }}" placeholder="Search" class="form-control">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </div>
-        <div class="mb-3 row">
+        <div class="mb-3 mt-4 row">
             {% for field in form %}
             <div class="col input-group">
                 {{ field.errors }}
@@ -21,12 +21,13 @@
 </div>
 
 <div class="container mt-5">
-{% if results %}
-    <h2>Results for "{{ req }}":</h2>
-    {% include 'recipes/recipe_grid.html' with cards=results %}
-{% else %}
-<h2>No results.</h2>
-{% endif %}
+    <hr class="border border-success border-3 opacity-75 mb-5 mt-5">
+    {% if results %}
+        <h2>Results for "{{ req }}":</h2><br><br>
+        {% include 'recipes/recipe_grid.html' with cards=results %}
+    {% else %}
+    <h2>No results.</h2>
+    {% endif %}
 </div>
 
 {% endblock %}

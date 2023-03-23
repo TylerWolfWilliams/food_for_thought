@@ -3,7 +3,7 @@
 
 {% block body_block %}
 <div class = "container text-center mt-5">
-   <h2>Your Recipes</h2><br>
+   <h1>Your Recipes</h1><br><br>
     <div class="row h-100 mb-5">
         {% if written_recipes %}
             {% include 'recipes/recipe_grid.html' with cards=written_recipes %}

@@ -1,5 +1,5 @@
 <button onclick="toggleSaveAJAX('{% url 'recipes:toggle_save_recipe' recipe.id %}')" id="saveRecipeButton{{ recipe.id }}" class="btn 
-{% if recipe not in request.user.userprofile.saved.all %} btn-success">Save 
+{% if recipe not in request.user.userprofile.saved.all %} btn-success">Save
 {% else %} 
 btn-danger">Unsave
 {% endif %}

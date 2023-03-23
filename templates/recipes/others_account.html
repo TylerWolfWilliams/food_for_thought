@@ -51,7 +51,7 @@
                     <h5 class="card-title"><a href="{% url 'recipes:show_recipe' review.recipe.author.id review.recipe.slug %}">{{ review.recipe.title }}</a></h5>
                     <p class="card-text">
                     {{ review.content }} <br>
-                    Rating: {{ review.rating }}
+                    <h6 class="card-subtitle text-muted mb-3"><i class="bi bi-star-fill text-warning"></i>{{ review.rating }}</h6>
                     </p>
                 </div>
             </div><br>
