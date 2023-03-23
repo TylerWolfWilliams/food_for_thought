@@ -49,7 +49,8 @@ def populate():
             "title": "Bread",
             "content": "Put dough in oven.",
             "cooking_time": datetime.timedelta(10),
-            "image": "test.jpg"
+            "image": "test.jpg",
+            "category": "Baked"
         }]
     }, {
         "auth": {"username": "mrbean62"},
@@ -81,10 +82,11 @@ def populate():
             r = Recipe.objects.get_or_create(**recipe, author=u)[0]
             with open(recipe["image"], "rb") as i:
                 r.image = ImageFile(i)
+                r.category.add(get_category(recipe["category"]))
                 r.save()
 
     reviews = [{
-        "author": get_user("paul"),
+        "author": get_user("coolboy4572"),
         "recipe": get_recipe("Bread"),
         "content": "cool",
         "rating": 10

@@ -14,8 +14,8 @@ from recipes.forms import UserForm, UserProfileForm, RecipeForm, ReviewForm, Sea
 
 
 def home(request):
-    category_list = Category.objects.annotate(number_of_recipes=Count('recipe')).order_by('-number_of_recipes')[:5]
-    recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:5]
+    category_list = Category.objects.annotate(number_of_recipes=Count('recipe')).order_by('-number_of_recipes')[:4]
+    recipe_list = Recipe.objects.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:4]
 
     context_dict = {'categories': category_list, 'recipes': recipe_list}
 
@@ -189,11 +189,9 @@ def show_user_account(request, msg=None):
         saved_recipes_ratings = current_user_profile.saved.annotate(average_rating=Avg('review__rating')).order_by(
             '-average_rating')[:4]
 
-        written_recipes = Recipe.objects.filter(author=current_user)
+        written_recipes = Recipe.objects.filter(author=current_user).annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:4]
 
-        written_recipes = written_recipes.annotate(average_rating=Avg('review__rating'))[:4]
-
-        written_reviews = Review.objects.filter(author=current_user)[:5]
+        written_reviews = Review.objects.filter(author=current_user)[:4]
 
         context_dict = {"current_user": current_user_profile, "saved_recipes": saved_recipes_ratings,
                         "written_recipes": written_recipes,
