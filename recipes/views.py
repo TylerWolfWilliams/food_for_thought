@@ -367,6 +367,10 @@ def edit_recipe(request, recipe_id):
 
             recipe.save()
 
+            recipe.category.clear()
+
+            recipe.category.add(*form.cleaned_data['category'])
+
             return redirect(reverse('recipes:show_user_account'))
         else:
             print(form.errors)
