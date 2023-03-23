@@ -1,0 +1,5 @@
+{% extends 'recipes/card_grid.html' %}
+
+{% block card_content %}
+    {% include 'recipes/recipe_card.html' with recipe=card %}
+{% endblock %}

@@ -1,13 +1,11 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
-{% load recipes_template_tags %}
-
 
 {% block body_block %}
 <div class = "container text-center mt-5">
     <h1>Categories</h1><br>
     {% if categories %}
-    {% categories_grid categories %}
+    {% include 'recipes/category_grid.html' with cards=categories %}
     {% else %}
     <strong>There are no categories present.</strong>
     {% endif %}

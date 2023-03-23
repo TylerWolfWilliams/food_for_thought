@@ -21,14 +21,6 @@ def confirm_review_deletion(review):
 def confirm_recipe_unsave(recipe):
     return {"button_message": "Unsave", "message": f"unsave recipe \"{recipe.title}\"", "action": reverse('recipes:unsave_recipe', args=[recipe.id]), "modal_id": f"recipeUnsaveModal{recipe.id}"}
 
-@register.inclusion_tag('recipes/recipe_card.html')
-def recipe_card(recipe, user):
-    return {"recipe": recipe, "user": user}
-
-@register.inclusion_tag('recipes/category_card.html')
-def category_card(category):
-    return {"category": category}
-
 @register.inclusion_tag('recipes/card_grid.html')
 def categories_grid(categories):
     return {"cards": categories, "categories": True}

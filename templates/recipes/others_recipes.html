@@ -6,7 +6,7 @@
 <div class = "container text-center mt-5">
     <h2>{{ account_user.username }} Recipes</h2><br>
     {% if written_recipes %}
-        {% recipes_grid written_recipes request.user %}
+        {% include 'recipes/recipe_grid.html' with cards=written_recipes %}
     {% else %}
     <strong>There are no recipes present.</strong>
     {% endif %}

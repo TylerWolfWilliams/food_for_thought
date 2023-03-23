@@ -1,7 +1,6 @@
 {% load recipes_template_tags %}
 
 <div class="card h-100">
-
 <img src="{{ recipe.image.url }}" class="card-img-top" height="250" alt="{{ recipe.title }} image">
 <div class="card-body text-start">
     <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5>
@@ -15,7 +14,7 @@
 </div>
 
 <div class="card-footer text-center">
-{% if recipe.author == user %}
+    {% if recipe.author == user %}
     <div class="btn-group" role="group">
         <a href="{% url 'recipes:edit_recipe' recipe.id %}" class="btn btn-outline-success">Edit</a>
         {% confirm_recipe_deletion recipe %}

@@ -24,7 +24,7 @@
 <div class="container mt-5">
 {% if results %}
     <h2>Results for "{{ req }}":</h2>
-    {% recipes_grid results request.user %}
+    {% include 'recipes/recipe_grid.html' with cards=results %}
 {% else %}
 <h2>No results.</h2>
 {% endif %}

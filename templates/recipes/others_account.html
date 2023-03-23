@@ -36,7 +36,7 @@
     <div class="row mb-5">
         <div class="col align-items-center">
            <h2><a href="{% url 'recipes:show_non_user_recipes' account_user.id %}">{{ account_user.username }}'s Recipes</a></h2><br>
-            {% recipes_grid written_recipes request.user %}
+            {% include 'recipes/recipe_grid.html' with cards=written_recipes %}
         </div>
     </div>
     {% endif %}

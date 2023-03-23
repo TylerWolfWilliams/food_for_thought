@@ -27,7 +27,7 @@
     <div class="row h-100 mb-5">
         <h2>Recipes</h2><br>
         {% if recipes %}
-            {% recipes_grid recipes request.user %}
+            {% include 'recipes/recipe_grid.html' with cards=recipes %}
         {% else %}
            <strong>There are no recipes present.</strong>
         {% endif %}
