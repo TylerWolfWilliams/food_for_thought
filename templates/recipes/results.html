@@ -4,35 +4,35 @@
 
 {% block body_block %}
 <div class="container">
-<form role="search" action="./" method="get">
-    <div class="input-group mb-3 w-50 mx-auto">
-        <input type="search" name="q" value="{{ request }}" placeholder="Search" class="form-control">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-    </div>
-    <div class="mb-3 row">
-        <div class="col input-group">
-            <span class="input-group-text">Category</span>
-            {{ form.category }}
+    <form role="search" action="./" method="get">
+        <div class="input-group mb-3 w-50 mx-auto">
+            <input type="search" name="q" value="{{ req }}" placeholder="Search" class="form-control">
+            <button class="btn btn-outline-success" type="submit">Search</button>
         </div>
-        <div class="col input-group">
-            <span class="input-group-text">Max cooking time (hh:mm)</span>
-            {{ form.time }}
+        <div class="mb-3 row">
+            <div class="col input-group">
+                <span class="input-group-text">Category</span>
+                {{ form.category }}
+            </div>
+            <div class="col input-group">
+                <span class="input-group-text">Max cooking time (hh:mm)</span>
+                {{ form.time }}
+            </div>
+            <div class="col input-group">
+                <span class="input-group-text">Author</span>
+                {{ form.author }}
+            </div>
+            <div class="col input-group">
+                <span class="input-group-text">Sort by</span>
+                {{ form.sort }}
+            </div>
         </div>
-        <div class="col input-group">
-            <span class="input-group-text">Author</span>
-            {{ form.author }}
-        </div>
-        <div class="col input-group">
-            <span class="input-group-text">Sort by</span>
-            {{ form.sort }}
-        </div>
-    </div>
-</form>
+    </form>
 </div>
 
 <div class="container mt-5">
 {% if results %}
-    <h2>Results for "{{ request }}":</h2>
+    <h2>Results for "{{ req }}":</h2>
     {% recipes_grid results request.user %}
 {% else %}
 <h2>No results.</h2>

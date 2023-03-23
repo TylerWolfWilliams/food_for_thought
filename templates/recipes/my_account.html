@@ -41,7 +41,7 @@
 
        <h2><a href="{% url 'recipes:show_user_saved_recipes' %}">Saved Recipes</a></h2><br>
         {% if saved_recipes %}
-           <h3 class="mb-5">Top Rated:</h3>
+           <h3 class="mb-3">Top Rated:</h3>
             {% recipes_grid saved_recipes request.user %}
         {% else %}
             <strong>There are no recipes present.</strong>
@@ -78,7 +78,7 @@
     <!--     <div class="col align-items-center"> -->
            <h2><a href="{% url 'recipes:show_user_recipes' %}">Your Recipes</a></h2><br>
         {% if written_recipes %}
-            <h3 class="mb-5">Top Rated:</h3>
+            <h3 class="mb-3">Top Rated:</h3>
             {% recipes_grid written_recipes request.user %}
         {% else %}
            <strong>There are no recipes present.</strong>
