@@ -799,7 +799,7 @@ def populate():
         {
             "author": get_user("cookByTheBook"),
             "recipe": get_recipe("Chocolate Fudge Cake"),
-            "content": "My kids loved this recipe! It's definitely going to be a house favourite. Now if you excuse "
+            "content": "My kids loved this recipe! It's definitely going to be a house favourite. Now if you'll excuse "
                        "me, I need to go restore my kitchen.",
             "rating": 5,
         },

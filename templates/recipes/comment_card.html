@@ -1,5 +1,5 @@
 {% load recipes_template_tags %}
-<div class="card">
+<div class="card mb-4">
     <div class="card-body">
         <h5 class="card-title"><a href="{% url 'recipes:show_recipe' review.recipe.author.id review.recipe.slug %}">{{ review.recipe.title }}</a></h5>
         <p class="card-text">
