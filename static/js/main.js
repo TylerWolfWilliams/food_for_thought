@@ -1,10 +1,19 @@
 $(document).ready(function() {
-    $('.select2-fancy-choice').select2({
-        theme: 'bootstrap-5'
+    $('#authorInput').select2({
+        theme: 'bootstrap-5',
+        placeholder: 'None',
+        ajax: {
+            url: '/recipes/fetch_author/',
+            dataType: 'json'
+        }
     });
     $('#categoryInput').select2({
         placeholder: 'None',
-        theme: 'bootstrap-5'
+        theme: 'bootstrap-5',
+        ajax: {
+            url: '/recipes/fetch_cats/',
+            dataType: 'json'
+        }
     });
 });
 

@@ -26,4 +26,6 @@ urlpatterns = [
     path('myaccount/editrecipe/<int:recipe_id>/', views.edit_recipe, name='edit_recipe'),
     path('myaccount/deleterecipe/<int:recipe_id>/', views.delete_recipe, name='delete_recipe'),
     path('myaccount/togglesaverecipe/<int:recipe_id>/', views.toggle_save_recipe, name='toggle_save_recipe'),
+    path('fetch_cats/', views.fetch_cats, name="fetch_cats"),
+    path('fetch_author/', views.fetch_author, name="fetch_author"),
 ]

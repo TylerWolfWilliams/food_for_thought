@@ -55,7 +55,7 @@ class SearchForm(forms.Form):
     time.widget.attrs.update({"class": "form-control", "step": "0.01"})
 
     author = forms.ModelChoiceField(UserProfile.objects.all(), required=False)
-    author.widget.attrs.update({"class": "select2-fancy-choice"})
+    author.widget.attrs.update({"id": "authorInput"})
 
     sort = forms.ChoiceField(choices=(('rd', "Rating Descending"), ('ra', "Rating Ascending"), ('aa', "Alphabetical"), ('ad', "Reverse Alphabetical")))
     sort.widget.attrs.update({"class": "form-select"})

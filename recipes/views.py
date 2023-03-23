@@ -450,3 +450,21 @@ def toggle_save_recipe(request, recipe_id):
     return JsonResponse({
         'response': render_to_string('recipes/toggle_save_button.html', request=request, context={"recipe": recipe}),
         'id': f"#saveRecipeButton{recipe_id}"})
+
+def fetch_cats(request):
+    search = request.GET.get('q', default="")
+    res = {"results": []}
+    if search != "":
+        cats = Category.objects.filter(name__icontains=search)[:3]
+        for cat in cats:
+            res["results"].append({"id": cat.id, "text": cat.name})                
+    return JsonResponse(res)
+
+def fetch_author(request):
+    search = request.GET.get('q', default="")
+    res = {"results": []}
+    if search != "":
+        users = User.objects.filter(username__icontains=search)[:3]
+        for user in users:
+            res["results"].append({"id": user.id, "text": user.username})                
+    return JsonResponse(res)
