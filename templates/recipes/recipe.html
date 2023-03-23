@@ -3,7 +3,7 @@
 
 
 {% block body_block %}
-<div class="container justify-content-md-center">
+<div class="container justify-content-md-center mb-3">
     <div class="text-center mb-3">
         <h2 class="text-center">{{ recipe.title }}</h2>
         Author: <a href = "{% url 'recipes:show_non_user_account' recipe.author.id %}">{{ recipe.author }}</a>
@@ -18,8 +18,12 @@
 
         <div class="col">
             <ul class="list-group">
-                {% if categories %}
-                     <li class="list-group-item">Category: <a href="{% url 'recipes:show_category' category.slug %}">{{ category.name }}</a></li>
+                {% if recipe.category %}
+                     <li class="list-group-item">Category:
+                         {% for c in recipe.category.all %}
+                         <a href="{% url 'recipes:show_category' c.slug %}">{{ c.name }}</a>
+                         {% endfor %}
+                     </li>
                 {% else %}
                      <li class="list-group-item disabled">Category: None</li>
                 {% endif %}
