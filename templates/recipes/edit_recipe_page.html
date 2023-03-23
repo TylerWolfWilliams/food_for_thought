@@ -10,6 +10,12 @@
     <form enctype="multipart/form-data" id="recipe_form" method="POST" action="{% url 'recipes:edit_recipe' recipe.id %}">
         {% csrf_token %}
 
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+        {% endif %}
+
         <div class="justify-content-md-center">
             <div class="mb-3 row">
 
