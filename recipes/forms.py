@@ -47,13 +47,14 @@ class ReviewForm(forms.ModelForm):
         exclude = ('author', 'recipe',)
 
 class SearchForm(forms.Form):
-    category = forms.ModelMultipleChoiceField(Category.objects.all(), required=False)
+    category = forms.ModelMultipleChoiceField(Category.objects.all(), label = "Categories", required=False)
     category.widget.attrs.update({"id": "categoryInput", "multiple": "multiple"})
-    time = forms.DurationField(required = False, widget=forms.TimeInput)
-    time.widget.attrs.update({"class": "form-control"})
+
+    time = forms.DurationField(label="Max Time (hh:mm)", required = False, widget=forms.TimeInput(attrs={"type": "time", "class": "form-control"}))
+
     author = forms.ModelChoiceField(UserProfile.objects.all(), required=False)
     author.widget.attrs.update({"class": "select2-fancy-choice"})
+
     sort = forms.ChoiceField(choices=(('rd', "Rating Descending"), ('ra', "Rating Ascending"), ('aa', "Alphabetical"), ('ad', "Reverse Alphabetical")))
     sort.widget.attrs.update({"class": "form-select"})
-    # ingredients = forms.CharField(required = False)
 

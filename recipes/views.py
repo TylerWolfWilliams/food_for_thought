@@ -48,6 +48,7 @@ def show_results(request):
     req_words = set(req.split())
 
     form = SearchForm(request.GET)
+    print(form.as_p())
     context_dict = {"req": req, "form": form}
 
     query = Q()

@@ -10,22 +10,13 @@
             <button class="btn btn-outline-success" type="submit">Search</button>
         </div>
         <div class="mb-3 row">
+            {% for field in form %}
             <div class="col input-group">
-                <span class="input-group-text">Category</span>
-                {{ form.category }}
+                {{ field.errors }}
+                <span class="input-group-text">{{ field.label }}</span>
+                {{ field }}
             </div>
-            <div class="col input-group">
-                <span class="input-group-text">Max cooking time (hh:mm)</span>
-                {{ form.time }}
-            </div>
-            <div class="col input-group">
-                <span class="input-group-text">Author</span>
-                {{ form.author }}
-            </div>
-            <div class="col input-group">
-                <span class="input-group-text">Sort by</span>
-                {{ form.sort }}
-            </div>
+            {% endfor %}
         </div>
     </form>
 </div>
