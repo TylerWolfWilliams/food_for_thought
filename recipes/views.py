@@ -436,3 +436,16 @@ def unsave_recipe(request, recipe_id):
         show_user_account(request, "Could not unsave recipe. Encountered following error: " + e)
 
     return redirect(reverse('recipes:show_user_account'))
+
+@login_required
+def save_recipe(request, recipe_id):
+    try:
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        user = request.user
+        user_profile = UserProfile.objects.get(user=user)
+        user_profile.saved.add(recipe)
+
+    except Exception as e:
+        show_user_account(request, "Could not save recipe. Encountered following error: " + e)
+
+    return redirect(reverse('recipes:show_user_account'))
