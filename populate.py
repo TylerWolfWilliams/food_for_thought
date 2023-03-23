@@ -24,14 +24,32 @@ def get_recipe(title):
 def populate():
     categories = [{
         "name": "Baked",
-        "image": "test.jpg",
+        "image": "/category_images/baked_category.jpg",
         "description": "Here find some amazing baked goods for all occasions that will have you and your guests "
                        "wanting seconds!"
     }, {
         "name": "Fried",
-        "image": "test.jpg",
+        "image": "/category_images/fried_category.jpg",
         "description": "Sometimes all you want is a traditional fry up. Find all your fried desires here!"
-    }]
+    }, {
+        "name": "Breakfast",
+        "image": "/category_images/breakfast_category.jpg",
+        "description": "From Croissants to Overnight oats, you'll find your morning craving in this category!"
+    }, {
+        "name": "Lunch",
+        "image": "/category_images/lunch_category.jpg",
+        "description": "How about some pasta? Oh or a salad! Or maybe even a toastie! Or maybe you're just looking "
+                       "for ways to spice up your packed lunch box. You can find all that and more here."
+    }, {
+        "name": "Dinner",
+        "image": "/category_images/dinner_category.jpg",
+        "description": "Simple bolognese to steak or maybe even a Sunday roast. Find the tastiest meals for even the fusiest eaters below."
+    }, {
+        "name": "Dessert",
+        "image": "/category_images/dessert_category.jpg",
+        "description": "Cake? Muffins? Pie? Fruit salad? Something delicious but healthy? Yes to all of it, please!"
+    },
+    ]
 
     for category in categories:
         c = Category.objects.get_or_create(name=category["name"])[0]
