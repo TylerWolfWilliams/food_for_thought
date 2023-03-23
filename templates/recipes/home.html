@@ -6,10 +6,12 @@
     <h1 class="fftTitle">Food For Thought</h1>
     <p class="lead mt-5">
       Welcome to Food For Thought! A dynamic recipe website that allows you to easily share, find and save your favourite recipes.
-    </p><br><br><br>
+    </p><br>
+
+    <hr class="border border-success border-3 opacity-75 mb-5 mt-5">
 
     <div>
-       <h2><a href="{% url 'recipes:categories' %}">Categories</a></h2><br>
+       <h2><a href="{% url 'recipes:categories' %}">Categories</a></h2><br><br>
     {% if categories %}
         {% include 'recipes/category_grid.html' with cards=categories %}
     {% else %}
@@ -17,9 +19,10 @@
     {% endif %}
     </div>
 
+    <hr class="border border-success border-3 opacity-75 mb-5 mt-5">
 
     <div>
-       <br><h2>Highest Rated Recipes</h2><br>
+       <br><h2>Highest Rated Recipes</h2><br><br>
     {% if recipes %}
         {% include 'recipes/recipe_grid.html' with cards=recipes %}
     {% else %}

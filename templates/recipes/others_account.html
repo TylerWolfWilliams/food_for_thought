@@ -34,7 +34,7 @@
     <hr class="border border-success border-3 opacity-75 mb-5">
     <div class="row mb-5">
         <div class="col align-items-center">
-           <h2><a href="{% url 'recipes:show_non_user_recipes' account_user.id %}">{{ account_user.username }}'s Recipes</a></h2><br>
+           <h2><a href="{% url 'recipes:show_non_user_recipes' account_user.id %}">{{ account_user.username }}'s Recipes</a></h2><br><br>
             {% include 'recipes/recipe_grid.html' with cards=written_recipes %}
         </div>
     </div>
@@ -44,7 +44,7 @@
     <hr class="border border-success border-3 opacity-75 mb-5">
     <div class="row mb-5">
         <div class="col">
-            <h2>{{ account_user.username }}'s Reviews</h2><br>
+            <h2>{{ account_user.username }}'s Reviews</h2><br><br>
             {% for review in written_reviews %}
                 {% include 'recipes/comment_card.html' with review=review %}
             {% endfor %}
