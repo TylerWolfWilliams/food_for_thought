@@ -25,6 +25,5 @@ urlpatterns = [
     path('myaccount/deletereview/<int:review_id>/', views.delete_review, name='delete_review'),
     path('myaccount/editrecipe/<int:recipe_id>/', views.edit_recipe, name='edit_recipe'),
     path('myaccount/deleterecipe/<int:recipe_id>/', views.delete_recipe, name='delete_recipe'),
-    path('myaccount/unsaverecipe/<int:recipe_id>/', views.unsave_recipe, name='unsave_recipe'),
-    path('myaccount/saverecipe/<int:recipe_id>/', views.save_recipe, name='save_recipe'),
+    path('myaccount/togglesaverecipe/<int:recipe_id>/', views.toggle_save_recipe, name='toggle_save_recipe'),
 ]
