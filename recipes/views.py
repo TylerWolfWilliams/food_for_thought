@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
 from django.urls import reverse
 
 from django.contrib.auth import authenticate, login, logout
@@ -415,37 +416,35 @@ def delete_review(request, review_id):
 @login_required
 def delete_recipe(request, recipe_id):
     try:
-        recipe = Recipe.objects.get(id=recipe_id, author=request.author)
+        recipe = Recipe.objects.get(id=recipe_id, author=request.user)
         recipe.delete()
 
     except Exception as e:
         show_user_account(request, "Could not delete recipe. Encountered following error: " + e)
 
-    return redirect(reverse('recipes:show_user_account'))
+    return JsonResponse({
+        'response': """
+        <div class='card h-100'>
+        <div class='card-body text-start'>
+        <h5 class='card-title'>Recipe Deleted</h5>
+        </div>
+        </div>""",
+        'id': f"#recipe{recipe_id}"})
 
 
 @login_required
-def unsave_recipe(request, recipe_id):
+def toggle_save_recipe(request, recipe_id):
     try:
         recipe = get_object_or_404(Recipe, id=recipe_id)
-        user = request.user
-        user_profile = UserProfile.objects.get(user=user)
-        user_profile.saved.remove(recipe)
+        user_profile = request.user.userprofile
+        if recipe in user_profile.saved.all():
+            user_profile.saved.remove(recipe)
+        else:
+            user_profile.saved.add(recipe)
 
     except Exception as e:
         show_user_account(request, "Could not unsave recipe. Encountered following error: " + e)
 
-    return redirect(reverse('recipes:show_user_account'))
-
-@login_required
-def save_recipe(request, recipe_id):
-    try:
-        recipe = get_object_or_404(Recipe, id=recipe_id)
-        user = request.user
-        user_profile = UserProfile.objects.get(user=user)
-        user_profile.saved.add(recipe)
-
-    except Exception as e:
-        show_user_account(request, "Could not save recipe. Encountered following error: " + e)
-
-    return redirect(reverse('recipes:show_user_account'))
+    return JsonResponse({
+        'response': render_to_string('recipes/toggle_save_button.html', request=request, context={"recipe": recipe}),
+        'id': f"#saveRecipeButton{recipe_id}"})
