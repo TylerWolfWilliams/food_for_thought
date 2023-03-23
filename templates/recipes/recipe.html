@@ -83,10 +83,15 @@
         {% endif %}
     </div>
 
-    <div class="col">
+    {% if review_form %}
+          <div class="col">
+              {% else %}
+    <div>
+        {% endif %}
     {% if reviews %}
          <h3 class="text-center">Reviews</h3>
     {% endif %}
+        <div data-bs-spy="scroll" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="scrollspy-example bg-body-tertiary p-3 rounded-2" tabindex="0">
     {% for review in reviews %}
          <div class="card mb-3 row justify-content-center">
              <div class="card-body justify-content-center">
@@ -100,6 +105,7 @@
              </div>
          </div>
     {% endfor %}
+        </div>
     </div>
 </div>
 
