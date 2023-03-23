@@ -60,6 +60,19 @@
         <strong>You have no written recipes.</strong>
         {% endif %}
     </div>
+
+    <hr class="border border-success border-3 opacity-75 mb-5">
+
+    <div class="container">
+        <h2><a href="{% url 'recipes:show_user_reviews' %}">Your Reviews</a></h2><br>
+        {% if written_reviews %}
+        {% for review in written_reviews %}
+        {% include 'recipes/recipe_grid.html' with cards=written_recipes %}
+        {% endfor %}
+        {% else %}
+        <strong>You have no written recipes.</strong>
+        {% endif %}
+    </div>
 </div>
 {% endif %}
 {% endblock %}

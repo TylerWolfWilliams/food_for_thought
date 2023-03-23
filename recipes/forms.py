@@ -9,7 +9,7 @@ class RecipeForm(forms.ModelForm):
     content = forms.CharField(max_length=10000, help_text="Instructions: ")
     ingredients = forms.CharField(max_length=10000, help_text="Ingredients: ")
     tags = forms.CharField(max_length=1000, help_text="Tags (optional): ", required=False)
-    cooking_time = forms.DurationField(label="Cooking Time")
+    cooking_time = forms.FloatField(label="Cooking Time")
     servings = forms.IntegerField(label="Servings", min_value=1)
     category = forms.ModelMultipleChoiceField(Category.objects.all(), required=False)
     category.widget.attrs.update({ "id": "categoryInput", "multiple": "multiple"})
@@ -19,7 +19,7 @@ class RecipeForm(forms.ModelForm):
 
     class Meta:
         model = Recipe
-        exclude = ('author', 'slug',)
+        exclude = ('author', 'slug', 'cooking_time')
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -50,7 +50,8 @@ class SearchForm(forms.Form):
     category = forms.ModelMultipleChoiceField(Category.objects.all(), label = "Categories", required=False)
     category.widget.attrs.update({"id": "categoryInput", "multiple": "multiple"})
 
-    time = forms.DurationField(label="Max Time (hh:mm)", required = False, widget=forms.TimeInput(attrs={"type": "time", "class": "form-control"}))
+    time = forms.FloatField(label="Max time in hours", required = False)
+    time.widget.attrs.update({"class": "form-control", "step": "0.01"})
 
     author = forms.ModelChoiceField(UserProfile.objects.all(), required=False)
     author.widget.attrs.update({"class": "select2-fancy-choice"})

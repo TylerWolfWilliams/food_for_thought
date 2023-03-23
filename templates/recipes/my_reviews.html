@@ -4,25 +4,11 @@
 
 {% block body_block %}
 <div class = "container text-center mt-5">
-    <h1>Your Reviews</h1><br><br>
+    <h2>Your Reviews</h2><br>
     <div class="row mb-5">
         {% if written_reviews %}
             {% for review in written_reviews %}
-                <div class="card w-25 mb-5">
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="{% url 'recipes:show_recipe' review.recipe.author.id review.recipe.slug %}">{{ review.recipe.title }}</a></h5>
-                        <p class="card-text text-start">
-                            {{ review.content }} <br>
-                            Rating: {{ review.rating }}
-                        </p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <a href="{% url 'recipes:edit_review' review.id %}" class="btn btn-outline-success">Edit</a>
-                            {% confirm_review_deletion review %}
-                        </div>
-                    </div>
-                </div>
+                {% include 'recipes/comment_card.html' with review=review %}
             {% endfor %}
         {% else %}
             <strong>There are no recipes present.</strong>
