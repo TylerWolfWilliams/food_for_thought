@@ -48,7 +48,8 @@ def show_results(request):
     req_words = set(req.split())
 
     form = SearchForm(request.GET)
-    context_dict = {"request": req, "form": form}
+    print(form.as_p())
+    context_dict = {"req": req, "form": form}
 
     query = Q()
     for word in req_words:
@@ -186,8 +187,7 @@ def show_user_account(request, msg=None):
 
         current_user_profile = UserProfile.objects.get(user=current_user)
 
-        saved_recipes_ratings = current_user_profile.saved.annotate(average_rating=Avg('review__rating')).order_by(
-            '-average_rating')[:4]
+        saved_recipes_ratings = current_user_profile.saved.annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:4]
 
         written_recipes = Recipe.objects.filter(author=current_user).annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:4]
 
@@ -209,8 +209,6 @@ def add_recipe(request):
 
     if request.method == "POST":
         form = RecipeForm(request.POST, request.FILES)
-
-        print(form['category'])
 
         if form.is_valid():
             recipe = form.save(commit=False)
@@ -332,8 +330,6 @@ def edit_account(request):
 def edit_review(request, review_id):
     review = Review.objects.get(id=review_id)
 
-    print(review.recipe.title)
-
     if request.method == "POST":
         form = ReviewForm(request.POST, instance=review)
 
@@ -438,5 +434,18 @@ def unsave_recipe(request, recipe_id):
 
     except Exception as e:
         show_user_account(request, "Could not unsave recipe. Encountered following error: " + e)
+
+    return redirect(reverse('recipes:show_user_account'))
+
+@login_required
+def save_recipe(request, recipe_id):
+    try:
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        user = request.user
+        user_profile = UserProfile.objects.get(user=user)
+        user_profile.saved.add(recipe)
+
+    except Exception as e:
+        show_user_account(request, "Could not save recipe. Encountered following error: " + e)
 
     return redirect(reverse('recipes:show_user_account'))

@@ -3,7 +3,7 @@
 <div class="card h-100">
 
 <img src="{{ recipe.image.url }}" class="card-img-top" height="250" alt="{{ recipe.title }} image">
-<div class="card-body">
+<div class="card-body text-start">
     <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h5>
     <p class="card-text"><i class="bi bi-star-fill text-warning"></i> 
     {% if recipe.average_rating %}
@@ -12,22 +12,20 @@
     No Ratings
     {% endif %}
     </p>
-
 </div>
+
+<div class="card-footer text-center">
 {% if recipe.author == user %}
-<div class="card-footer">
     <div class="btn-group" role="group">
         <a href="{% url 'recipes:edit_recipe' recipe.id %}" class="btn btn-outline-success">Edit</a>
         {% confirm_recipe_deletion recipe %}
     </div>
-</div>
 {% else %}
-<div class="card-footer">
-    {% if recipe in user.userprofile.saved %}
-    {% confirm_recipe_unsave card %}
+    {% if recipe in user.userprofile.saved.all %}
+    {% confirm_recipe_unsave recipe %}
     {% endif %}
     <p class="card-text"><small class="text-muted">Written by <a href="{% url 'recipes:show_non_user_account' recipe.author.id %}">{{ recipe.author.username }}</a></small></p>
-</div>
 {% endif %}
+</div>
 
 </div>

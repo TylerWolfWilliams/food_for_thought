@@ -1,7 +1,7 @@
 <div class="card h-100">
 
 <img src="{{ category.image.url }}" class="card-img-top" height="250" alt="{{ category.name }} image">
-<div class="card-body">
+<div class="card-body text-start">
     <h5 class="card-title"><a href="{% url 'recipes:show_category' category.slug %}">{{ category.name }}</a></h5>
     <p class="card-text">{{ category.description }}</p>
 

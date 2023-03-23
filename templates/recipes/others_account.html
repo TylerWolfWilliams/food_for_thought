@@ -1,5 +1,6 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
+{% load recipes_template_tags %}
 
 {% block head_block %}
     <script type="text/javascript" src="D:\Python\Second Year\Semester 2\Web App\Team Project\food_for_thought\static\javascript\my_account_javascript.js"></script>
@@ -28,43 +29,36 @@
         </div>
     </div>
 
+
+
+    {% if written_recipes %}
     <hr class="border border-success border-3 opacity-75 mb-5">
-
     <div class="row mb-5">
-        <div class="col">
-           <h2>{{ account_user.username }}'s Reviews</h2><br>
-            {% if written_reviews %}
-                {% for review in written_reviews %}
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title"><a href="{% url 'recipes:show_recipe' review.recipe.author.id review.recipe.slug %}">{{ review.recipe.title }}</a></h5>
-                                <p class="card-text text-start">
-                                    {{ review.content }} <br>
-                                    Rating: {{ review.rating }}
-                                </p>
-                        </div>
-                    </div><br>
-                {% endfor %}
-            {% else %}
-           <strong>There are no reviews present.</strong>
-        {% endif %}
-        </div>
-
         <div class="col align-items-center">
            <h2><a href="{% url 'recipes:show_non_user_recipes' account_user.id %}">{{ account_user.username }}'s Recipes</a></h2><br>
-        {% if written_recipes %}
-           {% for recipe in written_recipes %}
-                   <div class="card w-50 mx-auto">
-                       <img class="card-img-top" src="{{ recipe.image.url }}" alt="{{ recipe.title }} image">
-                       <div class="card-body">
-                           <h5 class="card-title"><a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a>{{ recipe.average_rating }}</h5>
-                       </div>
-                   </div><br>
-           {% endfor %}
-        {% else %}
-           <strong>There are no recipes present.</strong>
-        {% endif %}
+            {% recipes_grid written_recipes request.user %}
         </div>
     </div>
+    {% endif %}
+
+    {% if written_reviews %}
+    <hr class="border border-success border-3 opacity-75 mb-5">
+    <div class="row mb-5">
+        <div class="col">
+            <h2>{{ account_user.username }}'s Reviews</h2><br>
+            {% for review in written_reviews %}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{% url 'recipes:show_recipe' review.recipe.author.id review.recipe.slug %}">{{ review.recipe.title }}</a></h5>
+                    <p class="card-text">
+                    {{ review.content }} <br>
+                    Rating: {{ review.rating }}
+                    </p>
+                </div>
+            </div><br>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
