@@ -16,12 +16,12 @@ def confirm_account_deletion():
 def confirm_recipe_deletion(recipe):
     return {"button_message": "Delete Recipe",
             "message": f"delete the recipe titled \"{recipe.title}\"",
-            "action": f"confirmAJAX('{reverse('recipes:delete_recipe', args=[recipe.id])}')",
+            "action": f"ajaxHelper('{reverse('recipes:delete_recipe', args=[recipe.id])}')",
             "modal_id": f"recipeDeletionModal{recipe.id}"}
 
 @register.inclusion_tag('recipes/confirm.html')
 def confirm_review_deletion(review):
     return {"button_message": "Delete Review",
             "message": f"delete your review for \"{review.recipe.title}\"",
-            "action": f"confirmAJAX('{reverse('recipes:delete_review', args=[review.id])}')",
+            "action": f"ajaxHelper('{reverse('recipes:delete_review', args=[review.id])}')",
             "modal_id": f"reviewDeletionModal{review.id}"}

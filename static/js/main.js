@@ -17,27 +17,14 @@ $(document).ready(function() {
     });
 });
 
-function confirmAJAX(url) {
+function ajaxHelper(url) {
     $.ajax({
         url: url,
         type: "GET",
         dataType: "json",
         success: (data) => {
-            console.log(data["response"])
-            $(data["id"]).replaceWith(data["response"])
+            $(data["id"]).html(data["response"])
         },
     })
 };
 
-
-function toggleSaveAJAX(url) {
-    $.ajax({
-        url: url,
-        type: "GET",
-        dataType: "json",
-        success: (data) => {
-            console.log(data["response"])
-            $(data["id"]).replaceWith(data["response"])
-        },
-    })
-};

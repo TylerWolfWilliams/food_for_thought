@@ -38,7 +38,6 @@ def show_category(request, category_name_slug):
 
     category = get_object_or_404(Category, slug=category_name_slug)
     recipes = Recipe.objects.annotate(average_rating=Avg('review__rating')).filter(category=category).distinct()
-    # recipes = Recipe.objects.filter(category=category).distinct()
 
     context_dict['category'] = category
     context_dict['recipes'] = recipes
@@ -277,9 +276,9 @@ def show_non_user_account(request, user_id):
 
     user_profile = UserProfile.objects.get(user=user)
 
-    written_recipes = Recipe.objects.filter(author=user)[:5]
+    written_recipes = Recipe.objects.filter(author=user).annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:4]
 
-    written_reviews = Review.objects.filter(author=user)[:5]
+    written_reviews = Review.objects.filter(author=user)[:3]
 
     context_dict = {"account_user": user, "written_recipes": written_recipes,
                     "written_reviews": written_reviews, "user_profile": user_profile}
@@ -288,7 +287,7 @@ def show_non_user_account(request, user_id):
 
 def show_non_user_recipes(request, user_id):
     user = get_object_or_404(User, id=user_id)
-    written_recipes = Recipe.objects.filter(author=user)
+    written_recipes = Recipe.objects.filter(author=user).annotate(average_rating=Avg('review__rating')).order_by('-average_rating')[:4]
 
     context_dict = {'written_recipes': written_recipes, "account_user": user}
 
@@ -412,7 +411,12 @@ def delete_review(request, review_id):
     except Exception as e:
         show_user_account(request, "Could not delete review. Encountered following error: " + e)
 
-    return redirect(reverse('recipes:show_user_account'))
+    return JsonResponse({
+        'response': """
+        <div class='card-body text-start'>
+        <h5 class='card-title'>Review Deleted</h5>
+        </div>""",
+        'id': f"#review{review_id}"})
 
 
 @login_required
@@ -426,10 +430,8 @@ def delete_recipe(request, recipe_id):
 
     return JsonResponse({
         'response': """
-        <div class='card h-100'>
         <div class='card-body text-start'>
         <h5 class='card-title'>Recipe Deleted</h5>
-        </div>
         </div>""",
         'id': f"#recipe{recipe_id}"})
 

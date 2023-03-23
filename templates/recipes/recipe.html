@@ -67,53 +67,52 @@
 <hr class="border border-success border-3 opacity-75 mb-5">
 
 <div class="row">
-    <div class="col mx-5">
-        {% if review_form %}
-             <h3 class="text-center">Leave a Review:</h3>
-             <div>
-                 <form id="review_form" method="POST" action="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">
-                     {% csrf_token %}
-                         <div class="rating">
-                             <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
-                             <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
-                             <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
-                             <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
-                             <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
-                         </div>
-                         <div class="form-floating mb-3">
-                             <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="content"></textarea>
-                             <label for="floatingTextarea">Comments</label>
-                         </div>
-                     <div class="text-center">
-                         <button class="btn btn-outline-success" type="submit" name="submit" value="Post review">Post Review</button>
-                     </div>
-                 </form>
-             </div>
-        {% endif %}
-    </div>
-
     {% if review_form %}
-          <div class="col mx-5">
-              {% else %}
-    <div class="mx-5">
-        {% endif %}
-    {% if reviews %}
-         <h3 class="text-center">Reviews</h3>
-    {% endif %}
-    {% for review in reviews %}
-         <div class="card mb-3 row justify-content-center mx-5">
-             <div class="card-body justify-content-center ">
-                 <div class="col-4">
-                     <h5 class="card-title"><a href="{% url 'recipes:show_non_user_account' review.author.id %}">{{ review.author.username }}</a></h5>
-                 </div>
-                 <div class="col-4">
-                     <h6 class="card-subtitle mb-2 text-muted"><i class="bi bi-star-fill text-warning"></i>{{ review.rating }}</h6>
-                 </div>
-                 <p class="card-text">{{ review.content }}</p>
-             </div>
-         </div>
-    {% endfor %}
+    <div class="col mx-5">
+        <h3 class="text-center">Leave a Review:</h3>
+        <div>
+            <form id="review_form" method="POST" action="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">
+                {% csrf_token %}
+                <div class="rating">
+                    <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+                    <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                    <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                    <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                    <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="content"></textarea>
+                    <label for="floatingTextarea">Comments</label>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-outline-success" type="submit" name="submit" value="Post review">Post Review</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+    {% endif %}
+
+    <div class="col mx-5">
+            {% if reviews %}
+            <h3 class="text-center">Reviews</h3>
+            {% endif %}
+            {% for review in reviews %}
+            <div class="card mb-3 mx-5" id="review{{ review.id }}">
+                <div class="card-body ">
+                    <h5 class="card-title"><a href="{% url 'recipes:show_non_user_account' review.author.id %}">{{ review.author.username }}</a></h5>
+                    <h6 class="card-subtitle mb-2 text-muted"><i class="bi bi-star-fill text-warning"></i>{{ review.rating }}</h6>
+                    <p class="card-text">{{ review.content }}</p>
+                </div>
+                {% if request.user == review.author %}
+                <div class="card-footer">
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'recipes:edit_review' review.id %}" class="btn btn-outline-success">Edit</a>
+                        {% confirm_review_deletion review %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+    </div>
 
 {% endblock %}

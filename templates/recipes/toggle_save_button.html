@@ -1,5 +1,5 @@
 {% if request.user.is_authenticated %}
-<button onclick="toggleSaveAJAX('{% url 'recipes:toggle_save_recipe' recipe.id %}')" id="saveRecipeButton{{ recipe.id }}" class="btn 
+<button onclick="ajaxHelper('{% url 'recipes:toggle_save_recipe' recipe.id %}')" id="saveRecipeButton{{ recipe.id }}" class="btn 
 {% if recipe not in request.user.userprofile.saved.all %} btn-success">Save
 {% else %} 
 btn-danger">Unsave

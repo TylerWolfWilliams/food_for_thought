@@ -1,15 +1,15 @@
 {% load recipes_template_tags %}
-<div class="card mb-4">
+<div class="card mb-4 mx-auto w-50" id="review{{ review.id }}">
     <div class="card-body">
         <h5 class="card-title"><a href="{% url 'recipes:show_recipe' review.recipe.author.id review.recipe.slug %}">{{ review.recipe.title }}</a></h5>
         <p class="card-text">
         {{ review.content }} <br>
-        Rating: {{ review.rating }}
+        Rating: <i class="bi bi-star-fill text-warning"></i> {{ review.rating }}
         </p>
     </div>
     {% if request.user == review.author %}
     <div class="card-footer">
-        <div class="btn-group" role="group" aria-label="Basic example">
+        <div class="btn-group" role="group">
             <a href="{% url 'recipes:edit_review' review.id %}" class="btn btn-outline-success">Edit</a>
             {% confirm_review_deletion review %}
         </div>
