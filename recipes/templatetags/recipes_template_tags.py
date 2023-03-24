@@ -14,7 +14,7 @@ def confirm_account_deletion():
 
 @register.inclusion_tag('recipes/confirm.html')
 def confirm_recipe_deletion(recipe, ajax=True):
-    url = f"('{reverse('recipes:delete_recipe', args=[recipe.id])}')"
+    url = reverse('recipes:delete_recipe', args=[recipe.id])
     if not ajax:
         action = f"location.href = {url}"
     else:
