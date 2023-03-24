@@ -12,11 +12,13 @@
         <div class="row">
             {% csrf_token %}
             <div class="rating col-sm-3">
-                <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
-                <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
-                <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
-                <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
-                <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                {% for val in values %}
+                    {% if val == checked_val %}
+                        <input type="radio" name="rating" value="{{ val }}" id="{{ checked_val }}" checked><label for="{{ checked_val }}">☆</label>
+                    {% else %}
+                        <input type="radio" name="rating" value="{{ val }}" id="{{ val }}"><label for="{{ val }}">☆</label>
+                    {% endif %}
+                {% endfor %}
             </div>
             <div class="form-floating mb-3 col">
                 <textarea class="form-control border border-success border-3 opacity-75" placeholder="Leave a comment here" id="floatingTextarea" name="content">{{ review.content }}</textarea>
