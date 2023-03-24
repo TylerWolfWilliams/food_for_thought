@@ -46,7 +46,7 @@ class Recipe(models.Model):
         self.slug = slugify(self.title)
 
         if self.servings is not None:
-            if self.servings <= 0:
+            if int(self.servings) <= 0:
                 self.servings = 1
         else:
             self.servings = 1
