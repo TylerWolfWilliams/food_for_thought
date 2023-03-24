@@ -6,31 +6,26 @@
 {% endblock %}
 
 {% block body_block %}
-<h1>Edit Review For <a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h1><br>
+<h1 class="text-center fftTitle">Edit Review For <a href="{% url 'recipes:show_recipe' recipe.author.id recipe.slug %}">{{ recipe.title }}</a></h1>
 <div>
     <form id="review_form" method="POST" action="{% url 'recipes:edit_review' review.id %}" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        {% if review_form.errors %}
-            <div class="alert alert-danger">
-                {{ review_form.errors }}
+        <div class="row">
+            {% csrf_token %}
+            <div class="rating col-sm-3">
+                <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+                <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
             </div>
-        {% endif %}
-
-        <div class="mb-3 input-group">
-            Review:
-            {% for val in values %}
-                {% if val == checked_val %}
-                    <input class="form-check-input" type="radio" name="rating" value={{ val }} checked/>
-                {% else %}
-                    <input class="form-check-input" type="radio" name="rating" value={{ val }} />
-                {% endif %}
-            {% endfor %}
+            <div class="form-floating mb-3 col">
+                <textarea class="form-control border border-success border-3 opacity-75" placeholder="Leave a comment here" id="floatingTextarea" name="content">{{ review.content }}</textarea>
+                <label for="floatingTextarea">Comments</label>
+            </div>
         </div>
-        <div class="mb-3">
-            Comment: <textarea class="form-control" name="content" maxlength="1000">{{ review.content }}</textarea>
+        <div class="text-center">
+            <button class="btn btn-outline-success" type="submit" name="submit" value="Update review">Update Review</button>
         </div>
-        <input class="btn btn-outline-success" type="submit" name="submit" value="Save Changes" />
     </form>
 </div>
 {% endblock %}
