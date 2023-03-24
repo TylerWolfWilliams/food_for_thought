@@ -317,8 +317,6 @@ def edit_account(request):
 
             if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
-            else:
-                profile.picture = UserProfile.setDefaultImage(profile)
 
             profile.save()
 
