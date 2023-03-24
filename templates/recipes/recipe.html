@@ -13,7 +13,7 @@
         <div class="mb-2">
         {% if user == recipe.author %}
             <a href="{% url 'recipes:edit_recipe' recipe.id %}" class="btn btn-outline-success">Edit</a>
-            {% confirm_recipe_deletion recipe %}
+            {% confirm_recipe_deletion recipe ajax=False %}
         {% else %}
             {% include 'recipes/toggle_save_button.html' with recipe=recipe %}
         {% endif %}

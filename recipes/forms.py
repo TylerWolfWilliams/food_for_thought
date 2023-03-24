@@ -2,6 +2,17 @@ from django import forms
 from django.contrib.auth.models import User
 from recipes.models import Recipe, UserProfile, Review, Category
 
+from datetime import timedelta
+
+
+class CookingTimeField(forms.FloatField):
+    def clean(self, value):
+        data = super().clean(value)
+        if data:
+            return timedelta(hours=data)
+        else:
+            return timedelta()
+
 
 class RecipeForm(forms.ModelForm):
     title = forms.CharField(max_length=100)
@@ -20,7 +31,7 @@ class RecipeForm(forms.ModelForm):
     servings = forms.IntegerField(label="Servings", min_value=1)
     servings.widget.attrs.update({"class": "form-control", "placeholder": "Number of Servings"})
 
-    cooking_time = forms.FloatField(label="Cooking Time")
+    cooking_time = CookingTimeField(label="Cooking Time")
     cooking_time.widget.attrs.update({"class": "form-control", "step": "0.01"})
 
     tags = forms.CharField(max_length=1000, help_text="Tags (optional): ", required=False)
@@ -28,7 +39,7 @@ class RecipeForm(forms.ModelForm):
 
     class Meta:
         model = Recipe
-        exclude = ('author', 'slug', 'cooking_time')
+        exclude = ('author', 'slug')
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -60,7 +71,7 @@ class SearchForm(forms.Form):
     category = forms.ModelMultipleChoiceField(Category.objects.all(), label = "Categories", required=False)
     category.widget.attrs.update({"id": "categoryInput", "multiple": "multiple"})
 
-    time = forms.FloatField(label="Max time in hours", required = False)
+    time = CookingTimeField(label="Max time in hours", required = False)
     time.widget.attrs.update({"class": "form-control", "step": "0.01"})
 
     author = forms.ModelChoiceField(UserProfile.objects.all(), required=False)
