@@ -170,7 +170,7 @@ def populate():
                         "Heat oven to 200C/180C fan/gas 6. Mix the beaten egg with a pinch of salt and use to "
                         "generously glaze the croissants. Bake for 15-18 mins until risen and golden brown, "
                         "then cool on wire racks.",
-             "cooking_time": datetime.timedelta(hours=1,minutes=30),
+             "cooking_time": datetime.timedelta(hours=1, minutes=30),
              "image": "static/recipe_images/croissants.jpg",
              "servings": "12",
              "tags": "#Tricky #Yum #Pastry #French",
@@ -769,7 +769,9 @@ def populate():
             up.save()
 
         for recipe in user["recipes"]:
-            r = Recipe.objects.get_or_create(title=recipe["title"], author=u, content=recipe["content"], ingredients=recipe["ingredients"], cooking_time=recipe["cooking_time"], servings=recipe["servings"], tags=recipe["tags"])[0]
+            r = Recipe.objects.get_or_create(title=recipe["title"], author=u, content=recipe["content"],
+                                             ingredients=recipe["ingredients"], cooking_time=recipe["cooking_time"],
+                                             servings=recipe["servings"], tags=recipe["tags"])[0]
 
             for c in recipe["category"]:
                 r.category.add(get_category(c))
@@ -779,8 +781,10 @@ def populate():
                 r.save()
 
     get_userprofile("mrbean62").saved.add(get_recipe("Pea, Feta & Quinoa Spring Rolls"))
-    get_userprofile("coolboy4572").saved.add(get_recipe("Bread"), get_recipe("Pea, Feta & Quinoa Spring Rolls"), get_recipe("Croissants"))
-    get_userprofile("chefSteph").saved.add(get_recipe("Brioche Breakfast Bake with Crispy Bacon"), get_recipe("Spinach, Sweet Potato & Lentil Dhal"))
+    get_userprofile("coolboy4572").saved.add(get_recipe("Bread"), get_recipe("Pea, Feta & Quinoa Spring Rolls"),
+                                             get_recipe("Croissants"))
+    get_userprofile("chefSteph").saved.add(get_recipe("Brioche Breakfast Bake with Crispy Bacon"),
+                                           get_recipe("Spinach, Sweet Potato & Lentil Dhal"))
     get_userprofile("cookByTheBook").saved.add(get_recipe("Chocolate Fudge Cake"), get_recipe("Fajita-Style Pasta"))
 
     reviews = [{
