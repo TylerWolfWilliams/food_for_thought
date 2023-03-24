@@ -50,7 +50,7 @@ def show_results(request):
     req_words = set(req.split())
 
     form = SearchForm(request.GET)
-    context_dict = {"req": req, "form": form, "results": []}
+    context_dict = {"req": req, "form": form, "results": None}
 
     query = Q()
     for word in req_words:
