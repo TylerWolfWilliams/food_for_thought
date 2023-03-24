@@ -6,3 +6,7 @@ a {
     text-align:center;
     padding: 40px;
 }
+
+.respect-newline {
+    white-space: pre-line;
+}
