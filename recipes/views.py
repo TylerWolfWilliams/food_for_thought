@@ -56,8 +56,6 @@ def show_results(request):
     for word in req_words:
         query |= Q(title__icontains=word) | Q(ingredients__icontains=word) | Q(tags__icontains=word)
 
-    print(form.errors)
-
     if form.is_valid():
         categories = form.cleaned_data['category']
         time = form.cleaned_data['time']

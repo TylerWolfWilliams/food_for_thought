@@ -318,3 +318,21 @@ class ShowResultsViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No results.")
         self.assertEqual((response.context['results'] is None), True)
+
+
+class SignUpViewTests(TestCase):
+
+    def test_if_user_registered(self):
+        response = self.client.post(reverse('recipes:signup'),
+                                    {'username': 'Jim', 'email': 'jim@gmail.com', 'password': '1234',
+                                     'picture': 'test.jpg', 'bio': 'hi'})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Return to the login.")
+
+    def test_if_user_is_not_registered(self):
+        response = self.client.post(reverse('recipes:signup'),
+                                    {'email': 'jim@gmail.com', 'password': '1234', 'picture': 'test.jpg', 'bio': 'hi'})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Sign up here!")
