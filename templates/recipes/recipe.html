@@ -9,11 +9,16 @@
         <div class="m-2">
             Author: <a href = "{% url 'recipes:show_non_user_account' recipe.author.id %}">{{ recipe.author }}</a>
         </div>
+        {% if user.is_authenticated %}
         <div class="mb-2">
-            {% if user.is_authenticated %}
-                 {% include 'recipes/toggle_save_button.html' with recipe=recipe %}
-            {% endif %}
+        {% if user == recipe.author %}
+            <a href="{% url 'recipes:edit_recipe' recipe.id %}" class="btn btn-outline-success">Edit</a>
+            {% confirm_recipe_deletion recipe %}
+        {% else %}
+            {% include 'recipes/toggle_save_button.html' with recipe=recipe %}
+        {% endif %}
         </div>
+        {% endif %}
         <hr class="border border-success border-3 opacity-75 mb-5">
     </div>
     <div class="row">

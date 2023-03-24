@@ -4,18 +4,27 @@ from recipes.models import Recipe, UserProfile, Review, Category
 
 
 class RecipeForm(forms.ModelForm):
-    title = forms.CharField(max_length=100, help_text="Name of Recipe: ")
+    title = forms.CharField(max_length=100)
+    title.widget.attrs.update({"class": "form-control", "placeholder": "Name of Recipe"})
+
     image = forms.ImageField(help_text="Upload Image: ")
-    content = forms.CharField(max_length=10000, help_text="Instructions: ")
-    ingredients = forms.CharField(max_length=10000, help_text="Ingredients: ")
-    tags = forms.CharField(max_length=1000, help_text="Tags (optional): ", required=False)
-    cooking_time = forms.FloatField(label="Cooking Time")
-    servings = forms.IntegerField(label="Servings", min_value=1)
-    category = forms.ModelMultipleChoiceField(Category.objects.none(), required=False)
+    image.widget.attrs.update({"class": "form-control", "placeholder": "Upload an image"})
+
+    category = forms.ModelMultipleChoiceField(Category.objects.all(), required=False)
     category.widget.attrs.update({ "id": "categoryInput", "multiple": "multiple"})
 
-    def getCategories(self):
-        return [c for c in Category.objects.all()]
+    content = forms.CharField(max_length=10000, widget=forms.Textarea(attrs={"class": "form-control", "rows": "8", "placeholder": "Method"}))
+
+    ingredients = forms.CharField(max_length=10000, widget=forms.Textarea(attrs={"class": "form-control", "rows": "8", "placeholder": "Ingredients"}))
+
+    servings = forms.IntegerField(label="Servings", min_value=1)
+    servings.widget.attrs.update({"class": "form-control", "placeholder": "Number of Servings"})
+
+    cooking_time = forms.FloatField(label="Cooking Time")
+    cooking_time.widget.attrs.update({"class": "form-control", "step": "0.01"})
+
+    tags = forms.CharField(max_length=1000, help_text="Tags (optional): ", required=False)
+    tags.widget.attrs.update({"class": "form-control", "placeholder": "Tags (Optional)"})
 
     class Meta:
         model = Recipe
@@ -48,13 +57,13 @@ class ReviewForm(forms.ModelForm):
         exclude = ('author', 'recipe',)
 
 class SearchForm(forms.Form):
-    category = forms.ModelMultipleChoiceField(Category.objects.none(), label = "Categories", required=False)
+    category = forms.ModelMultipleChoiceField(Category.objects.all(), label = "Categories", required=False)
     category.widget.attrs.update({"id": "categoryInput", "multiple": "multiple"})
 
     time = forms.FloatField(label="Max time in hours", required = False)
     time.widget.attrs.update({"class": "form-control", "step": "0.01"})
 
-    author = forms.ModelChoiceField(UserProfile.objects.none(), required=False)
+    author = forms.ModelChoiceField(UserProfile.objects.all(), required=False)
     author.widget.attrs.update({"id": "authorInput"})
 
     sort = forms.ChoiceField(choices=(('rd', "Rating Descending"), ('ra', "Rating Ascending"), ('aa', "Alphabetical"), ('ad', "Reverse Alphabetical")))

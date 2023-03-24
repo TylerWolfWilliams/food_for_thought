@@ -1,5 +1,6 @@
 {% extends 'recipes/base.html' %}
 {% load staticfiles %}
+{% load recipes_template_tags %}
 
 {% block title_block %}
     Edit a recipe
@@ -9,57 +10,10 @@
 <div>
     <h1>Edit Recipe: {{ recipe.title }}</h1><br>
     <form enctype="multipart/form-data" id="recipe_form" method="POST" action="{% url 'recipes:edit_recipe' recipe.id %}">
-        {% csrf_token %}
-
-        {% if form.errors %}
-            <div class="alert alert-danger">
-                {{ form.errors }}
-            </div>
-        {% endif %}
-
-        <div class="justify-content-md-center">
-            <div class="mb-3 row">
-
-                <div class="col">
-                    <input type="text" name="title" class="form-control" placeholder="Name of Recipe" value="{{ recipe.title }}">
-                </div>
-                <div class="col">
-                    <input type="file" name="image" accept=".jpg, .png, .jpeg" class="form-control" placeholder="Upload an image" value="{{ recipe.image }}">
-                </div>
-                <div class="col input-group mb-3">
-                    <label class="input-group-text" for="categoryInput">Category:</label>
-                    {{ form.category }}
-                </div>
-            </div>
-
-            <div class="mb-3 row text-center">
-                <div class="col">
-                    <textarea class="form-control" placeholder="Method" rows="8" name="content" >{{ recipe.content }}</textarea>
-                </div>
-                <div class="col">
-                    <textarea class="form-control" placeholder="Ingredients" name="ingredients" rows="8">{{ recipe.ingredients }}</textarea>
-
-                </div>
-            </div>
-
-            <div class="mb-3 row">
-                <div class="col">
-                    <input type="number" aria-valuemin="1" class="form-control" placeholder="Number of Servings" name="servings" value="{{ recipe.servings }}">
-
-                </div>
-                <div class="col input-group">
-                    <span class="input-group-text" id="basic-addon3">Cooking Time in hours</span>
-                    <input type="number" class="form-control" name="cooking_time" step="0.01" value="{{ recipe.cooking_time }}">
-
-                </div>
-                <div class="col">
-                    <input type="text" class="form-control" name="tags" placeholder="Tags (Optional)" value="{{ recipe.tags }}">
-                </div>
-            </div>
-
-        </div>
+        {% include 'recipes/recipe_form.html' with form=form %}
         <div class="text-center">
-            <button type="submit" name="submit" value="Update recipe" class="btn btn-outline-success">Update Recipe</button>
+            <button type="submit" name="submit" value="Edit recipe" class="btn btn-outline-success">Edit Recipe</button>
+            {% confirm_recipe_deletion recipe %}
         </div>
     </form>
 </div>

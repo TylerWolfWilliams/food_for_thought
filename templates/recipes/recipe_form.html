@@ -1,0 +1,47 @@
+{% csrf_token %}
+
+{% if form.errors %}
+<div class="alert alert-danger">
+    {{ form.errors }}
+</div>
+{% endif %}
+
+<div class="justify-content-md-center">
+    <div class="mb-3 row">
+
+        <div class="col">
+            {{ form.title }}
+        </div>
+        <div class="col">
+            {{ form.image }}
+        </div>
+        <div class="col input-group mb-3">
+            <label class="input-group-text" for="categoryInput">Category:</label>
+            {{ form.category }}
+        </div>
+    </div>
+
+    <div class="mb-3 row text-center">
+        <div class="col">
+            {{ form.content }}
+        </div>
+        <div class="col">
+            {{ form.ingredients }}
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <div class="col">
+            {{ form.servings }}
+        </div>
+        <div class="col input-group">
+            <span class="input-group-text">Cooking time in hours</span>
+            {{ form.cooking_time }}
+
+        </div>
+        <div class="col">
+            {{ form.tags }}
+        </div>
+    </div>
+
+</div>
