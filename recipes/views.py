@@ -66,7 +66,7 @@ def show_results(request):
             query &= Q(category__in=categories)
 
         if time:
-            query &= Q(cooking_time__lte=timedelta(hours = time))
+            query &= Q(cooking_time__lte=time)
 
         if author:
             query &= Q(author=User.objects.get(userprofile=author))
@@ -214,7 +214,6 @@ def add_recipe(request):
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
-            recipe.cooking_time = timedelta(hours=form.cleaned_data["cooking_time"])
 
             if 'image' in request.FILES:
                 recipe.image = request.FILES['image']
@@ -430,12 +429,16 @@ def delete_recipe(request, recipe_id):
     except Exception as e:
         show_user_account(request, "Could not delete recipe. Encountered following error: " + e)
 
-    return JsonResponse({
-        'response': """
-        <div class='card-body text-start'>
-        <h5 class='card-title'>Recipe Deleted</h5>
-        </div>""",
-        'id': f"#recipe{recipe_id}"})
+    if request.is_ajax():
+        return JsonResponse({
+            'response': """
+            <div class='card-body text-start'>
+            <h5 class='card-title'>Recipe Deleted</h5>
+            </div>""",
+            'id': f"#recipe{recipe_id}"})
+
+    else:
+        return redirect(reverse('recipes:show_user_account'))
 
 
 @login_required
