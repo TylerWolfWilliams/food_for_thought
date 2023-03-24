@@ -317,6 +317,8 @@ def edit_account(request):
 
             if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
+            else:
+                profile.picture = UserProfile.setDefaultImage(profile)
 
             profile.save()
 
@@ -325,7 +327,7 @@ def edit_account(request):
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=user_profile)
 
-    context_dict = {'user_form': user_form, 'profile_form': profile_form, 'edited': edited}
+    context_dict = {'user_form': user_form, 'profile_form': profile_form, 'edited': edited, "user_profile": user_profile}
 
     return render(request, 'recipes/update_profile.html', context=context_dict)
 
