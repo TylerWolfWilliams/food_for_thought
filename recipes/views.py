@@ -56,8 +56,6 @@ def show_results(request):
     for word in req_words:
         query |= Q(title__icontains=word) | Q(ingredients__icontains=word) | Q(tags__icontains=word)
 
-    print(form.errors)
-
     if form.is_valid():
         categories = form.cleaned_data['category']
         time = form.cleaned_data['time']
@@ -309,6 +307,8 @@ def edit_account(request):
             user = user_form.save()
 
             user.set_password(user.password)
+            user.first_name = user_form.cleaned_data["firstname"]
+            user.last_name = user_form.cleaned_data["lastname"]
             user.save()
 
             profile = profile_form.save(commit=False)
@@ -316,6 +316,8 @@ def edit_account(request):
 
             if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
+            else:
+                profile.picture = UserProfile.setDefaultImage(profile)
 
             profile.save()
 
@@ -324,7 +326,7 @@ def edit_account(request):
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=user_profile)
 
-    context_dict = {'user_form': user_form, 'profile_form': profile_form, 'edited': edited}
+    context_dict = {'user_form': user_form, 'profile_form': profile_form, 'edited': edited, "user_profile": user_profile}
 
     return render(request, 'recipes/update_profile.html', context=context_dict)
 
@@ -349,7 +351,7 @@ def edit_review(request, review_id):
     else:
         form = ReviewForm(instance=review)
 
-    context_dict = {'review_form': form, 'review': review, 'recipe': review.recipe, 'values': ["1", "2", "3", "4", "5"],
+    context_dict = {'review_form': form, 'review': review, 'recipe': review.recipe, 'values': ["5", "4", "3", "2", "1"],
                     'checked_val': str(review.rating)}
 
     return render(request, 'recipes/edit_review.html', context=context_dict)

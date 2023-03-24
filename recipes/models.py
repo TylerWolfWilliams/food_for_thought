@@ -46,7 +46,7 @@ class Recipe(models.Model):
         self.slug = slugify(self.title)
 
         if self.servings is not None:
-            if self.servings <= 0:
+            if int(self.servings) <= 0:
                 self.servings = 1
         else:
             self.servings = 1
@@ -72,6 +72,9 @@ class UserProfile(models.Model):
 
     picture = models.ImageField(upload_to=upload_folder, blank=True, default="blank_profile_pic.png")
     bio = models.CharField(max_length=1000, blank=True)
+
+    def setDefaultImage(self):
+        return "blank_profile_pic.png"
 
     def __str__(self):
         return self.user.username
