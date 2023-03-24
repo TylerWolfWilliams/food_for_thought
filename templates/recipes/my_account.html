@@ -28,7 +28,9 @@
                 <div class="card-body">
                     <h2 class="card-title">{{ current_user.user.username }}</h2><br>
                     <p class="card-text">
-                        <b>Name:</b> {{ current_user.user.first_name }} {{ current_user.user.last_name }}<br>
+                        {% if user.first_name or user.last_name %}
+                            <b>Name:</b> {{ current_user.user.first_name }} {{ current_user.user.last_name }}<br>
+                        {% endif %}
                         <b>Email:</b> {{ current_user.user.email }}<br>
                         <b>Bio:</b> {{ current_user.bio }}
                     </p>

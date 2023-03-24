@@ -32,10 +32,12 @@ class RecipeForm(forms.ModelForm):
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
+    firstname = forms.CharField(required=False)
+    lastname = forms.CharField(required=False)
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password',)
+        fields = ('username', 'email', 'password', 'firstname', 'lastname')
 
 
 class UserProfileForm(forms.ModelForm):

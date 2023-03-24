@@ -308,6 +308,8 @@ def edit_account(request):
             user = user_form.save()
 
             user.set_password(user.password)
+            user.first_name = user_form.cleaned_data["firstname"]
+            user.last_name = user_form.cleaned_data["lastname"]
             user.save()
 
             profile = profile_form.save(commit=False)
