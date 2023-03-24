@@ -16,7 +16,7 @@ def confirm_account_deletion():
 def confirm_recipe_deletion(recipe, ajax=True):
     url = reverse('recipes:delete_recipe', args=[recipe.id])
     if not ajax:
-        action = f"location.href = {url}"
+        action = f"location.href = '{url}'"
     else:
         action = f"ajaxHelper('{url}')" 
 
