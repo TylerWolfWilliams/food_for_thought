@@ -51,9 +51,25 @@ python manage.py runserver
 
 ```
 ## Website Demo Screenshots
-![Screenshot 2024-11-11 211654](https://github.com/user-attachments/assets/2946ed3b-f649-419e-b3b7-f6eaaaa7df6a)
-![Screenshot 2024-11-11 211641](https://github.com/user-attachments/assets/fd4be17d-01e3-43f0-95ad-fe133c749248)
-![Screenshot 2024-11-11 211623](https://github.com/user-attachments/assets/883c1ef4-9947-41cf-af02-39db94d7738a)
-![Screenshot 2024-11-11 211612](https://github.com/user-attachments/assets/3d1075b5-005f-4952-b2f1-b4badd234c74)
-![Screenshot 2024-11-11 211554](https://github.com/user-attachments/assets/fefe9719-7841-4b7e-a993-e72030fc553e)
+
+## Home Page
 ![Screenshot 2024-11-11 211542](https://github.com/user-attachments/assets/24664b9c-c862-455b-ba2c-bdc5e237b640)
+![Screenshot 2024-11-11 211554](https://github.com/user-attachments/assets/fefe9719-7841-4b7e-a993-e72030fc553e)
+
+## Recipe Page
+![Screenshot 2024-11-11 211612](https://github.com/user-attachments/assets/3d1075b5-005f-4952-b2f1-b4badd234c74)
+![Screenshot 2024-11-11 211623](https://github.com/user-attachments/assets/883c1ef4-9947-41cf-af02-39db94d7738a)
+
+## Account Page
+![Screenshot 2024-11-11 211641](https://github.com/user-attachments/assets/fd4be17d-01e3-43f0-95ad-fe133c749248)
+![Screenshot 2024-11-11 211654](https://github.com/user-attachments/assets/2946ed3b-f649-419e-b3b7-f6eaaaa7df6a)
+
+## Categories Page
+![Screenshot 2024-11-11 211927](https://github.com/user-attachments/assets/40329a5d-c51b-4093-abd2-6a1e39a5b52b)
+
+## Dinner Category Page
+![Screenshot 2024-11-11 211938](https://github.com/user-attachments/assets/133a6fa0-6e18-47ec-b74e-7f3ae394eb49)
+
+
+
+
