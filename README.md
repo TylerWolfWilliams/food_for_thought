@@ -48,3 +48,12 @@ python population_script.py
 
 # Start development server
 python manage.py runserver
+
+```
+## Website Demo Screenshots
+![Screenshot 2024-11-11 211654](https://github.com/user-attachments/assets/2946ed3b-f649-419e-b3b7-f6eaaaa7df6a)
+![Screenshot 2024-11-11 211641](https://github.com/user-attachments/assets/fd4be17d-01e3-43f0-95ad-fe133c749248)
+![Screenshot 2024-11-11 211623](https://github.com/user-attachments/assets/883c1ef4-9947-41cf-af02-39db94d7738a)
+![Screenshot 2024-11-11 211612](https://github.com/user-attachments/assets/3d1075b5-005f-4952-b2f1-b4badd234c74)
+![Screenshot 2024-11-11 211554](https://github.com/user-attachments/assets/fefe9719-7841-4b7e-a993-e72030fc553e)
+![Screenshot 2024-11-11 211542](https://github.com/user-attachments/assets/24664b9c-c862-455b-ba2c-bdc5e237b640)
