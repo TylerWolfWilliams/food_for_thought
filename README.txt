@@ -22,7 +22,7 @@ Below I have described the project and how to access it.
 ## Installation Guide
 ```bash
 # Clone the repository
-git clone [repository URL]
+git clone https://github.com/TylerWolfWilliams/food_for_thought.git
 
 # Create virtual environment
 python -m venv venv
