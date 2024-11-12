@@ -8,6 +8,9 @@ Below I have described the project and how to access it.
 ## Technologies Used
 - Django 2.2.28
 - Python 3.9/10
+- Pillow 9.4.0
+- pytz 2022.7.1
+- sqlparse 0.4.3
 
 ## Key Features
 - Recipe creation and sharing
